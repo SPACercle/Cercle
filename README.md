@@ -1,4 +1,0 @@
-cercle
-======
-
-Projet Cercle Web
