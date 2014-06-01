@@ -25,7 +25,10 @@ class Controller{
 			'modifClientGeneral' => 'ModifClientGeneralAction',
 			'supClient' => 'SupressionClientAction',
 			'modifClientPersonnel' => 'ModifClientPersonnelAction',
-			'modifClientPro' => 'modifClientProAction'
+			'modifClientPro' => 'modifClientProAction',
+			'addClientRevenu' => 'AddClientRevenuAction',
+			'modifClientRevenu' => 'ModifClientRevenuAction',
+			'deleteClientRevenu' => 'DeleteClientRevenuAction'
 			);
 	}
 
@@ -290,7 +293,20 @@ class Controller{
 			$res_sta = $pdo->query($query_sta);
 			$status = $res_sta->fetchALL(PDO::FETCH_ASSOC);
 
-			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status));
+			//Requete Type Revenus
+			$query_typ_rev = "SELECT * FROM `type revenus`";
+			$pdo->exec("SET NAMES UTF8");
+			$res_typ_rev = $pdo->query($query_typ_rev);
+			$type_revenus = $res_typ_rev->fetchALL(PDO::FETCH_ASSOC);
+
+			//Requete Revenus Clients
+			$query_rev = "SELECT * FROM `revenus par client` WHERE `R/C-NumClient` = ".$client[0]['CLT-NumID']."";
+			$pdo->exec("SET NAMES UTF8");
+			$res_rev = $pdo->query($query_rev);
+			$revenus = $res_rev->fetchALL(PDO::FETCH_ASSOC);
+
+
+			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$type_revenus,$revenus));
 		} else {
 			AffichePage(AffichePageMessage("Erreur !"));
 		}
@@ -371,7 +387,7 @@ class Controller{
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
-		header("Location: index.php?action=ficheClient&idClient=".$idClient."");
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=personel");
 	}
 
 	//Modification de l'onglet professionel d'une fiche client
@@ -397,7 +413,36 @@ class Controller{
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
-		header("Location: index.php?action=ficheClient&idClient=".$idClient."");
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=pro");
 	}
 
+	//Ajout d'un revenu d'un client
+	public function AddClientRevenuAction(){
+		extract($_POST);
+		$query = "INSERT INTO `revenus par client` VALUES ('','$idClient','$type','$montant','$annee')";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=revenus");
+	}
+
+	//Modification d'un revenu d'un client
+	public function ModifClientRevenuAction(){
+		extract($_POST);
+		$query = "UPDATE `revenus par client` SET `R/C-TypeRevenus`=$type,`R/C-Montant`=$montant,`R/C-Année`='$annee' WHERE `R/C-NumID`=$idRevenu";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=revenus");
+	}
+
+	//Ajout d'un revenu d'un client
+	public function DeleteClientRevenuAction(){
+		extract($_POST);
+		$query = "DELETE FROM `revenus par client` WHERE `R/C-NumID`=$idRevenu";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=revenus");
+	}
 }

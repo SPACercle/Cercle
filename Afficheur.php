@@ -186,7 +186,7 @@ function AfficheClientAjout($formes){
 }
 
 //Affichage de la fiche client
-function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status){
+function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$types_revenus,$revenus){
 	$code='<h4>'.$client["CLT-Nom"].' '.$client["CLT-Prénom"].'</h4>
 	<form style="display:inline;" action="index.php?action=courrierClient" method="post"/><button type="submit" class="btn btn-default"><i class="fa fa-envelope"></i> Courrier</button></form>
 	<form style="display:inline;" action="index.php?action=arboClient" method="post"/><button type="submit" class="btn btn-default"><i class="fa fa-print"></i> Arborescence Groupe</button></form>
@@ -202,10 +202,12 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	}
 	//Onglet Professionel
 	$code.=AfficheFicheClientProfessionnel($client,$categories,$professions,$status);
+	//Onglet Revenus
+	if($client['CLT-PrsMorale'] == 0){
+		$code.=AfficheFicheClientRevenus($client,$types_revenus,$revenus);
+	}
 	//Le reste à faire
 	$code.='
-		<div class="tab-pane fade in" id="revenu">
-		</div>
 		<div class="tab-pane fade in" id="historique">
 		</div>
 		<div class="tab-pane fade in" id="relationel">
@@ -225,26 +227,102 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	';
 	//Menu du côté
 	if($client['CLT-PrsMorale'] == 0){
-		$menu = '<li class="active"><a href="#general" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Infos Générales</b></a></li>
-		<li><a href="#personel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Personnel</b></a></li>
-		<li><a href="#pro" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Professionnel</b></a></li>
-		<li><a href="#revenu" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Revenus</b></a></li>
-		<li><a href="#historique" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Historique</b></a></li>
-		<li><a href="#relationel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Relationel</b></a></li>
-		<li><a href="#besoin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Besoins</b></a></li>
-		<li><a href="#profil" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Profil Investisseur</b></a></li>
-		<li><a href="#tracfin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Procedure TRACFIN</b></a></li>
-		<li><a href="#solution" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Solutions retenues</b></a></li>
-		<li><a href="#liquidite" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Liquidités financières</b></a></li>';
+		if(!isset($_GET['onglet'])){
+			$menu = '<li class="active"><a href="#general" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Infos Générales</b></a></li>';
+		} else {
+			$menu = '<li><a href="#general" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Infos Générales</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "personel"){
+			$menu.='<li class="active"><a href="#personel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Personnel</b></a></li>';
+		} else {
+			$menu.='<li><a href="#personel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Personnel</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "pro"){
+			$menu.='<li class="active"><a href="#pro" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Professionnel</b></a></li>';
+		} else {
+			$menu.='<li><a href="#pro" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Professionnel</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "revenus"){
+			$menu.='<li class="active"><a href="#revenus" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Revenus</b></a></li>';
+		} else {
+			$menu.='<li><a href="#revenus" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Revenus</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "historique"){
+			$menu.='<li class="active"><a href="#historique" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Historique</b></a></li>';
+		} else {
+			$menu.='<li><a href="#historique" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Historique</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "relationel"){
+			$menu.='<li class="active"><a href="#relationel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Relationel</b></a></li>';
+		} else {
+			$menu.='<li><a href="#relationel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Relationel</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "besoin"){
+			$menu.='<li class="active"><a href="#besoin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Besoins</b></a></li>';
+		} else {
+			$menu.='<li><a href="#besoin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Besoins</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "profil"){
+			$menu.='<li class="active"><a href="#profil" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Profil Investisseur</b></a></li>';
+		} else {
+			$menu.='<li><a href="#profil" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Profil Investisseur</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "tracfin"){
+			$menu.='<li class="active"><a href="#tracfin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Procedure TRACFIN</b></a></li>';
+		} else {
+			$menu.='<li><a href="#tracfin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Procedure TRACFIN</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "solution"){
+			$menu.='<li class="active"><a href="#solution" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Solutions retenues</b></a></li>';
+		} else {
+			$menu.='<li><a href="#solution" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Solutions retenues</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "liquidite"){
+			$menu.='<li class="active"><a href="#liquidite" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Liquidités financières</b></a></li>';
+		} else {
+			$menu.='<li><a href="#liquidite" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Liquidités financières</b></a></li>';
+		}
 	} else {
-		$menu = '<li class="active"><a href="#general" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Infos Générales</b></a></li>
-		<li><a href="#pro" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Professionnel</b></a></li>
-		<li><a href="#historique" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Historique</b></a></li>
-		<li><a href="#relationel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Relationel</b></a></li>
-		<li><a href="#besoin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Besoins</b></a></li>
-		<li><a href="#profil" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Profil Investisseur</b></a></li>
-		<li><a href="#tracfin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Procedure TRACFIN</b></a></li>
-		<li><a href="#solution" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Solutions retenues</b></a></li>';
+		if(!isset($_GET['onglet'])){
+			$menu = '<li class="active"><a href="#general" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Infos Générales</b></a></li>';
+		} else {
+			$menu = '<li><a href="#general" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Infos Générales</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "pro"){
+			$menu.='<li class="active"><a href="#pro" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Professionnel</b></a></li>';
+		} else {
+			$menu.='<li><a href="#pro" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Professionnel</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "historique"){
+			$menu.='<li class="active"><a href="#historique" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Historique</b></a></li>';
+		} else {
+			$menu.='<li><a href="#historique" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Historique</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "relationel"){
+			$menu.='<li class="active"><a href="#relationel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Relationel</b></a></li>';
+		} else {
+			$menu.='<li><a href="#relationel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Relationel</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "besoin"){
+			$menu.='<li class="active"><a href="#besoin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Besoins</b></a></li>';
+		} else {
+			$menu.='<li><a href="#besoin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Besoins</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "profil"){
+			$menu.='<li class="active"><a href="#profil" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Profil Investisseur</b></a></li>';
+		} else {
+			$menu.='<li><a href="#profil" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Profil Investisseur</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "tracfin"){
+			$menu.='<li class="active"><a href="#tracfin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Procedure TRACFIN</b></a></li>';
+		} else {
+			$menu.='<li><a href="#tracfin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Procedure TRACFIN</b></a></li>';
+		}
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "solution"){
+			$menu.='<li class="active"><a href="#solution" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Solutions retenues</b></a></li>';
+		} else {
+			$menu.='<li><a href="#solution" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Solutions retenues</b></a></li>';
+		}
 	}
 	$_SESSION['menu'] = $menu; 
 	return($code);
@@ -253,7 +331,11 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 //Affichage de l'onglet Géneral
 function AfficheFicheClientGeneral($client,$types_client,$conseillers,$civilites,$situations,$sensibilites){
 	$code='
-	<div class="tab-pane fade in active" id="general">
+	<div class="tab-pane fade in';
+	if(!isset($_GET['onglet'])){
+		$code.=' active';
+	}
+	$code.='" id="general">
 	<form action="index.php?action=modifClientGeneral" method="post">
 	<div class="col-lg-4">
 	<div class="form-group">
@@ -325,7 +407,11 @@ function AfficheFicheClientGeneral($client,$types_client,$conseillers,$civilites
 
 //Affichage de l'onglet Personel
 function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilites,$situations,$sensibilites){
-	$code='<div class="tab-pane fade in" id="personel">
+	$code='<div class="tab-pane fade in';
+	if(isset($_GET['onglet']) && $_GET['onglet'] == "personel"){
+			$code.=' active';
+	}
+	$code.='" id="personel">
 		<form method="post" action="index.php?action=modifClientPersonnel">
 			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 			<div class="col-lg-6">
@@ -449,7 +535,11 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 
 //Affichage de l'onglet Professionnel
 function AfficheFicheClientProfessionnel($client,$categories,$professions,$status){
-	$code='<div class="tab-pane fade in" id="pro">
+	$code='<div class="tab-pane fade in';
+	if(isset($_GET['onglet']) && $_GET['onglet'] == "pro"){
+		$code.=' active';
+	}
+	$code.='" id="pro">
 	<form method="post" action="index.php?action=modifClientPro">
 	<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 
@@ -537,6 +627,60 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 
 	<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Valider Modifications</button>
 	</form>
+	</div>';
+	return($code);
+}
+
+//Affichage de l'onglet Professionnel
+function AfficheFicheClientRevenus($client,$types_revenus,$revenus){
+	$code='<div class="tab-pane fade in';
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "revenus"){
+			$code.=' active';
+		}
+		$code.='" id="revenus">
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<label>Type</label>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<label>Année</label>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<label>Montant</label><br/>';
+		foreach($revenus as $revenu) { 
+			$code.='
+			<form method="post" action="index.php?action=modifClientRevenu" style="display:inline;">
+				<input type="hidden" name="idRevenu" value="'.$revenu['R/C-NumID'].'"/>
+				<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+				<select name="type" style="width:200px;" required><option></option>';
+				foreach ($types_revenus as $type) {
+					if($type['REV-NumID'] == $revenu['R/C-TypeRevenus']){
+						$code.="<option value='".$type['REV-NumID']."' selected='selected'>".$type['REV-Nom']."</option>";
+					} else {
+						$code.="<option value='".$type['REV-NumID']."'>".$type['REV-Nom']."</option>";
+					}
+				}
+				$code.='</select>
+				<input type="text" name="annee" style="width:100px;" value="'.$revenu['R/C-Année'].'" required/>
+				<input type="text" name="montant" style="width:100px;" value="'.$revenu['R/C-Montant'].'"required/>
+				<input type="submit" value="Modifier"/>
+			</form>
+			<form method="post" action="index.php?action=deleteClientRevenu" style="display:inline;">
+				<input type="hidden" name="idRevenu" value="'.$revenu['R/C-NumID'].'"/>
+				<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+				<input type="submit" value="Supprimer"/>
+			</form><br/>';
+		}
+		$code.='
+		<br/><br/>
+		<form method="post" action="index.php?action=addClientRevenu">
+			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+			<select name="type" style="width:200px;" required><option></option>';
+			foreach ($types_revenus as $type) {
+				$code.="<option value='".$type['REV-NumID']."'>".$type['REV-Nom']."</option>";
+			}
+			$code.='</select>
+			<input type="text" name="annee" style="width:100px;" required/>
+			<input type="text" name="montant" style="width:100px;" required/>
+			<input type="submit" value="Ajouter"/>
+		</form>
 	</div>';
 	return($code);
 }

@@ -1,3 +1,4 @@
-Base client : Bouton Destinataire Couriers => demander info
-Fiche client : Bouton Courriers => bug ?
-Fiche client : Onglet Pro => filtre catégorie/profession
+Base Client : Bouton Destinataire Couriers => Demander infos
+Fiche Client : Bouton Courriers => bug ?
+Fiche Client : Bouton A faire : Arborescence groupe (PDF)
+Fiche Client : Onglet Pro => A faire : filtre catégorie/profession
