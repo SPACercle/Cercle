@@ -1,6 +1,6 @@
 <?php
 /*
-Page mère qui utilise la redirection du controleur
+Page mère
 */
 
 session_start();
