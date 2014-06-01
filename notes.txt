@@ -1,0 +1,3 @@
+Base client : Bouton Destinataire Couriers => demander info
+Fiche client : Bouton Courriers => bug ?
+Fiche client : Onglet Pro => filtre catégorie/profession
