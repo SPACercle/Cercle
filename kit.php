@@ -74,6 +74,7 @@ if(!(Auth::isLogged())){
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <!-- Menu du côté -->
         <ul class="nav navbar-nav side-nav" style="margin-top:9px;">
+          <hr style="margin:0px;margin-top:1px;"/>
           <?php if(isset($_SESSION['menu'])){ echo $_SESSION['menu']; unset($_SESSION['menu']); };?>
         </ul>
 

@@ -232,100 +232,100 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	//Menu du côté
 	if($client['CLT-PrsMorale'] == 0){
 		if(!isset($_GET['onglet'])){
-			$menu = '<li class="active"><a href="#general" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Infos Générales</b></a></li>';
+			$menu = '<li class="active"><a href="#general" data-toggle="tab"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
 		} else {
-			$menu = '<li><a href="#general" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Infos Générales</b></a></li>';
+			$menu = '<li><a href="#general" data-toggle="tab"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "personel"){
-			$menu.='<li class="active"><a href="#personel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Personnel</b></a></li>';
+			$menu.='<li class="active"><a href="#personel" data-toggle="tab"><i class="fa fa-user fa-lg"></i><b> Personnel</b></a></li>';
 		} else {
-			$menu.='<li><a href="#personel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Personnel</b></a></li>';
+			$menu.='<li><a href="#personel" data-toggle="tab"><i class="fa fa-user fa-lg"></i><b> Personnel</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "pro"){
-			$menu.='<li class="active"><a href="#pro" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Professionnel</b></a></li>';
+			$menu.='<li class="active"><a href="#pro" data-toggle="tab"><i class="fa fa-suitcase fa-lg"></i><b> Professionnel</b></a></li>';
 		} else {
-			$menu.='<li><a href="#pro" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Professionnel</b></a></li>';
+			$menu.='<li><a href="#pro" data-toggle="tab"><i class="fa fa-suitcase fa-lg"></i><b> Professionnel</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "revenus"){
-			$menu.='<li class="active"><a href="#revenus" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Revenus</b></a></li>';
+			$menu.='<li class="active"><a href="#revenus" data-toggle="tab"><i class="fa fa-euro fa-lg"></i><b> Revenus</b></a></li>';
 		} else {
-			$menu.='<li><a href="#revenus" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Revenus</b></a></li>';
+			$menu.='<li><a href="#revenus" data-toggle="tab"><i class="fa fa-euro fa-lg"></i><b> Revenus</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "historique"){
-			$menu.='<li class="active"><a href="#historique" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Historique</b></a></li>';
+			$menu.='<li class="active"><a href="#historique" data-toggle="tab"><i class="fa fa-clock-o fa-lg"></i><b> Historique</b></a></li>';
 		} else {
-			$menu.='<li><a href="#historique" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Historique</b></a></li>';
+			$menu.='<li><a href="#historique" data-toggle="tab"><i class="fa fa-clock-o fa-lg"></i><b> Historique</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "relationel"){
-			$menu.='<li class="active"><a href="#relationel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Relationel</b></a></li>';
+			$menu.='<li class="active"><a href="#relationel" data-toggle="tab"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
 		} else {
-			$menu.='<li><a href="#relationel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Relationel</b></a></li>';
+			$menu.='<li><a href="#relationel" data-toggle="tab"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "besoin"){
-			$menu.='<li class="active"><a href="#besoin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Besoins</b></a></li>';
+			$menu.='<li class="active"><a href="#besoin" data-toggle="tab"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		} else {
-			$menu.='<li><a href="#besoin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Besoins</b></a></li>';
+			$menu.='<li><a href="#besoin" data-toggle="tab"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "profil"){
-			$menu.='<li class="active"><a href="#profil" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Profil Investisseur</b></a></li>';
+			$menu.='<li class="active"><a href="#profil" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
 		} else {
-			$menu.='<li><a href="#profil" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Profil Investisseur</b></a></li>';
+			$menu.='<li><a href="#profil" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "tracfin"){
-			$menu.='<li class="active"><a href="#tracfin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Procedure TRACFIN</b></a></li>';
+			$menu.='<li class="active"><a href="#tracfin" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
 		} else {
-			$menu.='<li><a href="#tracfin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Procedure TRACFIN</b></a></li>';
+			$menu.='<li><a href="#tracfin" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "solution"){
-			$menu.='<li class="active"><a href="#solution" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Solutions retenues</b></a></li>';
+			$menu.='<li class="active"><a href="#solution" data-toggle="tab"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
 		} else {
-			$menu.='<li><a href="#solution" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Solutions retenues</b></a></li>';
+			$menu.='<li><a href="#solution" data-toggle="tab"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "liquidite"){
-			$menu.='<li class="active"><a href="#liquidite" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Liquidités financières</b></a></li>';
+			$menu.='<li class="active"><a href="#liquidite" data-toggle="tab"><i class="fa fa-euro fa-lg"></i><b> Liquidités financières</b></a></li>';
 		} else {
-			$menu.='<li><a href="#liquidite" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Liquidités financières</b></a></li>';
+			$menu.='<li><a href="#liquidite" data-toggle="tab"><i class="fa fa-euro fa-lg"></i><b> Liquidités financières</b></a></li>';
 		}
 	} else {
 		if(!isset($_GET['onglet'])){
-			$menu = '<li class="active"><a href="#general" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Infos Générales</b></a></li>';
+			$menu = '<li class="active"><a href="#general" data-toggle="tab"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
 		} else {
-			$menu = '<li><a href="#general" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Infos Générales</b></a></li>';
+			$menu = '<li><a href="#general" data-toggle="tab"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "pro"){
-			$menu.='<li class="active"><a href="#pro" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Professionnel</b></a></li>';
+			$menu.='<li class="active"><a href="#pro" data-toggle="tab"><i class="fa fa-suitcase fa-lg"></i><b> Professionnel</b></a></li>';
 		} else {
-			$menu.='<li><a href="#pro" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Professionnel</b></a></li>';
+			$menu.='<li><a href="#pro" data-toggle="tab"><i class="fa fa-suitcase fa-lg"></i><b> Professionnel</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "historique"){
-			$menu.='<li class="active"><a href="#historique" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Historique</b></a></li>';
+			$menu.='<li class="active"><a href="#historique" data-toggle="tab"><i class="fa fa-clock-o fa-lg"><b> Historique</b></a></li>';
 		} else {
-			$menu.='<li><a href="#historique" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Historique</b></a></li>';
+			$menu.='<li><a href="#historique" data-toggle="tab"><i class="fa fa-clock-o fa-lg"></i><b> Historique</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "relationel"){
-			$menu.='<li class="active"><a href="#relationel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Relationel</b></a></li>';
+			$menu.='<li class="active"><a href="#relationel" data-toggle="tab"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
 		} else {
-			$menu.='<li><a href="#relationel" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Relationel</b></a></li>';
+			$menu.='<li><a href="#relationel" data-toggle="tab"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "besoin"){
-			$menu.='<li class="active"><a href="#besoin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Besoins</b></a></li>';
+			$menu.='<li class="active"><a href="#besoin" data-toggle="tab"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		} else {
-			$menu.='<li><a href="#besoin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Besoins</b></a></li>';
+			$menu.='<li><a href="#besoin" data-toggle="tab"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "profil"){
-			$menu.='<li class="active"><a href="#profil" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Profil Investisseur</b></a></li>';
+			$menu.='<li class="active"><a href="#profil" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
 		} else {
-			$menu.='<li><a href="#profil" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Profil Investisseur</b></a></li>';
+			$menu.='<li><a href="#profil" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "tracfin"){
-			$menu.='<li class="active"><a href="#tracfin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Procedure TRACFIN</b></a></li>';
+			$menu.='<li class="active"><a href="#tracfin" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
 		} else {
-			$menu.='<li><a href="#tracfin" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Procedure TRACFIN</b></a></li>';
+			$menu.='<li><a href="#tracfin" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "solution"){
-			$menu.='<li class="active"><a href="#solution" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Solutions retenues</b></a></li>';
+			$menu.='<li class="active"><a href="#solution" data-toggle="tab"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
 		} else {
-			$menu.='<li><a href="#solution" data-toggle="tab"><i class="fa fa-circle-o"></i><b> Solutions retenues</b></a></li>';
+			$menu.='<li><a href="#solution" data-toggle="tab"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
 		}
 	}
 	$_SESSION['menu'] = $menu; 
