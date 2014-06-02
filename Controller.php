@@ -29,6 +29,9 @@ class Controller{
 			'addClientRevenu' => 'AddClientRevenuAction',
 			'modifClientRevenu' => 'ModifClientRevenuAction',
 			'deleteClientRevenu' => 'DeleteClientRevenuAction',
+			'addClientHistorique' => 'AddClientHistoriqueAction',
+			'modifClientHistorique' => 'ModifClientHistoriqueAction',
+			'deleteClientHistorique' => 'DeleteClientHistoriqueAction'
 			);
 	}
 
@@ -108,7 +111,7 @@ class Controller{
 			AND cli.`CLT-Statut` = sta.`SPR-NumID`
 			AND cli.`CLT-Type` = typ.`TYP-NumID`";
 			//Si il y a un filtre
-			if(isset($_POST['filtre'])){
+			if(isset($_POST['filtre']) && $_POST['filtre'] != 'all'){
 				$query.=" AND typ.`TYP-NumID` = ".$_POST['filtre']."";
 			} 
 			//Si il y a une recherche
@@ -126,7 +129,7 @@ class Controller{
 			AND cli.`CLT-Statut` = sta.`SPR-NumID`
 			AND cli.`CLT-Type` = typ.`TYP-NumID`";
 			//Si il y a un filtre
-			if(isset($_POST['filtre'])){
+			if(isset($_POST['filtre']) && $_POST['filtre'] != 'all'){
 				$query.=" AND typ.`TYP-NumID` = ".$_POST['filtre']."";
 			} 
 			//Si il y a une recherche
@@ -404,6 +407,11 @@ class Controller{
 	//Modification de l'onglet professionel d'une fiche client
 	public function ModifClientProAction(){
 		extract($_POST);
+		if(empty($optionIS)){
+			$optionIS = 0;
+		} else {
+			$optionIS = 1;
+		}
 		$query = "UPDATE `clients et prospects` SET 
 					`CLT-RaisonSocialePro`='$raisonPro',
 					`CLT-AdressePro`='$adressePro',
@@ -414,11 +422,16 @@ class Controller{
 					`CLT-MailPro`='$mailPro',
 					`CLT-ServicePro`='$servicePro',
 					`CLT-TelPortPro`='$telPortPro',
-					`CLT-Profession`='$profession',
-					`CLT-Promotion`='$promotion',
+					`CLT-Profession`='$profession',";
+					if($promotion != null){
+						$query.="`CLT-Promotion`='$promotion',";
+					} else {
+						$query.="`CLT-Promotion`=null,";
+					}
+		$query.="
 					`CLT-Statut`='$statut',
 					`CLT-CBC`='$mois',
-					`CLT-OptionIS`='$optionIS'
+					`CLT-OptionIS`=$optionIS
 				  WHERE `CLT-NumID` = $idClient;
 		";
 		$pdo = BDD::getConnection();
@@ -447,7 +460,7 @@ class Controller{
 		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=revenus");
 	}
 
-	//Ajout d'un revenu d'un client
+	//Supression d'un revenu d'un client
 	public function DeleteClientRevenuAction(){
 		extract($_POST);
 		$query = "DELETE FROM `revenus par client` WHERE `R/C-NumID`=$idRevenu";
@@ -455,5 +468,98 @@ class Controller{
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
 		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=revenus");
+	}
+
+	//Ajout d'un historique d'un client
+	public function AddClientHistoriqueAction(){
+		extract($_POST);
+		if(empty($demAssistante)){
+			$demAssistante = 0;
+		} else {
+			$demAssistante = 1;
+		}
+		if(empty($demCourtier)){
+			$demCourtier = 0;
+		} else {
+			$demCourtier = 1;
+		}
+		if(empty($tutoriel)){
+			$tutoriel = 0;
+		} else {
+			$tutoriel = 1;
+		}
+		if(empty($elements)){
+			$elements = 0;
+		} else {
+			$elements = 1;
+		}
+		if(empty($cloture)){
+			$cloture = 0;
+		} else {
+			$cloture = 1;
+		}
+		$query = "INSERT INTO `historique par client` VALUES (null,'$idClient','$type',
+			CASE WHEN '$date' <> '' THEN STR_TO_DATE('$date','%d/%m/%Y') ELSE null END,'$commentaire',$demAssistante,$demCourtier,$cloture,
+			CASE WHEN '$dateCloture' <> '' THEN STR_TO_DATE('$dateCloture','%d/%m/%Y') ELSE null END,$tutoriel,$elements,CASE WHEN '$echMax' <> '' THEN STR_TO_DATE('$echMax','%d/%m/%Y') ELSE null END)";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=historique");
+	}
+
+	//Suppression d'un historique d'un client
+	public function DeleteClientHistoriqueAction(){
+		extract($_POST);
+		$query = "DELETE FROM `historique par client` WHERE `H/C-NumID`=$idHistorique";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=historique");
+	}
+
+	//Modification d'un historique d'un client
+	public function ModifClientHistoriqueAction(){
+		extract($_POST);
+		if(empty($demAssistante)){
+			$demAssistante = 0;
+		} else {
+			$demAssistante = 1;
+		}
+		if(empty($demCourtier)){
+			$demCourtier = 0;
+		} else {
+			$demCourtier = 1;
+		}
+		if(empty($tutoriel)){
+			$tutoriel = 0;
+		} else {
+			$tutoriel = 1;
+		}
+		if(empty($elements)){
+			$elements = 0;
+		} else {
+			$elements = 1;
+		}
+		if(empty($cloture)){
+			$cloture = 0;
+		} else {
+			$cloture = 1;
+		}
+		$query = "UPDATE `historique par client` SET 
+			`H/C-DemandeAssistante`=$demAssistante, 
+			`H/C-DemandeCourtier`=$demCourtier,
+			`H/C-TypeHistorique`=$type,
+			`H/C-Date`=CASE WHEN '$date' <> '' THEN STR_TO_DATE('$date','%d/%m/%Y') ELSE null END,
+			`H/C-DateMax`=CASE WHEN '$echMax' <> '' THEN STR_TO_DATE('$echMax','%d/%m/%Y') ELSE null END,
+			`H/C-Tutoriel`=$tutoriel,
+			`H/C-Eléments`=$elements,
+			`H/C-Commentaire`='$commentaire',
+			`H/C-Cloture`=$cloture,
+			`H/C-DateCloture`=CASE WHEN '$dateCloture' <> '' THEN STR_TO_DATE('$dateCloture','%d/%m/%Y') ELSE null END
+			WHERE `H/C-NumID`=$idHistorique";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=historique");
 	}
 }

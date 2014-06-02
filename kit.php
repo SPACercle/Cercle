@@ -67,27 +67,27 @@ if(!(Auth::isLogged())){
     </div>
 
     <!-- Barre du haut -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="height:60px;" role="navigation">
       <div class="navbar-header">
-        <a class="navbar-brand" href="index.php" style="margin-right:31px;"><img src="img/logo.png" style="width:30px;height:30px;margin-top:-5px;"/> CERCLE</a>
+        <a class="navbar-brand" href="index.php" style="margin-right:21px;"><img src="img/logo.png" style="width:40px;height:40px;margin-top:-5px;padding:0px"/> CERCLE</a>
       </div>
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <!-- Menu du côté -->
-        <ul class="nav navbar-nav side-nav">
+        <ul class="nav navbar-nav side-nav" style="margin-top:9px;">
           <?php if(isset($_SESSION['menu'])){ echo $_SESSION['menu']; unset($_SESSION['menu']); };?>
         </ul>
 
         <ul class="nav navbar-nav navbar-left navbar-user">
-          <li <?php if(!isset($_GET['action'])){ echo "class='active'"; } ?>><a href="index.php"><i class="fa fa-home"></i><b> Accueil</b></a></li>
-          <li <?php if(isset($_GET['action']) && preg_match("#[c|C]lient#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=client"><i class="fa fa-user"></i><b> Base Clients</b></a></li>
-          <li><a href="#"><i class="fa fa-briefcase"></i><b> Bases Partenaires</b></a></li>
-          <li><a href="#"><i class="fa fa-globe"></i><b> Compagnies et Produits</b></a></li>
-          <li><a href="#"><i class="fa fa-file"></i><b> Procédures</b></a></li>
+          <li <?php if(!isset($_GET['action'])){ echo "class='active'"; } ?>><a href="index.php"><b><img src="img/home.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp;Accueil</b></a></li>
+          <li <?php if(isset($_GET['action']) && preg_match("#[c|C]lient#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=client"><b><img src="img/client.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Base Clients</b></a></li>
+          <li><a href="#"><b><img src="img/partenaire.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Bases Partenaires</b></a></li>
+          <li><a href="#"><b><img src="img/produit.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Compagnies et Produits</b></a></li>
+          <li><a href="#"><img src="img/procedure.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp;<b> Procédures</b></a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right navbar-user">
           <li class="dropdown user-dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i><?php echo " ".$_SESSION['Auth']['nom']." ".$_SESSION['Auth']['prenom']." (".Auth::getInfo('dpt').") ";?><b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="img/user.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp;<?php echo " ".$_SESSION['Auth']['nom']." ".$_SESSION['Auth']['prenom']." (".Auth::getInfo('dpt').") ";?><b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="index.php?action=droits"><i class="fa fa-lock"></i> Mes droits</a></li>
               <li class="divider"></li>

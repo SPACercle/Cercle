@@ -18,7 +18,7 @@ function AffichePageMessage($message){
 
 //Affichage de l'accueil
 function AfficheHome(){
-	return('');
+	return('<center><br/><br/><br/><br/><h1>Bienvenue sur Cercle</h1><br/><br/><img src="img/logo.png"/></center>');
 }
 
 //Affichage des droits
@@ -90,7 +90,11 @@ function AfficheClient($clients,$types,$filtre){
 	if($filtre == 'all'){
 		$code.="<option selected='selected' value='all'>Tous</option>";
 	} else {
-		$code.="<option value='all'>Tous</option>";
+		if(!isset($_POST['filtre'])){
+			$code.="<option selected='selected' value='all'>Tous</option>";
+		} else {
+			$code.="<option value='all'>Tous</option>";
+		}
 	}
 	$code.= "</select> <input type='submit' value='Filtrer'/></form>";
 	$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<form style='display:inline;' action='index.php?action=client' method='post'>";
@@ -699,11 +703,13 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
             <th>Demande</th>
             <th>Type</th>
             <th>Date</th>
-            <th>Ech. Max</th>
+            <th><span style="background:#CA6060">Ech. Max</span></th>
             <th></th>
             <th>Commentaire</th>
             <th></th>
-            <th>Date Cloture</th>
+            <th><span style="color:#FF8000">Date Cloture</span></th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
 		<tbody>';
@@ -712,17 +718,17 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 			<form method="post" action="index.php?action=modifClientHistorique" style="display:inline;">
 			<input type="hidden" name="idHistorique" value="'.$historique['H/C-NumID'].'"/>
 			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>';
-			$code.='<td>';
+			$code.='<td style="min-width: 100px;">';
 			if($historique['H/C-DemandeAssistante'] == 1){
-				$code.='<input type="checkbox" name="DemAssistante" checked>';
+				$code.='<input type="checkbox" name="demAssistante" checked>';
 			} else {
-				$code.='<input type="checkbox" name="DemAssistante">'; 
+				$code.='<input type="checkbox" name="demAssistante">'; 
 			}
 			$code.=" Assistante<br/>";
 			if($historique['H/C-DemandeCourtier'] == 1){
-				$code.='<input type="checkbox" name="DemCourtier" checked>';
+				$code.='<input type="checkbox" name="demCourtier" checked>';
 			} else {
-				$code.='<input type="checkbox" name="DemCourtier">'; 
+				$code.='<input type="checkbox" name="demCourtier">'; 
 			}
 			$code.=" Courtier";
 			$code.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>
@@ -735,20 +741,32 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 				}
 			}
 			$code.='</select></td>
-			<td><input type="text" name="date" style="width:100px;" value="'.$historique['H/C-Date'].'"/></td>
-			<td><input type="text" name="echMax" style="width:100px;" value="'.$historique['H/C-DateMax'].'"/></td><td>';
+			<td><input type="text" name="date" style="width:100px;" value="';
+			if($historique['H/C-Date']!=null){
+				$code.=date('d/m/Y',strtotime($historique['H/C-Date']));
+			} else {
+				$code.="";
+			}
+			$code.='"/></td>
+			<td><input type="text" name="echMax" style="width:100px;" value="';
+			if($historique['H/C-DateMax']!=null){
+				$code.=date('d/m/Y',strtotime($historique['H/C-DateMax']));
+			} else {
+				$code.="";
+			}
+			$code.='"/></td><td style="min-width: 100px;">';
 			if($historique['H/C-Tutoriel'] == 1){
 				$code.='<input type="checkbox" name="tutoriel" checked>';
 			} else {
 				$code.='<input type="checkbox" name="tutoriel">'; 
 			}
-			$code.=" Tutoriel<br/>";
+			$code.="<span style='color:#FF8000'> Tutoriel</span><br/>";
 			if($historique['H/C-Eléments'] == 1){
 				$code.='<input type="checkbox" name="elements" checked>';
 			} else {
 				$code.='<input type="checkbox" name="elements">'; 
 			}
-			$code.=" Eléments";
+			$code.="<span style='color:#FF8000'> Eléments</span>";
 			$code.='</td>
 			<td><textarea name="commentaire" rows="2" cols="75">'.$historique['H/C-Commentaire'].'</textarea></td><td>';
 			if($historique['H/C-Cloture'] == 1){
@@ -757,12 +775,45 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 				$code.='<input type="checkbox" name="cloture">'; 
 			}
 			$code.='</td>
-			<td><input type="text" name="dateCloture" style="width:100px;" value="'.$historique['H/C-DateCloture'].'"/></td>
-			</form>
+			<td><input type="text" name="dateCloture" style="width:100px;" value="';
+			if($historique['H/C-DateCloture']!=null){
+				$code.=date('d/m/Y',strtotime($historique['H/C-DateCloture']));
+			} else {
+				$code.="";
+			}
+			$code.='"/></td>
+			<td><input type="submit" value="Modifier"/></form></td>
+			<td><form method="post" action="index.php?action=deleteClientHistorique" style="display:inline;">
+				<input type="hidden" name="idHistorique" value="'.$historique['H/C-NumID'].'"/>
+				<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+				<input type="submit" value="Supprimer"/>
+			</form></td>
 			</tr>';
 		}
-	$code.=' </tbody>
-      </table>
+	$code.=' 
+      	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<form method="post" action="index.php?action=addClientHistorique">
+			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+			<td style="min-width: 100px;"><input type="checkbox" name="demAssistante"> Assistante<br/>
+			<input type="checkbox" name="demCourtier"> Courtier</td> 
+			<td><select name="type" style="width:200px;" required><option></option>';
+			foreach ($types_historique as $type) {
+				$code.="<option value='".$type['HIS-NumID']."'>".$type['HIS-Nom']."</option>";
+			}
+			$code.='</select></td>
+			<td><input type="text" name="date" style="width:100px;"/></td>
+			<td><input type="text" name="echMax" style="width:100px;"/></td>
+			<td style="min-width: 100px;"><input type="checkbox" name="tutoriel"><span style="color:#FF8000"> Tutoriel</span><br/>
+			<input type="checkbox" name="elements"><span style="color:#FF8000"> Eléments</span></td> 
+			<td><textarea name="commentaire" rows="2" cols="75"></textarea></td>
+			<td><input type="checkbox" name="cloture"></td>
+			<td><input type="text" name="dateCloture" style="width:100px;"/></td>
+			<td><input type="submit" value="Ajouter"/></td>
+			<td></td>
+		</form>
+		</table></tbody>
     </div></div>';
 	return($code);
 }
