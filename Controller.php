@@ -419,7 +419,7 @@ class Controller{
 	//Ajout d'un revenu d'un client
 	public function AddClientRevenuAction(){
 		extract($_POST);
-		$query = "INSERT INTO `revenus par client` VALUES ('','$idClient','$type','$montant','$annee')";
+		$query = "INSERT INTO `revenus par client` VALUES (null,'$idClient','$type','$montant','$annee')";
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
