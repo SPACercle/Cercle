@@ -28,7 +28,7 @@ class Controller{
 			'modifClientPro' => 'modifClientProAction',
 			'addClientRevenu' => 'AddClientRevenuAction',
 			'modifClientRevenu' => 'ModifClientRevenuAction',
-			'deleteClientRevenu' => 'DeleteClientRevenuAction'
+			'deleteClientRevenu' => 'DeleteClientRevenuAction',
 			);
 	}
 
@@ -305,8 +305,19 @@ class Controller{
 			$res_rev = $pdo->query($query_rev);
 			$revenus = $res_rev->fetchALL(PDO::FETCH_ASSOC);
 
+			//Requete Type Historique
+			$query_typ_his = "SELECT * FROM `type historique`";
+			$pdo->exec("SET NAMES UTF8");
+			$res_typ_his = $pdo->query($query_typ_his);
+			$type_historique = $res_typ_his->fetchALL(PDO::FETCH_ASSOC);
 
-			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$type_revenus,$revenus));
+			//Requete Historique Clients
+			$query_his = "SELECT * FROM `historique par client` WHERE `H/C-NumClient` = ".$client[0]['CLT-NumID']."";
+			$pdo->exec("SET NAMES UTF8");
+			$res_his = $pdo->query($query_his);
+			$historiques = $res_his->fetchALL(PDO::FETCH_ASSOC);
+
+			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques));
 		} else {
 			AffichePage(AffichePageMessage("Erreur !"));
 		}

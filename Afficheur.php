@@ -186,7 +186,7 @@ function AfficheClientAjout($formes){
 }
 
 //Affichage de la fiche client
-function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$types_revenus,$revenus){
+function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques){
 	$code='<h4>'.$client["CLT-Nom"].' '.$client["CLT-Prénom"].'</h4>
 	<form style="display:inline;" action="index.php?action=courrierClient" method="post"/><button type="submit" class="btn btn-default"><i class="fa fa-envelope"></i> Courrier</button></form>
 	<form style="display:inline;" action="index.php?action=arboClient" method="post"/><button type="submit" class="btn btn-default"><i class="fa fa-print"></i> Arborescence Groupe</button></form>
@@ -206,10 +206,10 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	if($client['CLT-PrsMorale'] == 0){
 		$code.=AfficheFicheClientRevenus($client,$types_revenus,$revenus);
 	}
+	//Onglet Historique
+	$code.=AfficheFicheClientHistorique($client,$types_historique,$historiques);
 	//Le reste à faire
 	$code.='
-		<div class="tab-pane fade in" id="historique">
-		</div>
 		<div class="tab-pane fade in" id="relationel">
 		</div>
 		<div class="tab-pane fade in" id="besoin">
@@ -682,6 +682,88 @@ function AfficheFicheClientRevenus($client,$types_revenus,$revenus){
 			<input type="submit" value="Ajouter"/>
 		</form>
 	</div>';
+	return($code);
+}
+
+//Affichage de l'onglet Historique
+function AfficheFicheClientHistorique($client,$types_historique,$historiques){
+	$code='<div class="tab-pane fade in';
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "historique"){
+			$code.=' active';
+		}
+		$code.='" id="historique">
+		<div class="table-responsive">
+      	<table class="table">
+        <thead>
+          <tr>
+            <th>Demande</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th>Ech. Max</th>
+            <th></th>
+            <th>Commentaire</th>
+            <th></th>
+            <th>Date Cloture</th>
+          </tr>
+        </thead>
+		<tbody>';
+		foreach ($historiques as $historique) {
+			$code.='<tr>
+			<form method="post" action="index.php?action=modifClientHistorique" style="display:inline;">
+			<input type="hidden" name="idHistorique" value="'.$historique['H/C-NumID'].'"/>
+			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>';
+			$code.='<td>';
+			if($historique['H/C-DemandeAssistante'] == 1){
+				$code.='<input type="checkbox" name="DemAssistante" checked>';
+			} else {
+				$code.='<input type="checkbox" name="DemAssistante">'; 
+			}
+			$code.=" Assistante<br/>";
+			if($historique['H/C-DemandeCourtier'] == 1){
+				$code.='<input type="checkbox" name="DemCourtier" checked>';
+			} else {
+				$code.='<input type="checkbox" name="DemCourtier">'; 
+			}
+			$code.=" Courtier";
+			$code.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>
+			<select name="type" style="width:200px;" required><option></option>';
+			foreach ($types_historique as $type) {
+				if($type['HIS-NumID'] == $historique['H/C-TypeHistorique']){
+					$code.="<option value='".$type['HIS-NumID']."' selected='selected'>".$type['HIS-Nom']."</option>";
+				} else {
+					$code.="<option value='".$type['HIS-NumID']."'>".$type['HIS-Nom']."</option>";
+				}
+			}
+			$code.='</select></td>
+			<td><input type="text" name="date" style="width:100px;" value="'.$historique['H/C-Date'].'"/></td>
+			<td><input type="text" name="echMax" style="width:100px;" value="'.$historique['H/C-DateMax'].'"/></td><td>';
+			if($historique['H/C-Tutoriel'] == 1){
+				$code.='<input type="checkbox" name="tutoriel" checked>';
+			} else {
+				$code.='<input type="checkbox" name="tutoriel">'; 
+			}
+			$code.=" Tutoriel<br/>";
+			if($historique['H/C-Eléments'] == 1){
+				$code.='<input type="checkbox" name="elements" checked>';
+			} else {
+				$code.='<input type="checkbox" name="elements">'; 
+			}
+			$code.=" Eléments";
+			$code.='</td>
+			<td><textarea name="commentaire" rows="2" cols="75">'.$historique['H/C-Commentaire'].'</textarea></td><td>';
+			if($historique['H/C-Cloture'] == 1){
+				$code.='<input type="checkbox" name="cloture" checked>';
+			} else {
+				$code.='<input type="checkbox" name="cloture">'; 
+			}
+			$code.='</td>
+			<td><input type="text" name="dateCloture" style="width:100px;" value="'.$historique['H/C-DateCloture'].'"/></td>
+			</form>
+			</tr>';
+		}
+	$code.=' </tbody>
+      </table>
+    </div></div>';
 	return($code);
 }
 
