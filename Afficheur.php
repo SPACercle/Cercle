@@ -18,7 +18,7 @@ function AffichePageMessage($message){
 
 //Affichage de l'accueil
 function AfficheHome(){
-	return('<center><br/><br/><br/><br/><h1>Bienvenue sur Cercle</h1><br/><br/><img src="img/logo.png"/></center>');
+	return('<center><br/><br/><br/><br/><br/><br/><img src="img/logo_new.png" style="width:300px;height:300px;"/></center>');
 }
 
 //Affichage des droits
@@ -238,8 +238,9 @@ function AfficheClientAjout($formes){
 }
 
 //Affichage de la fiche client
-function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques){
-	$code='<h4>'.$client["CLT-Nom"].' '.$client["CLT-Prénom"].'</h4>
+function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques,$types_relation,$relations,$personnes){
+	$code='
+	<h4>'.$client["CLT-Nom"].' '.$client["CLT-Prénom"].'</h4>
 	<form style="display:inline;" action="index.php?action=courrierClient" method="post"/><button type="submit" class="btn btn-default"><i class="fa fa-envelope"></i> Courrier</button></form>
 	<form style="display:inline;" action="index.php?action=arboClient" method="post"/><button type="submit" class="btn btn-default"><i class="fa fa-print"></i> Arborescence Groupe</button></form>
 	<form style="display:inline;" action="index.php?action=supClient" method="post"/><input type="hidden" value="'.$client['CLT-NumID'].'" name="idClient"/><button onclick="return confirm(\'Voulez-vous vraiment supprimer ce client ?\')" type="submit" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> Suppression Client</button></form>';
@@ -272,8 +273,9 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 		}
 	}
 	//FIN REQUETE ETAT AVEC SMILEY
-	$code.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h4 style="display:inline;">Etat : <img src=\'img/'.$smiley.'.png\' style=\'width:20px;height:20px;margin-top:-5px;\'></h4>
-
+	$code.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h4 style="display:inline;">Etat : <img src=\'img/'.$smiley.'.png\' style=\'width:20px;height:20px;;\'></h4>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<img id="load" src="img/load2.gif""/>
 	<hr/>
 	<div class="panel-body">
 	<div class="tab-content">';
@@ -292,7 +294,8 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	//Onglet Historique
 	$code.=AfficheFicheClientHistorique($client,$types_historique,$historiques);
 	//Onglet Relationel
-	//$code.=AfficheFicheClientRelationel($client,$types_relation,$relations);
+	$code.=AfficheFicheClientRelationel($client,$types_relation,$relations,$personnes);
+
 	//Le reste à faire
 	$code.='
 		<div class="tab-pane fade in" id="besoin">
@@ -408,6 +411,7 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 		}
 	}
 	$_SESSION['menu'] = $menu; 
+	$code.='<script type="text/javascript">document.getElementById(\'load\').style.display = \'none\';</script>';
 	return($code);
 }
 
@@ -898,12 +902,12 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 }
 
 //Affichage de l'onglet Relationel
-/*function AfficheFicheClientRelationel($client,$types_relation,$relations){
+function AfficheFicheClientRelationel($client,$type_relation,$relations,$personnes){
 	$code='<div class="tab-pane fade in';
-		if(isset($_GET['onglet']) && $_GET['onglet'] == "relation"){
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "relationel"){
 			$code.=' active';
 		}
-		$code.='" id="relation">
+		$code.='" id="relationel">
 		<div class="table-responsive">
       	<table class="table">
         <thead>
@@ -919,106 +923,67 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 		foreach ($relations as $relation) {
 			$code.='<tr>
 			<form method="post" action="index.php?action=modifClientRelationel" style="display:inline;">
-			<input type="hidden" name="idRelation" value="'.$historique['H/C-NumID'].'"/>
-			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>';
-			$code.='<td style="min-width: 100px;">';
-			if($historique['H/C-DemandeAssistante'] == 1){
-				$code.='<input type="checkbox" name="demAssistante" checked>';
-			} else {
-				$code.='<input type="checkbox" name="demAssistante">'; 
-			}
-			$code.=" Assistante<br/>";
-			if($historique['H/C-DemandeCourtier'] == 1){
-				$code.='<input type="checkbox" name="demCourtier" checked>';
-			} else {
-				$code.='<input type="checkbox" name="demCourtier">'; 
-			}
-			$code.=" Courtier";
-			$code.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>
-			<select name="type" style="width:200px;" required><option></option>';
-			foreach ($types_historique as $type) {
-				if($type['HIS-NumID'] == $historique['H/C-TypeHistorique']){
-					$code.="<option value='".$type['HIS-NumID']."' selected='selected'>".$type['HIS-Nom']."</option>";
+			<input type="hidden" name="idApp" value="'.$relation['R/P-NumApporteur'].'"/>
+			<input type="hidden" name="idReco" value="'.$relation['R/P-NumReco'].'"/>
+			<input type="hidden" name="idType" value="'.$relation['R/P-Type'].'"/>
+			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+			<td><select name="type" style="width:200px;" required><option></option>';
+			foreach ($type_relation as $type) {
+				if($type['REL-Num'] == $relation['R/P-Type']){
+					$code.="<option value='".$type['REL-Num']."' selected='selected'>".$type['REL-Nom']."</option>";
 				} else {
-					$code.="<option value='".$type['HIS-NumID']."'>".$type['HIS-Nom']."</option>";
+					$code.="<option value='".$type['REL-Num']."'>".$type['REL-Nom']."</option>";
 				}
 			}
 			$code.='</select></td>
-			<td><input type="text" name="date" style="width:100px;" value="';
-			if($historique['H/C-Date']!=null){
-				$code.=date('d/m/Y',strtotime($historique['H/C-Date']));
-			} else {
-				$code.="";
-			}
-			$code.='"/></td>
-			<td><input type="text" name="echMax" style="width:100px;" value="';
-			if($historique['H/C-DateMax']!=null){
-				$code.=date('d/m/Y',strtotime($historique['H/C-DateMax']));
-			} else {
-				$code.="";
-			}
-			$code.='"/></td><td style="min-width: 100px;">';
-			if($historique['H/C-Tutoriel'] == 1){
-				$code.='<input type="checkbox" name="tutoriel" checked>';
-			} else {
-				$code.='<input type="checkbox" name="tutoriel">'; 
-			}
-			$code.="<span style='color:#FF8000'> Tutoriel</span><br/>";
-			if($historique['H/C-Eléments'] == 1){
-				$code.='<input type="checkbox" name="elements" checked>';
-			} else {
-				$code.='<input type="checkbox" name="elements">'; 
-			}
-			$code.="<span style='color:#FF8000'> Eléments</span>";
-			$code.='</td>
-			<td><textarea name="commentaire" rows="2" cols="75">'.$historique['H/C-Commentaire'].'</textarea></td><td>';
-			if($historique['H/C-Cloture'] == 1){
-				$code.='<input type="checkbox" name="cloture" checked>';
-			} else {
-				$code.='<input type="checkbox" name="cloture">'; 
-			}
-			$code.='</td>
-			<td><input type="text" name="dateCloture" style="width:100px;" value="';
-			if($historique['H/C-DateCloture']!=null){
-				$code.=date('d/m/Y',strtotime($historique['H/C-DateCloture']));
-			} else {
-				$code.="";
-			}
-			$code.='"/></td>
-			<td><input type="submit" value="Modifier"/></form></td>
-			<td><form method="post" action="index.php?action=deleteClientHistorique" style="display:inline;">
-				<input type="hidden" name="idHistorique" value="'.$historique['H/C-NumID'].'"/>
-				<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
-				<input type="submit" value="Supprimer"/>
-			</form></td>
-			</tr>';
-		}
-	$code.=' 
-      	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		<form method="post" action="index.php?action=addClientHistorique">
-			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
-			<td style="min-width: 100px;"><input type="checkbox" name="demAssistante"> Assistante<br/>
-			<input type="checkbox" name="demCourtier"> Courtier</td> 
-			<td><select name="type" style="width:200px;" required><option></option>';
-			foreach ($types_historique as $type) {
-				$code.="<option value='".$type['HIS-NumID']."'>".$type['HIS-Nom']."</option>";
+			<td><select name="pers" style="width:200px;" required><option></option>';
+			foreach ($personnes as $pers) {
+				if($pers['CLT-NumID'] == $relation['R/P-NumReco']){
+					$code.="<option value='".$pers['CLT-NumID']."' selected='selected'>".$pers['CLT-Nom']."</option>";
+				} else {
+					$code.="<option value='".$pers['CLT-NumID']."'>".$pers['CLT-Nom']."</option>";
+				}
 			}
 			$code.='</select></td>
-			<td><input type="text" name="date" style="width:100px;"/></td>
-			<td><input type="text" name="echMax" style="width:100px;"/></td>
-			<td style="min-width: 100px;"><input type="checkbox" name="tutoriel"><span style="color:#FF8000"> Tutoriel</span><br/>
-			<input type="checkbox" name="elements"><span style="color:#FF8000"> Eléments</span></td> 
-			<td><textarea name="commentaire" rows="2" cols="75"></textarea></td>
-			<td><input type="checkbox" name="cloture"></td>
-			<td><input type="text" name="dateCloture" style="width:100px;"/></td>
-			<td><input type="submit" value="Ajouter"/></td>
-			<td></td>
+			<td><textarea name="commentaire" rows="2" cols="75">'.$relation['R/P-Commentaire'].'</textarea></td>
+			<td><input type="submit" value="Modifier"/></td></form>
+			<td>
+				<form method="post" action="index.php?action=deleteClientRelationel" style="display:inline;">
+					<input type="hidden" name="idApp" value="'.$relation['R/P-NumApporteur'].'"/>
+					<input type="hidden" name="idReco" value="'.$relation['R/P-NumReco'].'"/>
+					<input type="hidden" name="idType" value="'.$relation['R/P-Type'].'"/>
+					<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+					<input type="submit" value="Supprimer"/>
+				</form>
+			</td>
+			</tr>';
+		}
+		$code.='
+      	<tr><td></td><td></td><td></td><td></td><td></td></tr>
+      	<tr><td></td><td></td><td></td><td></td><td></td></tr>
+      	<tr><td></td><td></td><td></td><td></td><td></td></tr>
+		<form method="post" action="index.php?action=addClientRelationel">
+			<tr>
+				<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+				<td><select name="type" style="width:200px;" required><option></option>';
+				foreach ($type_relation as $type) {
+						$code.="<option value='".$type['REL-Num']."'>".$type['REL-Nom']."</option>";
+				}
+				$code.='</select></td>
+				<td><select name="pers" style="width:200px;" required><option></option>';
+				foreach ($personnes as $pers) {
+						$code.="<option value='".$pers['CLT-NumID']."'>".$pers['CLT-Nom']."</option>";
+				}
+				$code.='</select></td>
+				<td><textarea name="commentaire" rows="2" cols="75"></textarea></td>
+				<td><input type="submit" value="Ajouter"/></form></td>
+				<td></td>
+			</tr>
 		</form>
+
 		</table></tbody>
     </div></div>';
 	return($code);
-}*/
+}
 
 ?>

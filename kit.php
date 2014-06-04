@@ -35,7 +35,7 @@ if(!(Auth::isLogged())){
   
 </head>
 
-<body>
+<body style="background-color:#F6F6F6;">
 
   <div id="wrapper">
 
@@ -74,7 +74,7 @@ if(!(Auth::isLogged())){
     <!-- Barre du haut -->
     <nav class="navbar navbar-inverse navbar-fixed-top" style="height:60px;" role="navigation">
       <div class="navbar-header">
-        <a class="navbar-brand" href="index.php" style="margin-right:21px;"><img src="img/logo.png" style="width:40px;height:40px;margin-top:-5px;padding:0px"/> CERCLE</a>
+       <a class="navbar-brand" href="index.php" style="margin-right:50px;margin-left:40px;"><img src="img/logo_new2.png" style="width:50px;height:50px;margin-top:-12px;padding:0px"/></a>
       </div>
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <!-- Menu du côté -->
@@ -114,10 +114,10 @@ if(!(Auth::isLogged())){
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <center><h4 class="modal-title" id="myModalLabel">Chargement des clients</h4></center>
+                <h4 class="modal-title" id="myModalLabel">Chargement des clients</h4>
               </div>
               <div class="modal-body">
-                <center><img src="img/load.gif"/></center>
+                <center><img src="img/load_new.gif"/></center>
               </div>
 
             </div>
@@ -136,7 +136,7 @@ if(!(Auth::isLogged())){
     <!-- Bas de page -->
     <div class="col-lg-12">
       <center>
-        2014 © Tous Droits Réservés &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp; Contact : <a href="mailto:savcercle@strategies-avenir.com ">savcercle@strategies-avenir.com </a><img src="img/logo2.bmp" width="145px" height="49px"/>
+        2014 © Tous Droits Réservés &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp; Contact : <a href="mailto:savcercle@strategies-avenir.com ">savcercle@strategies-avenir.com </a><img src="img/logo2.png" width="145px" height="49px"/>
       </center>
     </div>
 

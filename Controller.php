@@ -31,7 +31,10 @@ class Controller{
 			'deleteClientRevenu' => 'DeleteClientRevenuAction',
 			'addClientHistorique' => 'AddClientHistoriqueAction',
 			'modifClientHistorique' => 'ModifClientHistoriqueAction',
-			'deleteClientHistorique' => 'DeleteClientHistoriqueAction'
+			'deleteClientHistorique' => 'DeleteClientHistoriqueAction',
+			'addClientRelationel' => 'AddClientRelationelAction',
+			'modifClientRelationel' => 'ModifClientRelationelAction',
+			'deleteClientRelationel' => 'DeleteClientRelationelAction'
 			);
 	}
 
@@ -324,8 +327,25 @@ class Controller{
 			$res_his = $pdo->query($query_his);
 			$historiques = $res_his->fetchALL(PDO::FETCH_ASSOC);
 
+			//Requete Type Relation
+			$query_typ_rel = "SELECT * FROM `relations`";
+			$pdo->exec("SET NAMES UTF8");
+			$res_typ_rel = $pdo->query($query_typ_rel);
+			$type_relation = $res_typ_rel->fetchALL(PDO::FETCH_ASSOC);
+
+			//Requete Relations Clients
+			$query_rel = "SELECT * FROM `relations par personne` WHERE `R/P-NumApporteur` = ".$client[0]['CLT-NumID']."";
+			$res_rel = $pdo->query($query_rel);
+			$relations = $res_rel->fetchALL(PDO::FETCH_ASSOC);
+
+			//Requete Personnes
+			$query_pers = "SELECT `CLT-NumID`, `CLT-Nom`, `CLT-Prénom` FROM `clients et prospects` ORDER BY `CLT-Nom`";
+			$pdo->exec("SET NAMES UTF8");
+			$res_pers = $pdo->query($query_pers);
+			$personnes = $res_pers->fetchALL(PDO::FETCH_ASSOC);
+
 			Auth::setInfo('page',$client[0]['CLT-Nom']);
-			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques));
+			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques,$type_relation,$relations,$personnes));
 		} else {
 			AffichePage(AffichePageMessage("Erreur !"));
 		}
@@ -566,5 +586,36 @@ class Controller{
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
 		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=historique");
+	}
+
+	//Ajout d'un historique d'un client
+	public function AddClientRelationelAction(){
+		extract($_POST);
+		$query = "INSERT INTO `relations par personne` VALUES ($idClient,$pers,$type,'$commentaire')";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=relationel");
+	}
+
+	//Suppression d'une relation d'un client
+	public function DeleteClientRelationelAction(){
+		extract($_POST);
+		$query = "DELETE FROM `relations par personne` WHERE `R/P-NumApporteur`= $idApp AND `R/P-NumReco` = $idReco AND `R/P-Type` = $idType";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=relationel");
+	}
+
+	//Modification d'une relation d'un client
+	public function ModifClientRelationelAction(){
+		extract($_POST);
+		$query = "UPDATE`relations par personne` SET `R/P-NumApporteur`= $idApp, `R/P-NumReco` = $pers, `R/P-Type` = $type, `R/P-Commentaire` = '$commentaire'
+				  WHERE `R/P-NumApporteur`= $idApp AND `R/P-NumReco` = $idReco AND `R/P-Type` = $idType";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=relationel");
 	}
 }
