@@ -18,7 +18,11 @@ if(!(Auth::isLogged())){
   <meta name="description" content="Gestion CRM">
   <meta name="author" content="Stratégies d'avenir">
 
-  <title>CERCLE</title>
+  <title>CERCLE - 
+    <?php 
+    echo $_SESSION['Auth']['page']; 
+    ?>
+  </title>
 
   <link rel="icon" href="img/favico.ico" />
 
@@ -28,6 +32,7 @@ if(!(Auth::isLogged())){
   <!-- Le Kit SB-Admin pour le Bootstrap -->
   <link href="css/sb-admin.css" rel="stylesheet">
   <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
+  
 </head>
 
 <body>
@@ -80,7 +85,7 @@ if(!(Auth::isLogged())){
 
         <ul class="nav navbar-nav navbar-left navbar-user">
           <li <?php if(!isset($_GET['action'])){ echo "class='active'"; } ?>><a href="index.php"><b><img src="img/home.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp;Accueil</b></a></li>
-          <li <?php if(isset($_GET['action']) && preg_match("#[c|C]lient#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=client"><b><img src="img/client.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Base Clients</b></a></li>
+          <li <?php if(isset($_GET['action']) && preg_match("#[c|C]lient#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=client" onclick="$('#myModal').modal('show')"><b><img src="img/client.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Base Clients</b></a></li>
           <li><a href="#"><b><img src="img/partenaire.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Bases Partenaires</b></a></li>
           <li><a href="#"><b><img src="img/produit.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Compagnies et Produits</b></a></li>
           <li><a href="#"><img src="img/procedure.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp;<b> Procédures</b></a></li>
@@ -103,9 +108,27 @@ if(!(Auth::isLogged())){
     <div id="page-wrapper">
       <div class="row">
         <div class="col-lg-12"><hr/>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <center><h4 class="modal-title" id="myModalLabel">Chargement des clients</h4></center>
+              </div>
+              <div class="modal-body">
+                <center><img src="img/load.gif"/></center>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
           <?php 
           echo $contenu;
           ?>
+
         </div>
       </div>
     </div>

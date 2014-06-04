@@ -2,4 +2,5 @@ Base Client : Bouton Destinataire Couriers => Demander infos
 Fiche Client : Bouton Courriers => bug ?
 Fiche Client : Bouton A faire : Arborescence groupe (PDF)
 Fiche Client : Onglet Pro => A faire : filtre catégorie/profession
-Base Client : Afficher Clients selon les droits 
+Base client : Smiley vérification sur contrats
+  

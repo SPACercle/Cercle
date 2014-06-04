@@ -44,6 +44,7 @@ if(isset($_POST) && !empty($_POST['identifiant']) && !empty($_POST['mdp'])){
             'portSelect' => null,
             'nomPortSelect' => null
             );
+        
         header("Location:index.php");
     } else {
         $error = "Mauvais identifiants";

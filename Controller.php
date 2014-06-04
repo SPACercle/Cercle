@@ -51,6 +51,7 @@ class Controller{
 
 	//Action par défaut
 	public function AfficheDefaultAction(){
+		Auth::setInfo('page','Accueil');
 		AffichePage(AfficheHome());
 	}
 
@@ -61,6 +62,7 @@ class Controller{
 	
 	//Droits
 	public function DroitsAction(){
+		Auth::setInfo('page','Mes droits');
 		$id = Auth::getInfo('identifiant');
 		$query = "SELECT * FROM `statuts administration` sa,`conseillers` c, `statuts fonctions` sf WHERE `CON-Identifiant`='$id' AND c.`CON-NumAdministration`= sa.`ADM-NumID` AND c.`CON-NumFonction`= sf.`FON-NumID`";
 		$pdo = BDD::getConnection();
@@ -101,10 +103,11 @@ class Controller{
 
 	//Base client (liste des clients)
 	public function ClientAction(){
+		Auth::setInfo('page','Base Clients');
 		$id = Auth::getInfo('portSelect');
 		$modeAgence = Auth::getInfo('modeAgence');
 		if($modeAgence == 1){
-			$query = "SELECT cli.`CLT-Civilité`, cli.`CLT-Conseiller`, cli.`CLT-Type`, cli.`CLT-Statut`, cli.`CLT-Nom`, cli.`CLT-Prénom`, cli.`CLT-NumID`, con.`CON-Couleur`,con.`CON-Nom` ,con.`CON-Prénom`, civ.`CIV-Nom`, sta.`SPR-Nom`, typ.`TYP-Nom`
+			$query = "SELECT cli.`CLT-Sensibilite` ,cli.`CLT-Civilité`, cli.`CLT-Conseiller`, cli.`CLT-Type`, cli.`CLT-Statut`, cli.`CLT-Nom`, cli.`CLT-Prénom`, cli.`CLT-NumID`, con.`CON-Couleur`,con.`CON-Nom` ,con.`CON-Prénom`, civ.`CIV-Nom`, sta.`SPR-Nom`, typ.`TYP-Nom`
 			FROM `clients et prospects` cli, `conseillers` con, `civilites` civ, `statut professionnel` sta, `type client` typ
 			WHERE cli.`CLT-Conseiller` = con.`CON-NumID`
 			AND cli.`CLT-Civilité` = civ.`CIV-NumID`
@@ -121,7 +124,7 @@ class Controller{
 			$query.=" ORDER BY cli.`CLT-Nom`;";
 
 		} else {
-			$query = "SELECT cli.`CLT-Civilité`, cli.`CLT-Conseiller`, cli.`CLT-Type`, cli.`CLT-Statut`,cli.`CLT-Nom`, cli.`CLT-Prénom`, cli.`CLT-NumID`, con.`CON-Couleur`,con.`CON-Nom` ,con.`CON-Prénom`, civ.`CIV-Nom`, sta.`SPR-Nom`, typ.`TYP-Nom`
+			$query = "SELECT cli.`CLT-Sensibilite`, cli.`CLT-Civilité`, cli.`CLT-Conseiller`, cli.`CLT-Type`, cli.`CLT-Statut`,cli.`CLT-Nom`, cli.`CLT-Prénom`, cli.`CLT-NumID`, con.`CON-Couleur`,con.`CON-Nom` ,con.`CON-Prénom`, civ.`CIV-Nom`, sta.`SPR-Nom`, typ.`TYP-Nom`
 			FROM `clients et prospects` cli,`conseillers` con, `civilites` civ, `statut professionnel` sta, `type client` typ
 			WHERE cli.`CLT-Conseiller` = $id 
 			AND con.`CON-NumID` = $id 
@@ -155,11 +158,13 @@ class Controller{
 		if(!isset($filtre)){
 			$filtre = 1;
 		}
+
 		AffichePage(AfficheClient($clients,$types,$filtre));
 	}
 
 	//Ajout client
 	public function AjoutClientAction(){
+		Auth::setInfo('page','Ajout Client');
 		$query = "SELECT sta.*
 		FROM `statut professionnel` sta
 		WHERE sta.`SPR-PersonneMorale` = 1
@@ -316,10 +321,10 @@ class Controller{
 
 			//Requete Historique Clients
 			$query_his = "SELECT * FROM `historique par client` WHERE `H/C-NumClient` = ".$client[0]['CLT-NumID']."";
-			$pdo->exec("SET NAMES UTF8");
 			$res_his = $pdo->query($query_his);
 			$historiques = $res_his->fetchALL(PDO::FETCH_ASSOC);
 
+			Auth::setInfo('page',$client[0]['CLT-Nom']);
 			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques));
 		} else {
 			AffichePage(AffichePageMessage("Erreur !"));
