@@ -32,6 +32,10 @@ if(!(Auth::isLogged())){
   <!-- Le Kit SB-Admin pour le Bootstrap -->
   <link href="css/sb-admin.css" rel="stylesheet">
   <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
+
+  <!-- Pour le drag and drop -->
+  <link rel="stylesheet" type="text/css" href="css/styleDragDrop.css" />
+  <link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
   
 </head>
 
@@ -50,7 +54,12 @@ if(!(Auth::isLogged())){
             <option></option>
             <?php
             foreach(Auth::getInfo('port') as $port){
-              echo "<option value=".$port['CON-NumID'].":".str_replace(' ','-',$port['CON-Nom']).":".$port['CON-Prénom'].">".$port['CON-Nom']." ".$port['CON-Prénom']."</option>";
+              echo "<option value=".$port['CON-NumID'].":".str_replace(' ','-',$port['CON-Nom']).":".$port['CON-Prénom'].">".$port['CON-Nom']." ".$port['CON-Prénom'];
+              if($port['VIS-AccesRestreint'] == 1){
+                echo" (RESTREINT)";
+                array_push($_SESSION['Auth']['portsRestreint'],$port['CON-NumID']);
+              }
+              echo "</option>";
             }
             ?>
           </select>
@@ -150,8 +159,19 @@ if(!(Auth::isLogged())){
   <script src="js/tablesorter/jquery.tablesorter.js"></script>
   <script src="js/tablesorter/tables.js"></script>
 
-  <!-- JavaScript Perso -->
+  <!-- Perso -->
   <script src="js/fonctions.js"></script>
+
+  <!-- Pour le drag and drop -->
+  <script src="js/jquery-ui.js"></script>
+  <script src="js/fieldChooser.js"></script>
+  <script>
+      $(document).ready(function () {
+          var $sourceFields = $("#sourceFields");
+          var $destinationFields = $("#destinationFields");
+          var $chooser = $("#fieldChooser").fieldChooser(sourceFields, destinationFields);
+      });
+  </script>
 
 </body>
 </html>

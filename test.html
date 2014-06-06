@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Drawing Tests</title>
+        
+        <link rel="stylesheet" type="text/css" href="css/styleDragDrop.css" />
+        <link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+        
+        <script src="js/jquery-1.10.2.js"></script>
+        <script src="js/jquery-ui.js"></script>
+        <script src="js/fieldChooser.js"></script>
+        
+        <script>
+            $(document).ready(function () {
+                var $sourceFields = $("#sourceFields");
+                var $destinationFields = $("#destinationFields");
+                var $chooser = $("#fieldChooser").fieldChooser(sourceFields, destinationFields);
+            });
+        </script>
+    </head>
+    <body>
+        <div id="fieldChooser" tabIndex="1">
+            <div id="sourceFields">
+                <div>First name</div>
+                <div>Last name</div>
+                <div>Home</div>
+                <div>Work</div>
+                <div>Direct</div>
+                <div>Cell</div>
+                <div>Fax</div>
+                <div>Work email</div>
+                <div>Personal email</div>
+                <div>Website</div>
+            </div>
+            <div id="destinationFields">
+            </div>
+        </div>
+    </body>
+</html>

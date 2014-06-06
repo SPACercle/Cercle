@@ -18,7 +18,7 @@ function AffichePageMessage($message){
 
 //Affichage de l'accueil
 function AfficheHome(){
-	return('<center><br/><br/><br/><br/><br/><br/><img src="img/logo_new.png" style="width:300px;height:300px;"/></center>');
+	return('<center><br/><br/><br/><br/><img src="img/logo_new.png" style="width:300px;height:300px;"/><br/><br/><h4>Version Beta</h4></center>');
 }
 
 //Affichage des droits
@@ -96,7 +96,7 @@ function AfficheClient($clients,$types,$filtre){
 			$code.="<option value='all'>Tous</option>";
 		}
 	}
-	$code.= "</select> <input type='submit' value='Filtrer'/></form>";
+	$code.= '</select> <input type="submit" value="Filtrer"  onclick="$(\'#myModal\').modal(\'show\')"/></form>';
 	$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<form style='display:inline;' action='index.php?action=client' method='post'>";
 	if(!isset($_POST['filtre'])){
 		$filtre = 1;
@@ -104,7 +104,7 @@ function AfficheClient($clients,$types,$filtre){
 	$code.="
 	<input type='text' class='form-control' style='display:inline;width:200px;' name='recherche'/>
 	<span class='input-group-btn' style='display:inline;'>
-	<button class='btn btn-default' type='submit' style='display:inline;'><i class='fa fa-search'></i></button>
+	<button class='btn btn-default' type='submit' style='display:inline;' onclick=\"$('#myModal').modal('show')\"><i class='fa fa-search'></i></button>
 	</span>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class='btn btn-default' onclick=\"$('#myModal').modal('show')\"><i class='fa fa-refresh'></i> Actualiser</button>
 	</form>
@@ -113,11 +113,15 @@ function AfficheClient($clients,$types,$filtre){
 	<table class='table table-hover tablesorter'>
 	<thead>
 	<tr>
-	<th>Etat <i class='fa fa-sort'></i></th>
+	<th style='width:90px;'>Etat <i class='fa fa-sort'></i></th>
 	<th style='width:65px;'>Civilité <i class='fa fa-sort'></i></th>
 	<th>Type <i class='fa fa-sort'></i></th>
 	<th>Nom Client <i class='fa fa-sort'></i></th>
-	<th>Conseiller <i class='fa fa-sort'></i></th>
+	<th style='width:120px;'>Date naissance <i class='fa fa-sort'></i></th>
+	<th>Profession <i class='fa fa-sort'></i></th>
+	<th >Ville <i class='fa fa-sort'></i></th>
+	<th style='width:300px;'>Conseiller <i class='fa fa-sort'></i></th>
+	<th style='width:70px;'>Accès <i class='fa fa-sort'></i></th>
 	</tr>
 	</thead>
 	<tbody>";
@@ -130,7 +134,11 @@ function AfficheClient($clients,$types,$filtre){
 			}
 		}
 		if($ok){
-			$code.= '<tr onclick="window.open(\'index.php?action=ficheClient&idClient='.$cli['CLT-NumID'].'\');" class="rowClient" target="_blank">';
+			if(in_array($cli['CLT-Conseiller'],Auth::getInfo('portsRestreint'))){
+				$code.= '<tr style="cursor:url(\'img/lock.png\'), pointer;">';
+			} else {
+				$code.= '<tr onclick="window.open(\'index.php?action=ficheClient&idClient='.$cli['CLT-NumID'].'\');" class="rowClient" target="_blank">';
+			}
 			//DEBUT REQUETE ETAT AVEC SMILEY
 			$smiley = 1;
 			$pdo = BDD::getConnection();
@@ -143,6 +151,8 @@ function AfficheClient($clients,$types,$filtre){
 							  AND typ.`HIS-PECSensibilite` = 1 AND sen.`SEN-Num` = ".$cli['CLT-Sensibilite']."";
 				$res_his = $pdo->query($query_his);
 				$historiques = $res_his->fetchALL(PDO::FETCH_ASSOC);
+				$diffMax = 0;
+				$smileyMax = 1;
 				foreach ($historiques as $historique) {
 					$d1 = new DateTime($historique['H/C-Date']); 
 					$d2 = new DateTime('NOW'); 
@@ -153,8 +163,20 @@ function AfficheClient($clients,$types,$filtre){
 					} else {
 						if($diff2 < ($historique['SEN-Fréquence']+3)){
 							$smiley = 2;
+							if($smileyMax < $smiley){
+								$smileyMax = $smiley;
+							}
+							if($diffMax < $diff2){
+								$diffMax = $diff2;
+							}
 						} else {
 							$smiley = 3;
+							if($smileyMax < $smiley){
+								$smileyMax = $smiley;
+							}
+							if($diffMax < $diff2){
+								$diffMax = $diff2;
+							}
 						}
 					}
 				}
@@ -167,17 +189,29 @@ function AfficheClient($clients,$types,$filtre){
 			}
 			$code.= "<td>";
 			if($cli['CLT-Sensibilite'] != 0 && $smiley != 1){
-				$code.="<img src='img/".$smiley.".png' style='width:20px;height:20px;'><span style='display:none;'>$smiley</span>";
+				$code.="<img src='img/".$smileyMax.".png' style='width:20px;height:20px;'> ".$diffMax." mois";
 			} else {
-				$code.="<span style='display:none;'>$smiley-3</span>";
+				$code.="";
+			}
+			if(!isset($cli['CLT-DateNaissance'])){
+				$dateNaissance = "";
+			} else {
+				$dateNaissance = date('d/m/Y',strtotime($cli['CLT-DateNaissance']));
 			}
 			$code.="</td>
 			<td>".$cli['CIV-Nom']."</td>
 			<td>".$cli['SPR-Nom']."</td>
 			<td><b>".$cli['CLT-Nom']." ".$cli['CLT-Prénom']."</b></td>
+			<td>".$dateNaissance."</td>
+			<td>".$cli['PRO-Nom']."</td>
+			<td>".$cli['CLT-Ville']."</td>
 			<td><button type='button' class='btn btn-primary btn-xs' style='background-color:".$couleur.";border-color:black;width:20px;height:15px;'></button>&nbsp;&nbsp;
 			 ".$cli['TYP-Nom']." de ".$cli['CON-Prénom']." ".$cli['CON-Nom']."</td>";
-
+			if(in_array($cli['CLT-Conseiller'],Auth::getInfo('portsRestreint'))){
+				$code.="<td><i class='fa fa-lock fa-lg lock' style='color:#BB0B0B;'></i></td>";
+			} else {
+				$code.="<td></td>";
+			}
 			$code.="</tr>";
 		}
 	}
@@ -238,15 +272,15 @@ function AfficheClientAjout($formes){
 }
 
 //Affichage de la fiche client
-function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques,$types_relation,$relations,$personnes){
+function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques,$types_relation,$relations,$personnes,$besoins,$occurences){
 	$code='
 	<h4>'.$client["CLT-Nom"].' '.$client["CLT-Prénom"].'</h4>
 	<form style="display:inline;" action="index.php?action=courrierClient" method="post"/><button type="submit" class="btn btn-default"><i class="fa fa-envelope"></i> Courrier</button></form>
 	<form style="display:inline;" action="index.php?action=arboClient" method="post"/><button type="submit" class="btn btn-default"><i class="fa fa-print"></i> Arborescence Groupe</button></form>
 	<form style="display:inline;" action="index.php?action=supClient" method="post"/><input type="hidden" value="'.$client['CLT-NumID'].'" name="idClient"/><button onclick="return confirm(\'Voulez-vous vraiment supprimer ce client ?\')" type="submit" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> Suppression Client</button></form>';
 	//DEBUT REQUETE ETAT AVEC SMILEY
-	$smiley = 1;
 	$pdo = BDD::getConnection();
+	$smileyMax = 1;
 	if($client['CLT-Sensibilite'] != 0 && $client['CLT-Type'] == 1){
 		//Requete Historique Clients
 		$query_his = "SELECT his.`H/C-NumID`, typ.`HIS-PECSensibilite`, his.`H/C-Date`, sen.`SEN-Fréquence` 
@@ -256,7 +290,10 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 					  AND typ.`HIS-PECSensibilite` = 1 AND sen.`SEN-Num` = ".$client['CLT-Sensibilite']."";
 		$res_his = $pdo->query($query_his);
 		$historiques_smiley = $res_his->fetchALL(PDO::FETCH_ASSOC);
+		$diffMax = 0;
+		$frequence;
 		foreach ($historiques_smiley as $historique_smiley) {
+			$frequence = $historique_smiley['SEN-Fréquence'];
 			$d1 = new DateTime($historique_smiley['H/C-Date']); 
 			$d2 = new DateTime('NOW'); 
 			$diff = $d1->diff($d2); 
@@ -266,14 +303,36 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 			} else {
 				if($diff2 < ($historique_smiley['SEN-Fréquence']+3)){
 					$smiley = 2;
+					if($smileyMax < $smiley){
+						$smileyMax = $smiley;
+					}
+					if($diffMax < $diff2){
+						$diffMax = $diff2;
+					}
 				} else {
 					$smiley = 3;
+					if($smileyMax < $smiley){
+						$smileyMax = $smiley;
+					}
+					if($diffMax < $diff2){
+						$diffMax = $diff2;
+					}
 				}
 			}
 		}
 	}
 	//FIN REQUETE ETAT AVEC SMILEY
-	$code.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h4 style="display:inline;">Etat : <img src=\'img/'.$smiley.'.png\' style=\'width:20px;height:20px;;\'></h4>
+	$code.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h4 style="display:inline;">Etat : <img src=\'img/'.$smileyMax.'.png\' style=\'width:20px;height:20px;;\'>';
+	$code.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	';
+	if(isset($diffMax) && $diffMax != 0){
+		$code.=" ".$diffMax.' mois';
+	}
+	$code.="</h4>";
+	if(isset($frequence) && isset($frenquence)){
+		$code.="&nbsp;&nbsp;&nbsp;&nbsp;<i>Sensibilité client : '.$frequence.' mois</i>";
+	}
+	$code.='
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<img id="load" src="img/load2.gif""/>
 	<hr/>
@@ -295,11 +354,10 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	$code.=AfficheFicheClientHistorique($client,$types_historique,$historiques);
 	//Onglet Relationel
 	$code.=AfficheFicheClientRelationel($client,$types_relation,$relations,$personnes);
-
+	//Onglet Besoin
+	$code.=AfficheFicheClientBesoin($client,$besoins,$occurences);
 	//Le reste à faire
 	$code.='
-		<div class="tab-pane fade in" id="besoin">
-		</div>
 		<div class="tab-pane fade in" id="profil">
 		</div>
 		<div class="tab-pane fade in" id="tracfin">
@@ -908,6 +966,7 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 			$code.=' active';
 		}
 		$code.='" id="relationel">
+		<button class="btn btn-success" id="ajoutLien" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Lien</button>
 		<div class="table-responsive">
       	<table class="table">
         <thead>
@@ -939,21 +998,21 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 			<td><select name="pers" style="width:200px;" required><option></option>';
 			foreach ($personnes as $pers) {
 				if($pers['CLT-NumID'] == $relation['R/P-NumReco']){
-					$code.="<option value='".$pers['CLT-NumID']."' selected='selected'>".$pers['CLT-Nom']."</option>";
+					$code.="<option value='".$pers['CLT-NumID']."' selected='selected'>".$pers['CLT-Nom']." ".$pers['CLT-Prénom']."</option>";
 				} else {
-					$code.="<option value='".$pers['CLT-NumID']."'>".$pers['CLT-Nom']."</option>";
+					$code.="<option value='".$pers['CLT-NumID']."'>".$pers['CLT-Nom']." ".$pers['CLT-Prénom']."</option>";
 				}
 			}
 			$code.='</select></td>
-			<td><textarea name="commentaire" rows="2" cols="75">'.$relation['R/P-Commentaire'].'</textarea></td>
-			<td><input type="submit" value="Modifier"/></td></form>
+			<td><textarea name="commentaire" rows="1" cols="75">'.$relation['R/P-Commentaire'].'</textarea></td>
+			<td><button type="submit" class="btn btn-warning btn-xs"><i class="fa fa-pencil fa-lg"></i> Modifier</button></td></form>
 			<td>
 				<form method="post" action="index.php?action=deleteClientRelationel" style="display:inline;">
 					<input type="hidden" name="idApp" value="'.$relation['R/P-NumApporteur'].'"/>
 					<input type="hidden" name="idReco" value="'.$relation['R/P-NumReco'].'"/>
 					<input type="hidden" name="idType" value="'.$relation['R/P-Type'].'"/>
 					<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
-					<input type="submit" value="Supprimer"/>
+					<button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-pencil fa-lg"></i> Supprimer</button>
 				</form>
 			</td>
 			</tr>';
@@ -962,28 +1021,103 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
       	<tr><td></td><td></td><td></td><td></td><td></td></tr>
       	<tr><td></td><td></td><td></td><td></td><td></td></tr>
       	<tr><td></td><td></td><td></td><td></td><td></td></tr>
-		<form method="post" action="index.php?action=addClientRelationel">
-			<tr>
-				<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
-				<td><select name="type" style="width:200px;" required><option></option>';
-				foreach ($type_relation as $type) {
-						$code.="<option value='".$type['REL-Num']."'>".$type['REL-Nom']."</option>";
-				}
-				$code.='</select></td>
-				<td><select name="pers" style="width:200px;" required><option></option>';
-				foreach ($personnes as $pers) {
-						$code.="<option value='".$pers['CLT-NumID']."'>".$pers['CLT-Nom']."</option>";
-				}
-				$code.='</select></td>
-				<td><textarea name="commentaire" rows="2" cols="75"></textarea></td>
-				<td><input type="submit" value="Ajouter"/></form></td>
-				<td></td>
-			</tr>
-		</form>
 
 		</table></tbody>
+
+			<div id="ajoutLienType">
+
+				<h5 style="display:inline;margin-left:10px;">Lien à créer <span style="color:#A5260A">(Glissez ici les éléments)</span></h5>
+
+		        <div id="fieldChooser" tabIndex="1">
+		        	<div id="lienPers">
+		            <div id="sourceFields"><h3 style="display:inline;"><span style="color:#A5260A">Personne</span></h3>';
+		               foreach ($personnes as $pers) {
+							$code.="<div>".$pers['CLT-Nom']." ".$pers['CLT-Prénom']."<input type='hidden' name='pers' value='".$pers['CLT-NumID']."'/></div>";
+						}
+					$code.='
+		            </div></div>
+		            <div id="lienType">
+		            <div id="sourceFields"><h3 style="display:inline;"><span style="color:#A5260A">Type</span></h3>';
+		               foreach ($type_relation as $type) {
+							$code.="<div>".$type['REL-Nom']."<input type='hidden' name='type' value='".$type['REL-Num']."'/></div>";
+						}
+					$code.='
+		            </div></div>
+		            <form method="post" action="index.php?action=addClientRelationel" id="formLien">
+		            	<div id="lien">
+			            	<div id="destinationFields">
+			            	</div>
+			            </div>
+			            <input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+					    <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					    
+			        </form>
+	        	</div>
+
+	        </div>
+			
     </div></div>';
 	return($code);
 }
 
+//Affichage de l'onglet Besoin
+function AfficheFicheClientBesoin($client,$besoins,$occurences){
+	$code='<div class="tab-pane fade in';
+		if(isset($_GET['onglet']) && $_GET['onglet'] == "besoin"){
+			$code.=' active';
+		}
+		$code.='" id="besoin">
+		<div class="col-lg-6">
+		<div class="bs-example">
+             <ul class="nav nav-tabs" style="margin-bottom: 15px;">
+                <li class="active"><a href="#retraite" data-toggle="tab">Retraite</a></li>
+                <li><a href="#prevoyance" data-toggle="tab">Prévoyance</a></li>
+                <li><a href="#prevoyancePost" data-toggle="tab">Prévoyance Post-Activité</a></li>
+                <li><a href="#sante" data-toggle="tab">Santé</a></li>
+                <li><a href="#epargne" data-toggle="tab">Epargne</a></li>
+                <li><a href="#chomage" data-toggle="tab">Chômage</a></li>
+                <li><a href="#pret" data-toggle="tab">Prêt</a></li>
+              </ul>
+              <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade active in" id="retraite">
+                	<h5>En Retraite, le client souhaite</h5>
+                	<select id="besoin2">
+                	<option>Choisir...</option>';
+                	foreach ($besoins as $besoin){
+                		if($besoin['B/T-NumType'] == 13){
+                			$code.="<option value='".$besoin['BES-NumID']."/13'>".$besoin['BES-NOM']."</option>";
+                		}
+                	}
+        $code.='
+        	</select>
+        		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        		<select id="occurences">
+        			<option>....</option>
+        		</select>
+
+                </div>
+                <div class="tab-pane fade in" id="prevoyance">
+                <h5>En Prévoyance, le client souhaite</h5>
+                </div>
+                <div class="tab-pane fadein" id="prevoyancePost">
+                	<h5>En Prévoyance Post-Activité, le client souhaite</h5>
+                </div>
+                <div class="tab-pane fade in" id="sante">
+                	<h5>En Santé, le client souhaite</h5>
+                </div>
+                <div class="tab-pane fade in" id="epargne">
+                	<h5>En Epargne, le client souhaite</h5>
+                </div>
+                <div class="tab-pane fade in" id="chomage">
+                	<h5>En Chômage, le client souhaite</h5>
+                </div>
+                <div class="tab-pane fade in" id="pret">
+                <h5>En Prêt, le client souhaite</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div></div>';
+	return($code);
+}
 ?>

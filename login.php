@@ -32,6 +32,7 @@ if(isset($_POST) && !empty($_POST['identifiant']) && !empty($_POST['mdp'])){
         $port_query ="SELECT * FROM `visualisation portefeuilles` v, `conseillers` c WHERE v.`VIS-NumUtilisateur` = ".$numId." AND v.`VIS-NumORIAS` = c.`CON-NumORIAS`"; 
         $res_port = $pdo->query($port_query);
         $trow = $res_port->fetchALL(PDO::FETCH_ASSOC);
+
         $_SESSION['Auth'] = array(
             'identifiant' => $identifiant,
             'mdp' => $mdp,
@@ -42,7 +43,8 @@ if(isset($_POST) && !empty($_POST['identifiant']) && !empty($_POST['mdp'])){
             'id' => $numId,
             'modeAgence' => 1,
             'portSelect' => null,
-            'nomPortSelect' => null
+            'nomPortSelect' => null,
+            'portsRestreint' => array()
             );
         
         header("Location:index.php");

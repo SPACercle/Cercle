@@ -110,11 +110,12 @@ class Controller{
 		$id = Auth::getInfo('portSelect');
 		$modeAgence = Auth::getInfo('modeAgence');
 		if($modeAgence == 1){
-			$query = "SELECT cli.`CLT-Sensibilite` ,cli.`CLT-Civilité`, cli.`CLT-Conseiller`, cli.`CLT-Type`, cli.`CLT-Statut`, cli.`CLT-Nom`, cli.`CLT-Prénom`, cli.`CLT-NumID`, con.`CON-Couleur`,con.`CON-Nom` ,con.`CON-Prénom`, civ.`CIV-Nom`, sta.`SPR-Nom`, typ.`TYP-Nom`
-			FROM `clients et prospects` cli, `conseillers` con, `civilites` civ, `statut professionnel` sta, `type client` typ
+			$query = "SELECT pro.`PRO-Nom`, cli.`CLT-Ville`, cli.`CLT-DateNaissance`, cli.`CLT-Sensibilite` ,cli.`CLT-Civilité`, cli.`CLT-Conseiller`, cli.`CLT-Type`, cli.`CLT-Statut`, cli.`CLT-Nom`, cli.`CLT-Prénom`, cli.`CLT-NumID`, con.`CON-Couleur`,con.`CON-Nom` ,con.`CON-Prénom`, civ.`CIV-Nom`, sta.`SPR-Nom`, typ.`TYP-Nom`
+			FROM `clients et prospects` cli, `conseillers` con, `civilites` civ, `statut professionnel` sta, `type client` typ, `professions` pro
 			WHERE cli.`CLT-Conseiller` = con.`CON-NumID`
 			AND cli.`CLT-Civilité` = civ.`CIV-NumID`
 			AND cli.`CLT-Statut` = sta.`SPR-NumID`
+			AND pro.`PRO-NumID` = cli.`CLT-Profession`
 			AND cli.`CLT-Type` = typ.`TYP-NumID`";
 			//Si il y a un filtre
 			if(isset($_POST['filtre']) && $_POST['filtre'] != 'all'){
@@ -127,12 +128,13 @@ class Controller{
 			$query.=" ORDER BY cli.`CLT-Nom`;";
 
 		} else {
-			$query = "SELECT cli.`CLT-Sensibilite`, cli.`CLT-Civilité`, cli.`CLT-Conseiller`, cli.`CLT-Type`, cli.`CLT-Statut`,cli.`CLT-Nom`, cli.`CLT-Prénom`, cli.`CLT-NumID`, con.`CON-Couleur`,con.`CON-Nom` ,con.`CON-Prénom`, civ.`CIV-Nom`, sta.`SPR-Nom`, typ.`TYP-Nom`
-			FROM `clients et prospects` cli,`conseillers` con, `civilites` civ, `statut professionnel` sta, `type client` typ
+			$query = "SELECT pro.`PRO-Nom`, cli.`CLT-Ville`, cli.`CLT-DateNaissance`, cli.`CLT-Sensibilite`, cli.`CLT-Civilité`, cli.`CLT-Conseiller`, cli.`CLT-Type`, cli.`CLT-Statut`,cli.`CLT-Nom`, cli.`CLT-Prénom`, cli.`CLT-NumID`, con.`CON-Couleur`,con.`CON-Nom` ,con.`CON-Prénom`, civ.`CIV-Nom`, sta.`SPR-Nom`, typ.`TYP-Nom`
+			FROM `clients et prospects` cli,`conseillers` con, `civilites` civ, `statut professionnel` sta, `type client` typ, `professions` pro
 			WHERE cli.`CLT-Conseiller` = $id 
 			AND con.`CON-NumID` = $id 
 			AND cli.`CLT-Civilité` = civ.`CIV-NumID`
 			AND cli.`CLT-Statut` = sta.`SPR-NumID`
+			AND pro.`PRO-NumID` = cli.`CLT-Profession`
 			AND cli.`CLT-Type` = typ.`TYP-NumID`";
 			//Si il y a un filtre
 			if(isset($_POST['filtre']) && $_POST['filtre'] != 'all'){
@@ -344,8 +346,20 @@ class Controller{
 			$res_pers = $pdo->query($query_pers);
 			$personnes = $res_pers->fetchALL(PDO::FETCH_ASSOC);
 
+			//Requete Besoins
+			$query_bes = "SELECT distinct(be.`BES-NOM`), bt.`B/T-NumType`, be.`BES-NumID` FROM `besoins par type produits` bt, `besoins existants` be WHERE bt.`B/T-NumBesoin` = be.`BES-NumID`";
+			$pdo->exec("SET NAMES UTF8");
+			$res_bes = $pdo->query($query_bes);
+			$besoins = $res_bes->fetchALL(PDO::FETCH_ASSOC);
+
+			//Requete Occurences
+			$query_occ = "SELECT bc.`OCC-Nom`, bt.`B/T-NumBesoin`, bt.`B/T-NumType` FROM `besoins par type produits` bt, `besoins occurences` bc WHERE bt.`B/T-NumOcc` = bc.`OCC-NumID`;";
+			$pdo->exec("SET NAMES UTF8");
+			$res_occ = $pdo->query($query_occ);
+			$occurences = $res_occ->fetchALL(PDO::FETCH_ASSOC);
+
 			Auth::setInfo('page',$client[0]['CLT-Nom']);
-			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques,$type_relation,$relations,$personnes));
+			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques,$type_relation,$relations,$personnes,$besoins,$occurences));
 		} else {
 			AffichePage(AffichePageMessage("Erreur !"));
 		}
@@ -591,20 +605,44 @@ class Controller{
 	//Ajout d'un historique d'un client
 	public function AddClientRelationelAction(){
 		extract($_POST);
-		$query = "INSERT INTO `relations par personne` VALUES ($idClient,$pers,$type,'$commentaire')";
+		//Insertion de la relation
+		$query = "INSERT INTO `relations par personne` VALUES ($idClient,$pers,$type,null)";
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
+		//Insertion de la relation inverse
+		$query2 = "SELECT `REL-NumInverse` FROM `relations` WHERE `REL-Num` = $type";
+		$pdo->exec("SET NAMES UTF8");
+		$res2 = $pdo->query($query2);
+		$res22 = $res2->fetchALL(PDO::FETCH_ASSOC);
+		$type_inverse = $res22[0]['REL-NumInverse'];
+		if($type_inverse != 0){
+			$query3 = "INSERT INTO `relations par personne` VALUES ($pers,$idClient,$type_inverse,null)";
+			$pdo->exec("SET NAMES UTF8");
+			$res3 = $pdo->exec($query3);
+		}
 		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=relationel");
 	}
 
 	//Suppression d'une relation d'un client
 	public function DeleteClientRelationelAction(){
 		extract($_POST);
+		//Suppression de la relation
 		$query = "DELETE FROM `relations par personne` WHERE `R/P-NumApporteur`= $idApp AND `R/P-NumReco` = $idReco AND `R/P-Type` = $idType";
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
+		//Suppresion de la relation inverse
+		$query2 = "SELECT `REL-NumInverse` FROM `relations` WHERE `REL-Num` = $idType";
+		$pdo->exec("SET NAMES UTF8");
+		$res2 = $pdo->query($query2);
+		$res22 = $res2->fetchALL(PDO::FETCH_ASSOC);
+		$type_inverse = $res22[0]['REL-NumInverse'];
+		if($type_inverse != 0){
+			$query3 = "DELETE FROM `relations par personne` WHERE `R/P-NumApporteur` = $idReco AND `R/P-NumReco` = $idApp AND `R/P-Type` = $type_inverse";
+			$pdo->exec("SET NAMES UTF8");
+			$res3 = $pdo->exec($query3);
+		}
 		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=relationel");
 	}
 
