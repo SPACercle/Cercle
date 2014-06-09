@@ -34,7 +34,9 @@ class Controller{
 			'deleteClientHistorique' => 'DeleteClientHistoriqueAction',
 			'addClientRelationel' => 'AddClientRelationelAction',
 			'modifClientRelationel' => 'ModifClientRelationelAction',
-			'deleteClientRelationel' => 'DeleteClientRelationelAction'
+			'deleteClientRelationel' => 'DeleteClientRelationelAction',
+			'deleteClientBesoin' => 'DeleteClientBesoinAction',
+			'addClientBesoin' => 'AddClientBesoinAction'
 			);
 	}
 
@@ -358,8 +360,14 @@ class Controller{
 			$res_occ = $pdo->query($query_occ);
 			$occurences = $res_occ->fetchALL(PDO::FETCH_ASSOC);
 
+			//Requete Besoins Client
+			$query_bes_cli = "SELECT * FROM `besoins par client` bc, `besoins occurences` bo, `besoins existants` be WHERE bc.`B/C-NumBesoin` = be.`BES-NumID` AND  bc.`B/C-NumOcc` = bo.`OCC-NumID` AND bc.`B/C-NumClient` = ".$client[0]['CLT-NumID']." ;";
+			$pdo->exec("SET NAMES UTF8");
+			$res_bes_cli = $pdo->query($query_bes_cli);
+			$besoins_cli = $res_bes_cli->fetchALL(PDO::FETCH_ASSOC);
+
 			Auth::setInfo('page',$client[0]['CLT-Nom']);
-			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques,$type_relation,$relations,$personnes,$besoins,$occurences));
+			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques,$type_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli));
 		} else {
 			AffichePage(AffichePageMessage("Erreur !"));
 		}
@@ -656,4 +664,28 @@ class Controller{
 		$res = $pdo->exec($query);
 		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=relationel");
 	}
+
+	//Ajout d'un besoin d'un client
+	public function AddClientBesoinAction(){
+		extract($_POST);
+		$idBesoin = explode("/",$idBesoin)[0];
+		$query = "INSERT INTO `besoins par client` VALUES ($idClient,$idType,$idBesoin,$idOcc)";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		echo $query;
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=besoin");
+	}
+
+	//Modification d'un besoin d'un client
+	public function DeleteClientBesoinAction(){
+		extract($_POST);
+		//Suppression de la relation
+		$query = "DELETE FROM `besoins par client` WHERE `B/C-NumClient`= $idClient AND `B/C-NumType` = $idType AND `B/C-NumBesoin` = $idBesoin AND `B/C-NumOcc` = $idOcc;";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=besoin");
+	}
+
 }

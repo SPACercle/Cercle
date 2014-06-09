@@ -272,7 +272,7 @@ function AfficheClientAjout($formes){
 }
 
 //Affichage de la fiche client
-function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques,$types_relation,$relations,$personnes,$besoins,$occurences){
+function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques,$types_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli){
 	$code='
 	<h4>'.$client["CLT-Nom"].' '.$client["CLT-Prénom"].'</h4>
 	<form style="display:inline;" action="index.php?action=courrierClient" method="post"/><button type="submit" class="btn btn-default"><i class="fa fa-envelope"></i> Courrier</button></form>
@@ -355,7 +355,7 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	//Onglet Relationel
 	$code.=AfficheFicheClientRelationel($client,$types_relation,$relations,$personnes);
 	//Onglet Besoin
-	$code.=AfficheFicheClientBesoin($client,$besoins,$occurences);
+	$code.=AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli);
 	//Le reste à faire
 	$code.='
 		<div class="tab-pane fade in" id="profil">
@@ -966,7 +966,7 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 			$code.=' active';
 		}
 		$code.='" id="relationel">
-		<button class="btn btn-success" id="ajoutLien" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Lien</button>
+		<button class="btn btn-success" id="ajoutLien" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Lien</button><br/>
 		<div class="table-responsive">
       	<table class="table">
         <thead>
@@ -1030,28 +1030,28 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 
 		        <div id="fieldChooser" tabIndex="1">
 		        	<div id="lienPers">
-		            <div id="sourceFields"><h3 style="display:inline;"><span style="color:#A5260A">Personne</span></h3>';
-		               foreach ($personnes as $pers) {
-							$code.="<div>".$pers['CLT-Nom']." ".$pers['CLT-Prénom']."<input type='hidden' name='pers' value='".$pers['CLT-NumID']."'/></div>";
-						}
-					$code.='
-		            </div></div>
-		            <div id="lienType">
-		            <div id="sourceFields"><h3 style="display:inline;"><span style="color:#A5260A">Type</span></h3>';
-		               foreach ($type_relation as $type) {
-							$code.="<div>".$type['REL-Nom']."<input type='hidden' name='type' value='".$type['REL-Num']."'/></div>";
-						}
-					$code.='
-		            </div></div>
-		            <form method="post" action="index.php?action=addClientRelationel" id="formLien">
-		            	<div id="lien">
-			            	<div id="destinationFields">
-			            	</div>
+			            <div id="sourceFields"><h3 style="display:inline;"><span style="color:#A5260A">Personne</span></h3>';
+			               foreach ($personnes as $pers) {
+								$code.="<div>".$pers['CLT-Nom']." ".$pers['CLT-Prénom']."<input type='hidden' name='pers' value='".$pers['CLT-NumID']."'/></div>";
+							}
+						$code.='
 			            </div>
-			            <input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
-					    <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					    
-			        </form>
+			        </div>
+		            <div id="lienType">
+			            <div id="sourceFields"><h3 style="display:inline;"><span style="color:#A5260A">Type</span></h3>';
+			               foreach ($type_relation as $type) {
+								$code.="<div>".$type['REL-Nom']."<input type='hidden' name='type' value='".$type['REL-Num']."'/></div>";
+							}
+						$code.='
+			            </div>
+			        </div>
+		            	<div id="lien">
+			            	<form method="post" action="index.php?action=addClientRelationel" id="formLien">
+				            	<div id="destinationFields">
+				            	</div>
+					            <input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+					        </form>
+			            </div>
 	        	</div>
 
 	        </div>
@@ -1061,13 +1061,12 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 }
 
 //Affichage de l'onglet Besoin
-function AfficheFicheClientBesoin($client,$besoins,$occurences){
+function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	$code='<div class="tab-pane fade in';
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "besoin"){
 			$code.=' active';
 		}
 		$code.='" id="besoin">
-		<div class="col-lg-6">
 		<div class="bs-example">
              <ul class="nav nav-tabs" style="margin-bottom: 15px;">
                 <li class="active"><a href="#retraite" data-toggle="tab">Retraite</a></li>
@@ -1081,7 +1080,34 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences){
               <div id="myTabContent" class="tab-content">
                 <div class="tab-pane fade active in" id="retraite">
                 	<h5>En Retraite, le client souhaite</h5>
-                	<select id="besoin2">
+					<div class="table-responsive">
+			      	<table class="table">
+			        <thead>
+			          <tr>
+			            <th>Besoin</th>
+			            <th>Occurence</th>
+			            <th></th>
+			          </tr>
+			        </thead>
+					<tbody>';
+                	foreach ($besoins_cli as $besoin_cli){
+                		if($besoin_cli['B/C-NumType'] == 13){
+                			$code.="<tr><td>".$besoin_cli['BES-Nom']."</td><td>".$besoin_cli['OCC-Nom']."</td>
+                					<td><form action='index.php?action=deleteClientBesoin' method='post'/>
+                					<input type='hidden' name='idClient' value='".$client['CLT-NumID']."'/>
+                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
+                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
+                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
+                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+                					</form>
+                				</tr>";
+                		}
+                	}
+			        $code.='</table></tbody>
+					<br/><br/>
+			        <h3>Ajouter un besoin </h3>
+			        <form action="index.php?action=addClientBesoin" method="post"/>
+                	Besoin : <select id="besoin2" name="idBesoin">
                 	<option>Choisir...</option>';
                 	foreach ($besoins as $besoin){
                 		if($besoin['B/T-NumType'] == 13){
@@ -1090,10 +1116,16 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences){
                 	}
         $code.='
         	</select>
-        		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-        		<select id="occurences">
-        			<option>....</option>
-        		</select>
+        		<br/><br/>
+        		Occurence :
+        		<select id="occurences" name="idOcc">
+        			
+        		</select><br/><br/>
+        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+                <input type="hidden" name="idType" value="13" />
+        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+        		</form>
+        		</div>
 
                 </div>
                 <div class="tab-pane fade in" id="prevoyance">
@@ -1116,7 +1148,6 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences){
                 </div>
               </div>
             </div>
-          </div>
     </div></div>';
 	return($code);
 }

@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+	//DEBUT ONGLET BESOIN
+
 	/**
 	* Méthode pour faire de l'Ajax
 	*/
@@ -24,7 +26,7 @@ $(document).ready(function() {
 	/**
 	* Méthode qui sera appelée au changement du besoin
 	*/
-	$('#besoin').change(function(){
+	$('#besoin2').change(function(){
 		var xhr = getXhr();
 		// On défini ce qu'on va faire quand on aura la réponse
 		xhr.onreadystatechange = function(){
@@ -48,11 +50,13 @@ $(document).ready(function() {
 		xhr.send("idBesoin="+idBesoin+"&idType="+idType);
 	});
 
+
+	//FIN ONGLET BESOIN
+
+	//DEBUT ONGLET RELATIONEL
+
 	//Cache le formulaire d'ajout d'un lien
 	$('#ajoutLienType').hide();
-
-	//Cache la liste des personnes
-	//$('#lienPers').hide();
 
 	//Cache la liste des types
 	$('#lienType').hide();
@@ -62,26 +66,21 @@ $(document).ready(function() {
 		$('#ajoutLienType').show();
 	});
 
+	//Quand la personne est glissé dans la boite, la selection du type s'affiche
 	$('#destinationFields').mouseover(function(){
 		$('#lienType').show();
 	});
 
 	nb = 0;
 
+	//Si le lien à créer dispose de toutes les infos, le formulaire se soumet
 	$('#lien').bind('DOMNodeInserted', function(event) {
-    /*if (event.type == 'DOMNodeInserted') {
-        alert('Content added! Current content:' + '\n\n' + this.innerHTML);
-    } else {
-        alert('Content removed! Current content:' + '\n\n' + this.innerHTML);
-    }*/
-    nb = nb + 1
-    if(nb/4 == 2){
-		$('#formLien').submit();
-	}
+	    nb = nb + 1
+	    if(nb/4 == 2){
+			$('#formLien').submit();
+		}
 	});
 
-	/*$('#test').click(function(){
-		alert(nb/4);
-	});*/
- 
+	//FIN ONGLET RELATIONEL
+
 });

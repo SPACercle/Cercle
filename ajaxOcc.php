@@ -4,17 +4,16 @@
 */
 include_once "BDD.php";
 
-echo "<select id='occurences'>";
+echo '<select id="occurences" name="idOcc">';
 if(isset($_POST["idBesoin"])){
 	extract($_POST);
-	$query = "SELECT bc.`OCC-Nom`, bt.`B/T-NumBesoin`, bt.`B/T-NumType` 
+	$query = "SELECT bc.`OCC-Nom`, bt.`B/T-NumBesoin`, bt.`B/T-NumType`, bc.`OCC-NumID`
 			  FROM `besoins par type produits` bt, `besoins occurences` bc 
 			  WHERE bt.`B/T-NumOcc` = bc.`OCC-NumID` 
 			  AND bt.`B/T-NumBesoin` = $idBesoin
 			  AND bc.`OCC-Nom` IS NOT NULL
 			  AND bt.`B/T-NumType` = $idType
 			 ;";
-			 echo $query;
 	$pdo = BDD::getConnection();
 	$pdo->exec("SET NAMES UTF8");
 	$res = $pdo->query($query);
