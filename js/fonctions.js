@@ -24,7 +24,7 @@ $(document).ready(function() {
 	}
 
 	/**
-	* Méthode qui sera appelée au changement du besoin
+	* Méthode qui sera appelée au changement du besoin retraite
 	*/
 	$('#besoin2').change(function(){
 		var xhr = getXhr();
@@ -50,6 +50,167 @@ $(document).ready(function() {
 		xhr.send("idBesoin="+idBesoin+"&idType="+idType);
 	});
 
+	/**
+	* Méthode qui sera appelée au changement du besoin prévoyance
+	*/
+	$('#besoin3').change(function(){
+		var xhr = getXhr();
+		// On défini ce qu'on va faire quand on aura la réponse
+		xhr.onreadystatechange = function(){
+			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
+			if(xhr.readyState == 4 && xhr.status == 200){
+				leselect = xhr.responseText;
+				// On se sert de innerHTML pour rajouter les options a la liste
+				document.getElementById('occurences2').innerHTML = leselect;
+			}
+		}
+		// Ici on va voir comment faire du post
+		xhr.open("POST","ajaxOcc.php",true);
+		// ne pas oublier ça pour le post
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		// ne pas oublier de poster les arguments
+		// ici, l'id du besoin
+		infos = document.getElementById("besoin3").value;
+		var tab = infos.split("/");
+		idBesoin =tab[0];
+		idType =tab[1];
+		xhr.send("idBesoin="+idBesoin+"&idType="+idType);
+	});
+
+	/**
+	* Méthode qui sera appelée au changement du besoin prévoyance post-activité
+	*/
+	$('#besoin4').change(function(){
+		var xhr = getXhr();
+		// On défini ce qu'on va faire quand on aura la réponse
+		xhr.onreadystatechange = function(){
+			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
+			if(xhr.readyState == 4 && xhr.status == 200){
+				leselect = xhr.responseText;
+				// On se sert de innerHTML pour rajouter les options a la liste
+				document.getElementById('occurences3').innerHTML = leselect;
+			}
+		}
+		// Ici on va voir comment faire du post
+		xhr.open("POST","ajaxOcc.php",true);
+		// ne pas oublier ça pour le post
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		// ne pas oublier de poster les arguments
+		// ici, l'id du besoin
+		infos = document.getElementById("besoin4").value;
+		var tab = infos.split("/");
+		idBesoin =tab[0];
+		idType =tab[1];
+		xhr.send("idBesoin="+idBesoin+"&idType="+idType);
+	});
+
+	/**
+	* Méthode qui sera appelée au changement du besoin santé
+	*/
+	$('#besoin5').change(function(){
+		var xhr = getXhr();
+		// On défini ce qu'on va faire quand on aura la réponse
+		xhr.onreadystatechange = function(){
+			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
+			if(xhr.readyState == 4 && xhr.status == 200){
+				leselect = xhr.responseText;
+				// On se sert de innerHTML pour rajouter les options a la liste
+				document.getElementById('occurences4').innerHTML = leselect;
+			}
+		}
+		// Ici on va voir comment faire du post
+		xhr.open("POST","ajaxOcc.php",true);
+		// ne pas oublier ça pour le post
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		// ne pas oublier de poster les arguments
+		// ici, l'id du besoin
+		infos = document.getElementById("besoin5").value;
+		var tab = infos.split("/");
+		idBesoin =tab[0];
+		idType =tab[1];
+		xhr.send("idBesoin="+idBesoin+"&idType="+idType);
+	});
+
+	/**
+	* Méthode qui sera appelée au changement du besoin épargne
+	*/
+	$('#besoin6').change(function(){
+		var xhr = getXhr();
+		// On défini ce qu'on va faire quand on aura la réponse
+		xhr.onreadystatechange = function(){
+			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
+			if(xhr.readyState == 4 && xhr.status == 200){
+				leselect = xhr.responseText;
+				// On se sert de innerHTML pour rajouter les options a la liste
+				document.getElementById('occurences5').innerHTML = leselect;
+			}
+		}
+		// Ici on va voir comment faire du post
+		xhr.open("POST","ajaxOcc.php",true);
+		// ne pas oublier ça pour le post
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		// ne pas oublier de poster les arguments
+		// ici, l'id du besoin
+		infos = document.getElementById("besoin6").value;
+		var tab = infos.split("/");
+		idBesoin =tab[0];
+		idType =tab[1];
+		xhr.send("idBesoin="+idBesoin+"&idType="+idType);
+	});
+
+	/**
+	* Méthode qui sera appelée au changement du besoin chomage
+	*/
+	$('#besoin7').change(function(){
+		var xhr = getXhr();
+		// On défini ce qu'on va faire quand on aura la réponse
+		xhr.onreadystatechange = function(){
+			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
+			if(xhr.readyState == 4 && xhr.status == 200){
+				leselect = xhr.responseText;
+				// On se sert de innerHTML pour rajouter les options a la liste
+				document.getElementById('occurences6').innerHTML = leselect;
+			}
+		}
+		// Ici on va voir comment faire du post
+		xhr.open("POST","ajaxOcc.php",true);
+		// ne pas oublier ça pour le post
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		// ne pas oublier de poster les arguments
+		// ici, l'id du besoin
+		infos = document.getElementById("besoin7").value;
+		var tab = infos.split("/");
+		idBesoin =tab[0];
+		idType =tab[1];
+		xhr.send("idBesoin="+idBesoin+"&idType="+idType);
+	});
+
+	/**
+	* Méthode qui sera appelée au changement du besoin prévoyance
+	*/
+	$('#besoin8').change(function(){
+		var xhr = getXhr();
+		// On défini ce qu'on va faire quand on aura la réponse
+		xhr.onreadystatechange = function(){
+			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
+			if(xhr.readyState == 4 && xhr.status == 200){
+				leselect = xhr.responseText;
+				// On se sert de innerHTML pour rajouter les options a la liste
+				document.getElementById('occurences7').innerHTML = leselect;
+			}
+		}
+		// Ici on va voir comment faire du post
+		xhr.open("POST","ajaxOcc.php",true);
+		// ne pas oublier ça pour le post
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		// ne pas oublier de poster les arguments
+		// ici, l'id du besoin
+		infos = document.getElementById("besoin8").value;
+		var tab = infos.split("/");
+		idBesoin =tab[0];
+		idType =tab[1];
+		xhr.send("idBesoin="+idBesoin+"&idType="+idType);
+	});
 
 	//FIN ONGLET BESOIN
 

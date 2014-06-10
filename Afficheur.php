@@ -1078,74 +1078,357 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
                 <li><a href="#pret" data-toggle="tab">Prêt</a></li>
               </ul>
               <div id="myTabContent" class="tab-content">
+              	
                 <div class="tab-pane fade active in" id="retraite">
                 	<h5>En Retraite, le client souhaite</h5>
 					<div class="table-responsive">
-			      	<table class="table">
-			        <thead>
-			          <tr>
-			            <th>Besoin</th>
-			            <th>Occurence</th>
-			            <th></th>
-			          </tr>
-			        </thead>
-					<tbody>';
-                	foreach ($besoins_cli as $besoin_cli){
-                		if($besoin_cli['B/C-NumType'] == 13){
-                			$code.="<tr><td>".$besoin_cli['BES-Nom']."</td><td>".$besoin_cli['OCC-Nom']."</td>
-                					<td><form action='index.php?action=deleteClientBesoin' method='post'/>
-                					<input type='hidden' name='idClient' value='".$client['CLT-NumID']."'/>
-                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
-                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
-                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
-                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
-                					</form>
-                				</tr>";
-                		}
-                	}
-			        $code.='</table></tbody>
-					<br/><br/>
-			        <h3>Ajouter un besoin </h3>
-			        <form action="index.php?action=addClientBesoin" method="post"/>
-                	Besoin : <select id="besoin2" name="idBesoin">
-                	<option>Choisir...</option>';
-                	foreach ($besoins as $besoin){
-                		if($besoin['B/T-NumType'] == 13){
-                			$code.="<option value='".$besoin['BES-NumID']."/13'>".$besoin['BES-NOM']."</option>";
-                		}
-                	}
-        $code.='
-        	</select>
-        		<br/><br/>
-        		Occurence :
-        		<select id="occurences" name="idOcc">
-        			
-        		</select><br/><br/>
-        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
-                <input type="hidden" name="idType" value="13" />
-        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
-        		</form>
-        		</div>
+				      	<table class="table">
+				        <thead>
+				          <tr>
+				            <th>Besoin</th>
+				            <th>Occurence</th>
+				            <th></th>
+				          </tr>
+				        </thead>
+						<tbody>';
+	                	foreach ($besoins_cli as $besoin_cli){
+	                		if($besoin_cli['B/C-NumType'] == 13){
+	                			$code.="<tr><td>".$besoin_cli['BES-Nom']."</td><td>".$besoin_cli['OCC-Nom']."</td>
+	                					<td><form action='index.php?action=deleteClientBesoin' method='post'/>
+	                					<input type='hidden' name='idClient' value='".$client['CLT-NumID']."'/>
+	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
+	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
+	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					</form>
+	                				</tr>";
+	                		}
+	                	}
+				        $code.='</table></tbody>
+						<br/><br/>
+				        <h3>Ajouter un besoin </h3>
+				        <form action="index.php?action=addClientBesoin" method="post"/>
+	                	Besoin : <select id="besoin2" name="idBesoin">
+	                	<option>Choisir...</option>';
+	                	foreach ($besoins as $besoin){
+	                		if($besoin['B/T-NumType'] == 13){
+	                			$code.="<option value='".$besoin['BES-NumID']."/13'>".$besoin['BES-NOM']."</option>";
+	                		}
+	                	}
+	        			$code.='
+			        	</select>
+		        		<br/><br/>
+		        		Occurence :
+		        		<select id="occurences" name="idOcc">
+		        			
+		        		</select><br/><br/>
+		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+		                <input type="hidden" name="idType" value="13" />
+		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		</form>
+	        		</div>
+                </div>
 
-                </div>
                 <div class="tab-pane fade in" id="prevoyance">
-                <h5>En Prévoyance, le client souhaite</h5>
+                	<h5>En Prévoyance, le client souhaite</h5>
+                	<div class="table-responsive">
+				      	<table class="table">
+				        <thead>
+				          <tr>
+				            <th>Besoin</th>
+				            <th>Occurence</th>
+				            <th></th>
+				          </tr>
+				        </thead>
+						<tbody>';
+	                	foreach ($besoins_cli as $besoin_cli){
+	                		if($besoin_cli['B/C-NumType'] == 12){
+	                			$code.="<tr><td>".$besoin_cli['BES-Nom']."</td><td>".$besoin_cli['OCC-Nom']."</td>
+	                					<td><form action='index.php?action=deleteClientBesoin' method='post'/>
+	                					<input type='hidden' name='idClient' value='".$client['CLT-NumID']."'/>
+	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
+	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
+	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					</form>
+	                				</tr>";
+	                		}
+	                	}
+				        $code.='</table></tbody>
+						<br/><br/>
+				        <h3>Ajouter un besoin </h3>
+				        <form action="index.php?action=addClientBesoin" method="post"/>
+	                	Besoin : <select id="besoin3" name="idBesoin2">
+	                	<option>Choisir...</option>';
+	                	foreach ($besoins as $besoin){
+	                		if($besoin['B/T-NumType'] == 12){
+	                			$code.="<option value='".$besoin['BES-NumID']."/12'>".$besoin['BES-NOM']."</option>";
+	                		}
+	                	}
+	        			$code.='
+			        	</select>
+		        		<br/><br/>
+		        		Occurence :
+		        		<select id="occurences2" name="idOcc2">
+		        			
+		        		</select><br/><br/>
+		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+		                <input type="hidden" name="idType" value="12" />
+		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		</form>
+	        		</div>
                 </div>
+
                 <div class="tab-pane fadein" id="prevoyancePost">
                 	<h5>En Prévoyance Post-Activité, le client souhaite</h5>
+                	<div class="table-responsive">
+				      	<table class="table">
+				        <thead>
+				          <tr>
+				            <th>Besoin</th>
+				            <th>Occurence</th>
+				            <th></th>
+				          </tr>
+				        </thead>
+						<tbody>';
+	                	foreach ($besoins_cli as $besoin_cli){
+	                		if($besoin_cli['B/C-NumType'] == 15){
+	                			$code.="<tr><td>".$besoin_cli['BES-Nom']."</td><td>".$besoin_cli['OCC-Nom']."</td>
+	                					<td><form action='index.php?action=deleteClientBesoin' method='post'/>
+	                					<input type='hidden' name='idClient' value='".$client['CLT-NumID']."'/>
+	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
+	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
+	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					</form>
+	                				</tr>";
+	                		}
+	                	}
+				        $code.='</table></tbody>
+						<br/><br/>
+				        <h3>Ajouter un besoin </h3>
+				        <form action="index.php?action=addClientBesoin" method="post"/>
+	                	Besoin : <select id="besoin4" name="idBesoin3">
+	                	<option>Choisir...</option>';
+	                	foreach ($besoins as $besoin){
+	                		if($besoin['B/T-NumType'] == 15){
+	                			$code.="<option value='".$besoin['BES-NumID']."/15'>".$besoin['BES-NOM']."</option>";
+	                		}
+	                	}
+	        			$code.='
+			        	</select>
+		        		<br/><br/>
+		        		Occurence :
+		        		<select id="occurences3" name="idOcc3">
+		        			
+		        		</select><br/><br/>
+		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+		                <input type="hidden" name="idType" value="15" />
+		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		</form>
+	        		</div>
                 </div>
+
                 <div class="tab-pane fade in" id="sante">
                 	<h5>En Santé, le client souhaite</h5>
+                	<div class="table-responsive">
+				      	<table class="table">
+				        <thead>
+				          <tr>
+				            <th>Besoin</th>
+				            <th>Occurence</th>
+				            <th></th>
+				          </tr>
+				        </thead>
+						<tbody>';
+	                	foreach ($besoins_cli as $besoin_cli){
+	                		if($besoin_cli['B/C-NumType'] == 14){
+	                			$code.="<tr><td>".$besoin_cli['BES-Nom']."</td><td>".$besoin_cli['OCC-Nom']."</td>
+	                					<td><form action='index.php?action=deleteClientBesoin' method='post'/>
+	                					<input type='hidden' name='idClient' value='".$client['CLT-NumID']."'/>
+	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
+	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
+	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					</form>
+	                				</tr>";
+	                		}
+	                	}
+				        $code.='</table></tbody>
+						<br/><br/>
+				        <h3>Ajouter un besoin </h3>
+				        <form action="index.php?action=addClientBesoin" method="post"/>
+	                	Besoin : <select id="besoin5" name="idBesoin4">
+	                	<option>Choisir...</option>';
+	                	foreach ($besoins as $besoin){
+	                		if($besoin['B/T-NumType'] == 14){
+	                			$code.="<option value='".$besoin['BES-NumID']."/14'>".$besoin['BES-NOM']."</option>";
+	                		}
+	                	}
+	        			$code.='
+			        	</select>
+		        		<br/><br/>
+		        		Occurence :
+		        		<select id="occurences4" name="idOcc4">
+		        			
+		        		</select><br/><br/>
+		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+		                <input type="hidden" name="idType" value="14" />
+		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		</form>
+	        		</div>
                 </div>
+
                 <div class="tab-pane fade in" id="epargne">
                 	<h5>En Epargne, le client souhaite</h5>
+                	<div class="table-responsive">
+				      	<table class="table">
+				        <thead>
+				          <tr>
+				            <th>Besoin</th>
+				            <th>Occurence</th>
+				            <th></th>
+				          </tr>
+				        </thead>
+						<tbody>';
+	                	foreach ($besoins_cli as $besoin_cli){
+	                		if($besoin_cli['B/C-NumType'] == 4){
+	                			$code.="<tr><td>".$besoin_cli['BES-Nom']."</td><td>".$besoin_cli['OCC-Nom']."</td>
+	                					<td><form action='index.php?action=deleteClientBesoin' method='post'/>
+	                					<input type='hidden' name='idClient' value='".$client['CLT-NumID']."'/>
+	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
+	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
+	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					</form>
+	                				</tr>";
+	                		}
+	                	}
+				        $code.='</table></tbody>
+						<br/><br/>
+				        <h3>Ajouter un besoin </h3>
+				        <form action="index.php?action=addClientBesoin" method="post"/>
+	                	Besoin : <select id="besoin6" name="idBesoin5">
+	                	<option>Choisir...</option>';
+	                	foreach ($besoins as $besoin){
+	                		if($besoin['B/T-NumType'] == 4){
+	                			$code.="<option value='".$besoin['BES-NumID']."/4'>".$besoin['BES-NOM']."</option>";
+	                		}
+	                	}
+	        			$code.='
+			        	</select>
+		        		<br/><br/>
+		        		Occurence :
+		        		<select id="occurences5" name="idOcc5">
+		        			
+		        		</select><br/><br/>
+		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+		                <input type="hidden" name="idType" value="4" />
+		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		</form>
+	        		</div>
                 </div>
+
                 <div class="tab-pane fade in" id="chomage">
                 	<h5>En Chômage, le client souhaite</h5>
+                	<div class="table-responsive">
+				      	<table class="table">
+				        <thead>
+				          <tr>
+				            <th>Besoin</th>
+				            <th>Occurence</th>
+				            <th></th>
+				          </tr>
+				        </thead>
+						<tbody>';
+	                	foreach ($besoins_cli as $besoin_cli){
+	                		if($besoin_cli['B/C-NumType'] == 6){
+	                			$code.="<tr><td>".$besoin_cli['BES-Nom']."</td><td>".$besoin_cli['OCC-Nom']."</td>
+	                					<td><form action='index.php?action=deleteClientBesoin' method='post'/>
+	                					<input type='hidden' name='idClient' value='".$client['CLT-NumID']."'/>
+	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
+	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
+	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					</form>
+	                				</tr>";
+	                		}
+	                	}
+				        $code.='</table></tbody>
+						<br/><br/>
+				        <h3>Ajouter un besoin </h3>
+				        <form action="index.php?action=addClientBesoin" method="post"/>
+	                	Besoin : <select id="besoin7" name="idBesoin6">
+	                	<option>Choisir...</option>';
+	                	foreach ($besoins as $besoin){
+	                		if($besoin['B/T-NumType'] == 6){
+	                			$code.="<option value='".$besoin['BES-NumID']."/6'>".$besoin['BES-NOM']."</option>";
+	                		}
+	                	}
+	        			$code.='
+			        	</select>
+		        		<br/><br/>
+		        		Occurence :
+		        		<select id="occurences6" name="idOcc6">
+		        			
+		        		</select><br/><br/>
+		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+		                <input type="hidden" name="idType" value="6" />
+		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		</form>
+	        		</div>
                 </div>
+
                 <div class="tab-pane fade in" id="pret">
                 <h5>En Prêt, le client souhaite</h5>
+                <div class="table-responsive">
+				      	<table class="table">
+				        <thead>
+				          <tr>
+				            <th>Besoin</th>
+				            <th>Occurence</th>
+				            <th></th>
+				          </tr>
+				        </thead>
+						<tbody>';
+	                	foreach ($besoins_cli as $besoin_cli){
+	                		if($besoin_cli['B/C-NumType'] == 2){
+	                			$code.="<tr><td>".$besoin_cli['BES-Nom']."</td><td>".$besoin_cli['OCC-Nom']."</td>
+	                					<td><form action='index.php?action=deleteClientBesoin' method='post'/>
+	                					<input type='hidden' name='idClient' value='".$client['CLT-NumID']."'/>
+	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
+	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
+	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					</form>
+	                				</tr>";
+	                		}
+	                	}
+				        $code.='</table></tbody>
+						<br/><br/>
+				        <h3>Ajouter un besoin </h3>
+				        <form action="index.php?action=addClientBesoin" method="post"/>
+	                	Besoin : <select id="besoin8" name="idBesoin7">
+	                	<option>Choisir...</option>';
+	                	foreach ($besoins as $besoin){
+	                		if($besoin['B/T-NumType'] == 2){
+	                			$code.="<option value='".$besoin['BES-NumID']."/2'>".$besoin['BES-NOM']."</option>";
+	                		}
+	                	}
+	        			$code.='
+			        	</select>
+		        		<br/><br/>
+		        		Occurence :
+		        		<select id="occurences7" name="idOcc7">
+		        			
+		        		</select><br/><br/>
+		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+		                <input type="hidden" name="idType" value="2" />
+		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		</form>
+	        		</div>
                 </div>
+                
               </div>
             </div>
     </div></div>';

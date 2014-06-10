@@ -668,7 +668,13 @@ class Controller{
 	//Ajout d'un besoin d'un client
 	public function AddClientBesoinAction(){
 		extract($_POST);
-		$idBesoin = explode("/",$idBesoin)[0];
+		print_r($_POST);
+		$tab = array_values($_POST);
+		$idBesoin = explode("/",$tab[0])[0];
+		//Si moins de 4 variables, il n'y a pas d'occurences => defaut = 1
+		if(sizeof($tab) < 4){
+			$idOcc = 1;
+		}
 		$query = "INSERT INTO `besoins par client` VALUES ($idClient,$idType,$idBesoin,$idOcc)";
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
