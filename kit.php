@@ -145,7 +145,7 @@ if(!(Auth::isLogged())){
     <!-- Bas de page -->
     <div class="col-lg-12">
       <center>
-        2014 © Tous Droits Réservés &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp; Contact : <a href="mailto:savcercle@strategies-avenir.com ">savcercle@strategies-avenir.com </a><img src="img/logo2.png" width="145px" height="49px"/>
+        2014 © Tous Droits Réservés &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp; Contact : <a href="mailto:savcercle@strategies-avenir.com ">savcercle@strategies-avenir.com </a><img src="img/logo2.png" width="145" height="49"/>
       </center>
     </div>
 

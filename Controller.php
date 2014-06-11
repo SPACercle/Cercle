@@ -36,7 +36,8 @@ class Controller{
 			'modifClientRelationel' => 'ModifClientRelationelAction',
 			'deleteClientRelationel' => 'DeleteClientRelationelAction',
 			'deleteClientBesoin' => 'DeleteClientBesoinAction',
-			'addClientBesoin' => 'AddClientBesoinAction'
+			'addClientBesoin' => 'AddClientBesoinAction',
+			'ficheClientProduit' => 'FicheClientProduitAction'
 			);
 	}
 
@@ -366,8 +367,33 @@ class Controller{
 			$res_bes_cli = $pdo->query($query_bes_cli);
 			$besoins_cli = $res_bes_cli->fetchALL(PDO::FETCH_ASSOC);
 
+			//Requete Compagnies
+			$query_comp = "SELECT * FROM `compagnies` ORDER BY `CIE-Nom`";
+			$pdo->exec("SET NAMES UTF8");
+			$res_comp = $pdo->query($query_comp);
+			$compagnies = $res_comp->fetchALL(PDO::FETCH_ASSOC);
+
+			//Requete Type Produits
+			$query_typ_prod = "SELECT * FROM `type produit` ORDER BY `TPD-Nom`";
+			$pdo->exec("SET NAMES UTF8");
+			$res_typ_prod = $pdo->query($query_typ_prod);
+			$type_produits = $res_typ_prod->fetchALL(PDO::FETCH_ASSOC);
+
+			//Requete Produits Client
+			$query_prod = "SELECT prod_cli.`P/C-NumID`, prod.`PDT-Nom`, comp.`CIE-Nom`, typ_sit.`TSC-Nom`, cli.`CLT-Nom`, cli.`CLT-Prénom`
+						   FROM `produits par clients` prod_cli, `produits` prod, `compagnies` comp, `type situations contrats` typ_sit, `clients et prospects` cli
+						   WHERE prod_cli.`P/C-NumClient` = ".$client[0]['CLT-NumID']." 
+						   AND prod.`PDT-NumID` = prod_cli.`P/C-NumProduit`
+						   AND comp.`CIE-NumID` = prod.`PDT-Cie`
+						   AND typ_sit.`TSC-NumID` = prod_cli.`P/C-SituationContrat`
+						   AND cli.`CLT-NumID` = prod_cli.`P/C-NumClient`
+						   ";
+			$pdo->exec("SET NAMES UTF8");
+			$res_prod = $pdo->query($query_prod);
+			$produits = $res_prod->fetchALL(PDO::FETCH_ASSOC);
+
 			Auth::setInfo('page',$client[0]['CLT-Nom']);
-			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques,$type_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli));
+			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques,$type_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli,$type_produits,$compagnies,$produits));
 		} else {
 			AffichePage(AffichePageMessage("Erreur !"));
 		}
@@ -692,6 +718,23 @@ class Controller{
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
 		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=besoin");
+	}
+
+	//Fiche produits d'un produit client
+	public function FicheClientProduitAction(){
+		$query_prod = "SELECT prod_cli.`P/C-NumID`, prod.`PDT-Nom`, comp.`CIE-Nom`, typ_sit.`TSC-Nom`, cli.`CLT-Nom`, cli.`CLT-Prénom`
+					   FROM `produits par clients` prod_cli, `produits` prod, `compagnies` comp, `type situations contrats` typ_sit, `clients et prospects` cli
+					   WHERE prod_cli.`P/C-NumID` = ".$_GET['idProduit']."
+					   AND prod.`PDT-NumID` = prod_cli.`P/C-NumProduit`
+					   AND comp.`CIE-NumID` = prod.`PDT-Cie`
+					   AND typ_sit.`TSC-NumID` = prod_cli.`P/C-SituationContrat`
+					   AND cli.`CLT-NumID` = prod_cli.`P/C-NumClient`
+					   ";
+	    $pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res_prod = $pdo->query($query_prod);
+		$produits = $res_prod->fetchALL(PDO::FETCH_ASSOC);
+		AffichePage(AfficheFicheClientProduit($produits));
 	}
 
 }

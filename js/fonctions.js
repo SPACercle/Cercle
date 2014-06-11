@@ -244,4 +244,105 @@ $(document).ready(function() {
 
 	//FIN ONGLET RELATIONEL
 
+	//DEBUT ONGLET SOLUTION RETENUES
+
+
+	/**
+	* Méthode qui sera appelée au changement du type produit
+	*/
+	$('#typeProduit').change(function(){
+		var xhr = getXhr();
+		// On défini ce qu'on va faire quand on aura la réponse
+		xhr.onreadystatechange = function(){
+			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
+			if(xhr.readyState == 4 && xhr.status == 200){
+				leselect = xhr.responseText;
+				// On se sert de innerHTML pour rajouter les options a la liste
+				//$('#sourceFields')[2].innerHTML = leselect;
+				$('#produitListe').find("#sourceFields").html(leselect);
+			}
+		}
+		// Ici on va voir comment faire du post
+		xhr.open("POST","ajaxProdFiltre.php",true);
+		// ne pas oublier ça pour le post
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		// ne pas oublier de poster les arguments
+		// ici, l'id du besoin
+		idType = document.getElementById("typeProduit").value;
+		idComp = document.getElementById("compagnie").value;
+		isCom = 0;
+		if($('#isCom').prop('checked')){
+			isCom = 1;
+		}
+		xhr.send("idType="+idType+"&idComp="+idComp+"&isCom="+isCom);
+	});
+
+	/**
+	* Méthode qui sera appelée au changement de la compagnie
+	*/
+	$('#compagnie').change(function(){
+		var xhr = getXhr();
+		// On défini ce qu'on va faire quand on aura la réponse
+		xhr.onreadystatechange = function(){
+			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
+			if(xhr.readyState == 4 && xhr.status == 200){
+				leselect = xhr.responseText;
+				// On se sert de innerHTML pour rajouter les options a la liste
+				$('#produitListe').find("#sourceFields").html(leselect);
+			}
+		}
+		// Ici on va voir comment faire du post
+		xhr.open("POST","ajaxProdFiltre.php",true);
+		// ne pas oublier ça pour le post
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		// ne pas oublier de poster les arguments
+		// ici, l'id du besoin
+		idType = document.getElementById("typeProduit").value;
+		idComp = document.getElementById("compagnie").value;
+		isCom = 0;
+		if($('#isCom').prop('checked')){
+			isCom = 1;
+		}
+		xhr.send("idType="+idType+"&idComp="+idComp+"&isCom="+isCom);
+	});
+
+	/**
+	* Méthode qui sera appelée au changement de la case commercialisé
+	*/
+	$('#isCom').change(function(){
+		var xhr = getXhr();
+		// On défini ce qu'on va faire quand on aura la réponse
+		xhr.onreadystatechange = function(){
+			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
+			if(xhr.readyState == 4 && xhr.status == 200){
+				leselect = xhr.responseText;
+				// On se sert de innerHTML pour rajouter les options a la liste
+				$('#produitListe').find("#sourceFields").html(leselect);
+			}
+		}
+		// Ici on va voir comment faire du post
+		xhr.open("POST","ajaxProdFiltre.php",true);
+		// ne pas oublier ça pour le post
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		// ne pas oublier de poster les arguments
+		// ici, l'id du besoin
+		idType = document.getElementById("typeProduit").value;
+		idComp = document.getElementById("compagnie").value;
+		isCom = 0;
+		if($('#isCom').prop('checked')){
+			isCom = 1;
+		}
+		xhr.send("idType="+idType+"&idComp="+idComp+"&isCom="+isCom);
+	});
+
+
+	$('#produitListe').find("#destinationFields").mouseenter(function(){
+
+		$('#produitListe').mouseup(function(){
+			alert('déposé !');
+		});
+	});
+
+	//FIN ONGLET SOLUTIONS RETENUES
+
 });

@@ -272,7 +272,7 @@ function AfficheClientAjout($formes){
 }
 
 //Affichage de la fiche client
-function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques,$types_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli){
+function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques,$types_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli,$type_produits,$compagnies,$produits){
 	$code='
 	<h4>'.$client["CLT-Nom"].' '.$client["CLT-Prénom"].'</h4>
 	<form style="display:inline;" action="index.php?action=courrierClient" method="post"/><button type="submit" class="btn btn-default"><i class="fa fa-envelope"></i> Courrier</button></form>
@@ -334,7 +334,7 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	}
 	$code.='
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<img id="load" src="img/load2.gif""/>
+	<img id="load" src="img/load2.gif"/>
 	<hr/>
 	<div class="panel-body">
 	<div class="tab-content">';
@@ -356,13 +356,15 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	$code.=AfficheFicheClientRelationel($client,$types_relation,$relations,$personnes);
 	//Onglet Besoin
 	$code.=AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli);
+
+	//Onglet Solutions retenues
+	$code.=AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits);
+
 	//Le reste à faire
 	$code.='
 		<div class="tab-pane fade in" id="profil">
 		</div>
 		<div class="tab-pane fade in" id="tracfin">
-		</div>
-		<div class="tab-pane fade in" id="solution">
 		</div>
 		<div class="tab-pane fade in" id="liquidite">
 		</div>
@@ -1012,7 +1014,7 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 					<input type="hidden" name="idReco" value="'.$relation['R/P-NumReco'].'"/>
 					<input type="hidden" name="idType" value="'.$relation['R/P-Type'].'"/>
 					<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
-					<button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-pencil fa-lg"></i> Supprimer</button>
+					<button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o fa-lg"></i> Supprimer</button>
 				</form>
 			</td>
 			</tr>';
@@ -1024,37 +1026,37 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 
 		</table></tbody>
 
-			<div id="ajoutLienType">
+		<div id="ajoutLienType">
 
-				<h5 style="display:inline;margin-left:10px;">Lien à créer <span style="color:#A5260A">(Glissez ici les éléments)</span></h5>
+			<h5 style="display:inline;margin-left:10px;">Lien à créer <span style="color:#A5260A">(Glissez ici les éléments)</span></h5>
 
-		        <div id="fieldChooser" tabIndex="1">
-		        	<div id="lienPers">
-			            <div id="sourceFields"><h3 style="display:inline;"><span style="color:#A5260A">Personne</span></h3>';
-			               foreach ($personnes as $pers) {
-								$code.="<div>".$pers['CLT-Nom']." ".$pers['CLT-Prénom']."<input type='hidden' name='pers' value='".$pers['CLT-NumID']."'/></div>";
-							}
-						$code.='
-			            </div>
-			        </div>
-		            <div id="lienType">
-			            <div id="sourceFields"><h3 style="display:inline;"><span style="color:#A5260A">Type</span></h3>';
-			               foreach ($type_relation as $type) {
-								$code.="<div>".$type['REL-Nom']."<input type='hidden' name='type' value='".$type['REL-Num']."'/></div>";
-							}
-						$code.='
-			            </div>
-			        </div>
-		            	<div id="lien">
-			            	<form method="post" action="index.php?action=addClientRelationel" id="formLien">
-				            	<div id="destinationFields">
-				            	</div>
-					            <input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
-					        </form>
-			            </div>
-	        	</div>
+	        <div id="fieldChooser" tabIndex="1">
+	        	<div id="lienPers">
+		            <div id="sourceFields"><h3 style="display:inline;"><span style="color:#A5260A">Personne</span></h3>';
+		               foreach ($personnes as $pers) {
+							$code.="<div>".$pers['CLT-Nom']." ".$pers['CLT-Prénom']."<input type='hidden' name='pers' value='".$pers['CLT-NumID']."'/></div>";
+						}
+					$code.='
+		            </div>
+		        </div>
+	            <div id="lienType">
+		            <div id="sourceFields"><h3 style="display:inline;"><span style="color:#A5260A">Type</span></h3>';
+		               foreach ($type_relation as $type) {
+							$code.="<div>".$type['REL-Nom']."<input type='hidden' name='type' value='".$type['REL-Num']."'/></div>";
+						}
+					$code.='
+		            </div>
+		        </div>
+	            	<div id="lien">
+		            	<form method="post" action="index.php?action=addClientRelationel" id="formLien">
+			            	<div id="destinationFields">
+			            	</div>
+				            <input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+				        </form>
+		            </div>
+        	</div>
 
-	        </div>
+        </div>
 			
     </div></div>';
 	return($code);
@@ -1099,7 +1101,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
 	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
 	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
-	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Supprimer</button></td>
 	                					</form>
 	                				</tr>";
 	                		}
@@ -1149,7 +1151,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
 	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
 	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
-	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Supprimer</button></td>
 	                					</form>
 	                				</tr>";
 	                		}
@@ -1199,7 +1201,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
 	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
 	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
-	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Supprimer</button></td>
 	                					</form>
 	                				</tr>";
 	                		}
@@ -1249,7 +1251,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
 	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
 	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
-	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Supprimer</button></td>
 	                					</form>
 	                				</tr>";
 	                		}
@@ -1299,7 +1301,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
 	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
 	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
-	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Supprimer</button></td>
 	                					</form>
 	                				</tr>";
 	                		}
@@ -1349,7 +1351,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
 	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
 	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
-	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Supprimer</button></td>
 	                					</form>
 	                				</tr>";
 	                		}
@@ -1399,7 +1401,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                					<input type='hidden' name='idType' value='".$besoin_cli['B/C-NumType']."'/>
 	                					<input type='hidden' name='idBesoin' value='".$besoin_cli['B/C-NumBesoin']."'/>
 	                					<input type='hidden' name='idOcc' value='".$besoin_cli['B/C-NumOcc']."'/>
-	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-pencil fa-lg'></i> Supprimer</button></td>
+	                					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Supprimer</button></td>
 	                					</form>
 	                				</tr>";
 	                		}
@@ -1428,10 +1430,118 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		        		</form>
 	        		</div>
                 </div>
-                
-              </div>
             </div>
     </div></div>';
+	return($code);
+}
+
+function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits){
+	$code='<div class="tab-pane fade in';
+	if(isset($_GET['onglet']) && $_GET['onglet'] == "solution"){
+		$code.=' active';
+	}
+	$code.='" id="solution">
+
+	<div class="table-responsive">
+      	<table class="table">
+        <thead>
+          <tr>
+            <th>Souscripteur</th>
+            <th>Compagnie</th>
+            <th>Produit</th>
+            <th>Situation</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+		<tbody>';
+			foreach ($produits as $produit) {
+				$code.="<tr>";
+				$code.="<td>".$produit['CLT-Nom']." ".$produit['CLT-Prénom']."</td>";
+				$code.="<td>".$produit['CIE-Nom']."</td>";
+				$code.="<td>".$produit['PDT-Nom']."</td>";
+				$code.="<td>".$produit['TSC-Nom']."</td>";
+				$code.="<td><form action='index.php?action=ficheClientProduit&idProduit=".$produit['P/C-NumID']."' method='post'><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-pencil fa-lg'></i> Accéder</button></form></td>";
+				$code.="<td><button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Supprimer</button></td>";
+				$code.="</tr>";
+			}
+		
+		$code.='
+		</table></tbody>
+		<br/><br/><hr/><br/>
+	</div>
+
+	Type Produit :
+	<select name="type" id="typeProduit"><option>Choisir...</option>';
+	foreach ($type_produits as $type){
+		$code.="<option value=".$type['TPD-NumID'].">".$type['TPD-Nom']."</option>";
+	}
+	$code.='
+	</select>
+
+	<br/><br/>Compagnie :
+	<select name="compagnie" id="compagnie"><option>Choisir...</option>';
+	foreach ($compagnies as $compagnie){
+		$code.="<option value=".$compagnie['CIE-NumID'].">".$compagnie['CIE-Nom']."</option>";
+	}
+	$code.='
+	</select><br/><br/>
+
+	Commercialisé : <input type="checkbox" name="commerce" id="isCom" checked><br/><br/>
+
+	<div id="produitListe">
+		<div id="fieldChooser" tabIndex="1">
+	        <div id="sourceFields" style="float:left;height:150px;width:300px;">
+	        	
+	        </div>
+		</div>
+
+		<br/><br/>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<span style="color:red;display:inline;">Glissez le produit ici</span>
+		<br/>
+		<div id="destinationFields" style="float:left;height:37px;width:173px;padding:0;margin-left:50px;border:1px solid green;-moz-border-radius: 10px;-webkit-border-radius: 10px;border-radius: 10px;">
+		</div>
+	</div>
+
+	</div>';
+	return($code);
+}
+
+function AfficheFicheClientProduit($produits){
+	$code='
+	<div class="col-lg-6">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h3 class="panel-title">Infos produit</h3>
+			</div>
+			<div class="panel-body">
+				test
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6">
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h3 class="panel-title">Infos produit</h3>
+			</div>
+			<div class="panel-body">
+				test
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-12">
+		<div class="panel panel-warning">
+			<div class="panel-heading">
+				<h3 class="panel-title">Infos produit</h3>
+			</div>
+			<div class="panel-body">
+				test
+			</div>
+		</div>
+	</div>
+	';
+
 	return($code);
 }
 ?>
