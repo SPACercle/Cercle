@@ -37,7 +37,10 @@ class Controller{
 			'deleteClientRelationel' => 'DeleteClientRelationelAction',
 			'deleteClientBesoin' => 'DeleteClientBesoinAction',
 			'addClientBesoin' => 'AddClientBesoinAction',
-			'ficheClientProduit' => 'FicheClientProduitAction'
+			'ficheClientProduit' => 'FicheClientProduitAction',
+			'addClientProduit' => 'AddClientProduitAction',
+			'deleteClientProduit' => 'DeleteClientProduitAction',
+			'modifClientProduit1' => 'ModifClientProduit1Action'
 			);
 	}
 
@@ -700,6 +703,8 @@ class Controller{
 		//Si moins de 4 variables, il n'y a pas d'occurences => defaut = 1
 		if(sizeof($tab) < 4){
 			$idOcc = 1;
+		} else {
+			$idOcc = $tab[1];
 		}
 		$query = "INSERT INTO `besoins par client` VALUES ($idClient,$idType,$idBesoin,$idOcc)";
 		$pdo = BDD::getConnection();
@@ -722,7 +727,8 @@ class Controller{
 
 	//Fiche produits d'un produit client
 	public function FicheClientProduitAction(){
-		$query_prod = "SELECT prod_cli.`P/C-NumID`, prod.`PDT-Nom`, comp.`CIE-Nom`, typ_sit.`TSC-Nom`, cli.`CLT-Nom`, cli.`CLT-Prénom`
+		//Le produit
+		$query_prod = "SELECT prod.`PDT-Nom`, comp.`CIE-Nom`, typ_sit.`TSC-Nom`, cli.`CLT-Nom`, cli.`CLT-Prénom`, comp.`CIE-NumID`, cli.`CLT-Conseiller`, prod_cli.*, cli.`CLT-NumID`
 					   FROM `produits par clients` prod_cli, `produits` prod, `compagnies` comp, `type situations contrats` typ_sit, `clients et prospects` cli
 					   WHERE prod_cli.`P/C-NumID` = ".$_GET['idProduit']."
 					   AND prod.`PDT-NumID` = prod_cli.`P/C-NumProduit`
@@ -734,7 +740,205 @@ class Controller{
 		$pdo->exec("SET NAMES UTF8");
 		$res_prod = $pdo->query($query_prod);
 		$produits = $res_prod->fetchALL(PDO::FETCH_ASSOC);
-		AffichePage(AfficheFicheClientProduit($produits));
+
+		//Requete souscripteur (liste de tout les clients)
+		$query_pers = "SELECT `CLT-NumID`, `CLT-Nom`, `CLT-Prénom` FROM `clients et prospects` ORDER BY `CLT-Nom`";
+		$pdo->exec("SET NAMES UTF8");
+		$res_pers = $pdo->query($query_pers);
+		$personnes = $res_pers->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete Produits
+		$query_prod = "SELECT p.`PDT-NumID`, p.`PDT-Nom`, c.`CIE-Nom` FROM `produits` p, `compagnies` c WHERE p.`PDT-Cie` = c.`CIE-NumID` ORDER BY `PDT-Nom`";
+		$pdo->exec("SET NAMES UTF8");
+		$res_prod = $pdo->query($query_prod);
+		$produits_liste = $res_prod->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete Type Situation
+		$query_sit = "SELECT * FROM `type situations contrats` ORDER BY `TSC-Nom`";
+		$pdo->exec("SET NAMES UTF8");
+		$res_sit = $pdo->query($query_sit);
+		$situations = $res_sit->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requte Code Courtier
+		$query_code="SELECT DISTINCT `Codes Compagnies`.`COD-NumID`, `Codes Compagnies`.`COD-TypeCode`, `Codes Compagnies`.`COD-NomCodeMere`, `Codes Compagnies`.`COD-Code`
+					 FROM Compagnies 
+					 	INNER JOIN ( (Conseillers INNER JOIN `Codes Compagnies` ON Conseillers.`CON-NumID` = `Codes Compagnies`.`COD-NumConseiller`) 
+					 		         LEFT JOIN `Produits par Clients` ON `Codes Compagnies`.`COD-NumID` = `Produits par Clients`.`P/C-NumCodeCom`
+					 		       ) 
+									 ON Compagnies.`CIE-NumID` = `Codes Compagnies`.`COD-NumCie`
+					 WHERE ( Compagnies.`CIE-NumID`=".$produits[0]['CIE-NumID']." 
+					 	       AND Conseillers.`CON-NumID`=".$produits[0]['CLT-Conseiller']."
+					 	    );";
+		$pdo->exec("SET NAMES UTF8");
+		$res_code = $pdo->query($query_code);
+		$codes = $res_code->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete Contrat Maître
+		$query_maitre="SELECT `Produits par Clients`.`P/C-NumID`, Compagnies.`CIE-NumID`, `Produits par Clients`.`P/C-NumContrat`, `Clients et Prospects`.`CLT-NumID`, `Produits par Clients`.`P/C-NumSouscripteur`, `Clients et Prospects`.`CLT-PrsMorale`
+		FROM `Produits par Clients` AS `Produits par Clients_1` RIGHT JOIN 
+		(`Clients et Prospects` INNER JOIN 
+			(Compagnies INNER JOIN 
+				(Produits INNER JOIN `Produits par Clients` ON Produits.`PDT-NumID` = `Produits par Clients`.`P/C-NumProduit`) 
+			    ON Compagnies.`CIE-NumID` = Produits.`PDT-Cie`
+			) 
+			ON `Clients et Prospects`.`CLT-NumID` = `Produits par Clients`.`P/C-NumClient`
+		) 
+		ON `Produits par Clients_1`.`P/C-NumID` = `Produits par Clients`.`P/C-NumContratMaitre`
+
+		WHERE 
+		(
+			Compagnies.`CIE-NumID`=".$produits[0]['CIE-NumID']." 
+			AND `Produits par Clients`.`P/C-NumSouscripteur`=".$produits[0]['P/C-NumSouscripteur']." 
+		    AND `Clients et Prospects`.`CLT-PrsMorale`=1
+		);";
+		$pdo->exec("SET NAMES UTF8");
+		$res_maitre = $pdo->query($query_maitre);
+		$maitre = $res_maitre->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete Fractionnement
+		$query_frac = "SELECT * FROM `fractionnements`";
+		$pdo->exec("SET NAMES UTF8");
+		$res_frac = $pdo->query($query_frac);
+		$fractionnements = $res_frac->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete Type Prescripteur
+		$query_typ_pre = "SELECT * FROM `type prescripteur`";
+		$pdo->exec("SET NAMES UTF8");
+		$res_typ_pre = $pdo->query($query_typ_pre);
+		$types_prescripteur = $res_typ_pre->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete Evenement par produits
+		$query_typ_pre = "SELECT * FROM `type prescripteur`";
+		$pdo->exec("SET NAMES UTF8");
+		$res_typ_pre = $pdo->query($query_typ_pre);
+		$types_prescripteur = $res_typ_pre->fetchALL(PDO::FETCH_ASSOC);
+
+		AffichePage(AfficheFicheClientProduit($produits[0],$personnes,$produits_liste,$situations,$codes,$maitre,$fractionnements,$types_prescripteur));
+	}
+
+	//Ajout d'un produit à un client
+	public function AddClientProduitAction(){
+		extract($_POST);
+		$query = "INSERT INTO `produits par clients` (`P/C-NumClient`,`P/C-NumProduit`,`P/C-SituationContrat`,`P/C-NumSouscripteur`,`P/C-Type Prescripteur`) VALUES ($idClient,$idProduit,16,$idClient,'Non défini')";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClient&idClient=$idClient&onglet=solution");
+	}
+
+	//Supression d'un produit d'un client
+	public function DeleteClientProduitAction(){
+		extract($_POST);
+		$query = "DELETE FROM `produits par clients` WHERE `P/C-NumID`=$idProduit";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClient&idClient=$idClient&onglet=solution");
+	}
+
+	//Modification d'une produit d'un client
+	public function ModifClientProduit1Action(){
+		extract($_POST);
+		if(empty($concur)){
+			$concur = 0;
+		} else {
+			$concur = 1;
+		}
+		if(empty($avie)){
+			$avie = 0;
+		} else {
+			$avie = 1;
+		}
+		if(empty($mad)){
+			$mad = 0;
+		} else {
+			$mad = 1;
+		}
+		if(empty($art62)){
+			$art62 = 0;
+		} else {
+			$art62 = 1;
+		}
+		if(empty($pep)){
+			$pep = 0;
+		} else {
+			$pep = 1;
+		}
+		if(empty($perp)){
+			$perp = 0;
+		} else {
+			$perp = 1;
+		}
+		if(empty($art82)){
+			$art82 = 0;
+		} else {
+			$art82 = 1;
+		}
+		if(empty($art83)){
+			$art83 = 0;
+		} else {
+			$art83 = 1;
+		}
+		if(empty($art39)){
+			$art39 = 0;
+		} else {
+			$art39 = 1;
+		}
+		if(empty($clauseType)){
+			$clauseType = 0;
+		} else {
+			$clauseType = 1;
+		}
+		if(empty($clauseDem)){
+			$clauseDem = 0;
+		} else {
+			$clauseDem = 1;
+		}
+		if(empty($clauseNom)){
+			$clauseNom = 0;
+		} else {
+			$clauseNom = 1;
+		}
+		if(empty($clauseAcc)){
+			$clauseAcc = 0;
+		} else {
+			$clauseAcc = 1;
+		}
+		echo $frac."<br/>";
+		$query = "UPDATE `produits par clients` SET
+				  `P/C-Type Prescripteur`= '$typePrescripteur',
+				  `P/C-DossierConcurrent`= $concur,
+				  `P/C-NumSouscripteur`= $souscripteur,
+				  `P/C-NumProduit`= $produit,
+				  `P/C-SituationContrat`= $situation,
+				  `P/C-NumCodeSofraco`= '$codeCourtier',
+				  `P/C-NumContrat`= '$numContrat',
+				  `P/C-Option`= '$option',
+				  `P/C-Fractionnement`= $frac,";
+				  if($ageTerme != null){
+				  	$query.= "`P/C-AgeTermeRetraite`= $ageTerme,";
+				  }
+				  $query.="
+				  `P/C-AVie`= $avie,
+				  `P/C-Mad`= $mad,
+				  `P/C-Art62`= $art62,
+				  `P/C-PEP`= $pep,
+				  `P/C-PERP`= $perp,
+				  `P/C-Art82`= $art82,
+				  `P/C-Art83`= $art83,
+				  `P/C-Art39`= $art39,
+				  `P/C-ClauseType`= $clauseType,
+				  `P/C-ClauseDémembrée`= $clauseDem,
+				  `P/C-ClauseNominative`= $clauseNom,
+				  `P/C-ClauseAcceptée`= $clauseAcc,
+				  `P/C-Commentaire`= '$commentaire'
+				  WHERE `P/C-NumID`= $idProduit
+				  ";
+		$pdo = BDD::getConnection();
+		echo $query;
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit);
 	}
 
 }

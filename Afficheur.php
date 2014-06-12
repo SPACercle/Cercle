@@ -1126,7 +1126,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		        		</select><br/><br/>
 		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 		                <input type="hidden" name="idType" value="13" />
-		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		<button class="btn btn-success" type="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
 		        		</form>
 	        		</div>
                 </div>
@@ -1176,7 +1176,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		        		</select><br/><br/>
 		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 		                <input type="hidden" name="idType" value="12" />
-		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		<button class="btn btn-success" type="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
 		        		</form>
 	        		</div>
                 </div>
@@ -1226,7 +1226,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		        		</select><br/><br/>
 		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 		                <input type="hidden" name="idType" value="15" />
-		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		<button class="btn btn-success" type="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
 		        		</form>
 	        		</div>
                 </div>
@@ -1276,7 +1276,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		        		</select><br/><br/>
 		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 		                <input type="hidden" name="idType" value="14" />
-		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		<button class="btn btn-success" type="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
 		        		</form>
 	        		</div>
                 </div>
@@ -1326,7 +1326,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		        		</select><br/><br/>
 		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 		                <input type="hidden" name="idType" value="4" />
-		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		<button class="btn btn-success" type="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
 		        		</form>
 	        		</div>
                 </div>
@@ -1376,7 +1376,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		        		</select><br/><br/>
 		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 		                <input type="hidden" name="idType" value="6" />
-		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		<button class="btn btn-success" type="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
 		        		</form>
 	        		</div>
                 </div>
@@ -1441,7 +1441,7 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 		$code.=' active';
 	}
 	$code.='" id="solution">
-
+	<button class="btn btn-success" id="ajoutProduit" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Produit</button><br/>
 	<div class="table-responsive">
       	<table class="table">
         <thead>
@@ -1461,18 +1461,22 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 				$code.="<td>".$produit['CIE-Nom']."</td>";
 				$code.="<td>".$produit['PDT-Nom']."</td>";
 				$code.="<td>".$produit['TSC-Nom']."</td>";
-				$code.="<td><form action='index.php?action=ficheClientProduit&idProduit=".$produit['P/C-NumID']."' method='post'><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-pencil fa-lg'></i> Accéder</button></form></td>";
-				$code.="<td><button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Supprimer</button></td>";
+				$code.="<td><form action='index.php?action=ficheClientProduit&idProduit=".$produit['P/C-NumID']."'  target='_blank' method='post'><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-pencil fa-lg'></i> Accéder</button></form></td>";
+				$code.="<td><form action='index.php?action=deleteClientProduit' method='post'><input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/><input type='hidden' name='idClient' value='".$client['CLT-NumID']."'/>
+						<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Supprimer</button></form></td>";
 				$code.="</tr>";
 			}
 		
 		$code.='
 		</table></tbody>
-		<br/><br/><hr/><br/>
+		<br/>
 	</div>
 
+	<div id="formProduitClient">
+	<h3>Création Produit Client</h3><br/>
+
 	Type Produit :
-	<select name="type" id="typeProduit"><option>Choisir...</option>';
+	<select name="type" id="typeProduit"><option value="rien">Choisir...</option>';
 	foreach ($type_produits as $type){
 		$code.="<option value=".$type['TPD-NumID'].">".$type['TPD-Nom']."</option>";
 	}
@@ -1480,7 +1484,7 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 	</select>
 
 	<br/><br/>Compagnie :
-	<select name="compagnie" id="compagnie"><option>Choisir...</option>';
+	<select name="compagnie" id="compagnie"><option value="rien">Choisir...</option>';
 	foreach ($compagnies as $compagnie){
 		$code.="<option value=".$compagnie['CIE-NumID'].">".$compagnie['CIE-Nom']."</option>";
 	}
@@ -1491,6 +1495,8 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 
 	<div id="produitListe">
 		<div id="fieldChooser" tabIndex="1">
+			<form method="post" action="index.php?action=addClientProduit" id="formAddProduit">
+			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 	        <div id="sourceFields" style="float:left;height:150px;width:300px;">
 	        	
 	        </div>
@@ -1498,17 +1504,22 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 
 		<br/><br/>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<span style="color:red;display:inline;">Glissez le produit ici</span>
 		<br/>
-		<div id="destinationFields" style="float:left;height:37px;width:173px;padding:0;margin-left:50px;border:1px solid green;-moz-border-radius: 10px;-webkit-border-radius: 10px;border-radius: 10px;">
+		<div id="formProduitClient">
+		<div id="destinationFields" style="float:left;height:60px;width:300px;padding:0;margin-left:50px;border:1px solid green;-moz-border-radius: 10px;-webkit-border-radius: 10px;border-radius: 10px;">
 		</div>
+		</div>
+		</form>
+	</div>
 	</div>
 
 	</div>';
 	return($code);
 }
 
-function AfficheFicheClientProduit($produits){
+function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situations,$codes,$maitre,$fractionnements,$types_prescripteur){
 	$code='
 	<div class="col-lg-6">
 		<div class="panel panel-info">
@@ -1516,27 +1527,214 @@ function AfficheFicheClientProduit($produits){
 				<h3 class="panel-title">Infos produit</h3>
 			</div>
 			<div class="panel-body">
-				test
+				<form action="index.php?action=modifClientProduit1" method="post">
+				<input type="hidden" name="idProduit" value="'.$_GET['idProduit'].'"/>
+				<b>Type Prescripteur : </b>
+				<select name="typePrescripteur">';
+				foreach ($types_prescripteur as $typ) {
+					if($typ['PRE-Nom'] == $produit['P/C-Type Prescripteur']){
+						$code.='<option value="'.$typ['PRE-Nom'].'" selected>'.$typ['PRE-Nom'].'</option>';
+					} else {
+						$code.='<option value="'.$typ['PRE-Nom'].'">'.$typ['PRE-Nom'].'</option>';
+					}
+				}
+				$code.='
+				</select>
+				<br/><br/>
+				<b>Concurrent : </b>';
+				if($produit['P/C-DossierConcurrent'] == 1){
+					$code.='<input name="concur" type="checkbox" checked/><br/>';
+				} else {
+					$code.='<input name="concur" type="checkbox"/><br/>';
+				}
+				$code.='
+				<br/><b>Souscripteur : </b><select name="souscripteur">';
+				foreach ($personnes as $pers) {
+					if($pers['CLT-NumID'] == $produit['P/C-NumSouscripteur']){
+						$code.='<option value="'.$pers['CLT-NumID'].'" selected>'.$pers['CLT-Nom'].' '.$pers['CLT-Prénom'].'</option>';
+					} else {
+						$code.='<option value="'.$pers['CLT-NumID'].'">'.$pers['CLT-Nom'].' '.$pers['CLT-Prénom'].'</option>';
+					}
+				}
+				$code.='
+				</select>
+				<br/><br/>
+				<h4 style="display:inline;">Produit : </h4>
+				<select name="produit">';
+				foreach ($produits_liste as $prod_liste) {
+					if($prod_liste['PDT-NumID'] == $produit['P/C-NumProduit']){
+						$code.='<option value="'.$prod_liste['PDT-NumID'].'" selected>'.$prod_liste['PDT-Nom'].' - '.$prod_liste['CIE-Nom'].'</option>';
+					} else {
+						$code.='<option value="'.$prod_liste['PDT-NumID'].'">'.$prod_liste['PDT-Nom'].' - '.$prod_liste['CIE-Nom'].'</option>';
+					}
+				}
+				$code.='
+				</select><br/><br/>
+				<h4 style="display:inline;">Compagnie : </h4>'.$produit['CIE-Nom'].'<br/><br/>
+				<input type="hidden" name="compagnie" value="'.$produit['CIE-NumID'].'" />
+				<b>Situation : </b>
+				<select name="situation">';
+				foreach ($situations as $sit) {
+					if($sit['TSC-NumID'] == $produit['P/C-SituationContrat']){
+						$code.='<option value="'.$sit['TSC-NumID'].'" selected>'.$sit['TSC-Nom'].'</option>';
+					} else {
+						$code.='<option value="'.$sit['TSC-NumID'].'" >'.$sit['TSC-Nom'].'</option>';
+					}
+				}
+				$code.='
+				</select><br/><br/>
+				<b>Code Courtier : </b>
+				<select name="codeCourtier">';
+				foreach ($codes as $cod) {
+					if($cod['COD-Code'] == $produit['P/C-NumCodeSofraco']){
+						$code.='<option value="'.$cod['COD-Code'].'" selected>'.$cod['COD-Code'].'</option>';
+					} else {
+						$code.='<option value="'.$cod['COD-Code'].'">'.$cod['COD-Code'].'</option>';
+					}
+				}
+				$code.='
+				</select><br/><br/>
+				<b>N° Contrat : </b><input type="text" name="numContrat" value="'.$produit['P/C-NumContrat'].'"></input><br/><br/>
+				<b>Contrat Maître : </b>
+				<select name="maitre">';
+				foreach ($maitre as $mai) {
+					if($mai['P/C-NumContratMaitre'] == $produit['P/C-NumContratMaitre']){
+						$code.='<option value="'.$mai['P/C-NumContratMaitre'].'" selected>'.$mai['P/C-NumContratMaitre'].'</option>';
+					} else {
+						$code.='<option value="'.$mai['P/C-NumContratMaitre'].'">'.$mai['P/C-NumContratMaitre'].'</option>';
+					}
+				}
+				$code.='
+				</select><br/><br/>
+				<b>Option : </b><input type="text"  name="option" value="'.$produit['P/C-Option'].'"></input><br/><br/>
+				<b>Fractionnement : </b>
+				<select name="frac">';
+				foreach ($fractionnements as $frac) {
+					if($frac['FRA-NumID'] == $produit['P/C-Fractionnement']){
+						$code.='<option  value="'.$frac['FRA-NumID'].'" selected>'.$frac['FRA-Nom'].'</option>';
+					} else {
+						$code.='<option  value="'.$frac['FRA-NumID'].'">'.$frac['FRA-Nom'].'</option>';
+					}
+				}
+				$code.='
+				</select><br/><br/>
+				<b>Age Terme : </b><input type="text" name="ageTerme" value="'.$produit['P/C-AgeTermeRetraite'].'"></input><br/><br/>
+
+				<div class="well well-sm">';
+					if($produit['P/C-AVie'] == 1){
+						$code.='<input name="avie" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="avie" type="checkbox"/>';
+					}
+					$code.=' A Vie &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+					if($produit['P/C-Mad'] == 1){
+						$code.='<input name="mad" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="mad" type="checkbox"/>';
+					}
+					$code.=' Art154bis &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+					if($produit['P/C-Art62'] == 1){
+						$code.='<input name="art62" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="art62" type="checkbox"/>';
+					}
+					$code.=' Art62 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+					if($produit['P/C-PEP'] == 1){
+						$code.='<input name="pep" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="pep" type="checkbox"/>';
+					}
+					$code.=' PEP &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+					if($produit['P/C-PERP'] == 1){
+						$code.='<input name="perp"  type="checkbox" checked/>';
+					} else {
+						$code.='<input name="perp" type="checkbox"/>';
+					}
+					$code.=' PERP &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+					if($produit['P/C-Art82'] == 1){
+						$code.='<input name="art82" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="art82" type="checkbox"/>';
+					}
+					$code.=' Art82 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+					if($produit['P/C-Art83'] == 1){
+						$code.='<input name="art83" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="art83" type="checkbox"/>';
+					}
+					$code.=' Art83 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+					if($produit['P/C-Art39'] == 1){
+						$code.='<input name="art39" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="art39" type="checkbox"/>';
+					}
+					$code.=' Art39 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+
+				<div class="well well-sm">';
+					if($produit['P/C-ClauseType'] == 1){
+						$code.='<input name="clauseType" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="clauseType" type="checkbox"/>';
+					}
+					$code.=' Clause Type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+					if($produit['P/C-ClauseDémembrée'] == 1){
+						$code.='<input name="clauseDem" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="clauseDem" type="checkbox"/>';
+					}
+					$code.=' Clause Démembrée &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+					if($produit['P/C-ClauseNominative'] == 1){
+						$code.='<input name="clauseNom" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="clauseNom" type="checkbox"/>';
+					}
+					$code.=' Clause Nominative &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+					if($produit['P/C-ClauseAcceptée'] == 1){
+						$code.='<input name="clauseAcc" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="clauseAcc" type="checkbox"/>';
+					}
+					$code.=' Clause Acceptée &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+
+				<b>Commentaire : </b><textarea name="commentaire" rows="1" cols="75">'.$produit['P/C-Commentaire'].'</textarea>
+
+				<button type="submit" class="btn btn-success" style="float:right;"><i class="fa fa-save"></i> Valider Modifications</button>
+
+				</form>
 			</div>
 		</div>
 	</div>
 	<div class="col-lg-6">
-		<div class="panel panel-success">
+		<div class="panel panel-danger">
 			<div class="panel-heading">
-				<h3 class="panel-title">Infos produit</h3>
+				<h3 class="panel-title">Historique des anomalies éventuelles</h3>
 			</div>
 			<div class="panel-body">
-				test
+				<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+				<button type="submit" class="btn btn-success" style="float:right;"><i class="fa fa-save"></i> Valider Modifications</button>
 			</div>
 		</div>
 	</div>
 	<div class="col-lg-12">
 		<div class="panel panel-warning">
 			<div class="panel-heading">
-				<h3 class="panel-title">Infos produit</h3>
+				<h3 class="panel-title">Différentes phases de mise en place des mes dossiers</h3>
 			</div>
 			<div class="panel-body">
-				test
+				<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+				<button type="submit" class="btn btn-success" style="float:right;"><i class="fa fa-save"></i> Valider Modifications</button>
 			</div>
 		</div>
 	</div>

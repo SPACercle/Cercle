@@ -246,7 +246,6 @@ $(document).ready(function() {
 
 	//DEBUT ONGLET SOLUTION RETENUES
 
-
 	/**
 	* Méthode qui sera appelée au changement du type produit
 	*/
@@ -337,11 +336,19 @@ $(document).ready(function() {
 
 
 	$('#produitListe').find("#destinationFields").mouseenter(function(){
-
-		$('#produitListe').mouseup(function(){
-			alert('déposé !');
+		$('body').mouseup(function(){
+			$('#formAddProduit').submit();
 		});
 	});
+
+	//Cache le formaulaire d'ajout
+	$('#formProduitClient').hide();
+
+	//Afficher le formulaire de création de lien
+	$('#ajoutProduit').click(function(){
+		$('#formProduitClient').show();
+	});
+
 
 	//FIN ONGLET SOLUTIONS RETENUES
 
