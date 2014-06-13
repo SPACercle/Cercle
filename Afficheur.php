@@ -1494,12 +1494,11 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 	Commercialisé : <input type="checkbox" name="commerce" id="isCom" checked><br/><br/>
 
 	<div id="produitListe">
+
 		<div id="fieldChooser" tabIndex="1">
 			<form method="post" action="index.php?action=addClientProduit" id="formAddProduit">
 			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
-	        <div id="sourceFields" style="float:left;height:150px;width:300px;">
-	        	
-	        </div>
+	        <div id="sourceFields" style="float:left;height:150px;width:300px;"></div>
 		</div>
 
 		<br/><br/>
@@ -1507,21 +1506,22 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<span style="color:red;display:inline;">Glissez le produit ici</span>
 		<br/>
-		<div id="formProduitClient">
-		<div id="destinationFields" style="float:left;height:60px;width:300px;padding:0;margin-left:50px;border:1px solid green;-moz-border-radius: 10px;-webkit-border-radius: 10px;border-radius: 10px;">
-		</div>
-		</div>
+
+		<div id="destinationFields" style="float:left;height:60px;width:300px;padding:0;margin-left:50px;border:1px solid green;-moz-border-radius: 10px;-webkit-border-radius: 10px;border-radius: 10px;"></div>
+
 		</form>
+
 	</div>
+
 	</div>
 
 	</div>';
 	return($code);
 }
 
-function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situations,$codes,$maitre,$fractionnements,$types_prescripteur){
+function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situations,$codes,$maitre,$fractionnements,$types_prescripteur,$evenements,$type_evenements,$realisateurs,$apporteurs,$commissions){
 	$code='
-	<div class="col-lg-6">
+	<div class="col-lg-12">
 		<div class="panel panel-info">
 			<div class="panel-heading">
 				<h3 class="panel-title">Infos produit</h3>
@@ -1716,7 +1716,147 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-6">
+	
+	<div class="col-lg-12">
+		<div class="panel panel-warning">
+			<div class="panel-heading">
+				<h3 class="panel-title">Différentes phases de mise en place des mes dossiers</h3>
+			</div>
+			<div class="panel-body" style="font-size:11px;">';
+				foreach ($evenements as $ev) {
+					$code.="<div style='background-color:#FDE9E0;margin:5px;padding:5px;border:1px solid #685E43;-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;'>";
+					$code.="<form action='index.php?action=modifEvProduit' method='post' style='display:inline;'><select name='typeEv'>";
+					foreach($type_evenements as $typ){
+						if($typ['EVE-NumID'] == $ev['E/P-NumEvenement']){
+							$code.="<option value='".$typ['EVE-NumID']."' selected>".$typ['EVE-Nom']."</option>";
+						} else {
+							$code.="<option value='".$typ['EVE-NumID']."'>".$typ['EVE-Nom']."</option>";
+						}
+					}
+					$code.="</select>";
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date signature <input style='width:80px;' type='text' name='dateSignature' value='".date('d/m/Y',strtotime($ev['E/P-DateSignature']))."'/>";
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apporteur <select name='apporteur'><option></option>";
+					foreach($apporteurs as $app){
+						if($app['APP-NumID'] == $ev['E/P-Apporteur']){
+							$code.="<option value='".$app['APP-NumID']."' selected>".$app['APP-Nom']." ".$app['APP-Prénom']."</option>";
+						} else {
+							$code.="<option value='".$app['APP-NumID']."'>".$app['APP-Nom']." ".$app['APP-Prénom']."</option>";
+						}
+					}
+					$code.="</select>";
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Realisateur <select name='realisateur'><option></option>";
+					foreach($realisateurs as $res){
+						if($res['CON-NumID'] == $ev['E/P-Réalisateur']){
+							$code.="<option value='".$res['CON-NumID']."' selected>".$res['CON-Nom']." ".$res['CON-Prénom']."</option>";
+						} else {
+							$code.="<option value='".$res['CON-NumID']."'>".$res['CON-Nom']." ".$res['CON-Prénom']."</option>";
+						}
+					}
+					$code.="</select>";
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Envoyé ";
+					if($ev['E/P-DossierEnvoyéClt'] == 1){
+						$code.='<input name="env" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="env" type="checkbox"/>';
+					}
+
+					$code.="<br/>Prime Pério <input style='width:80px;' type='text' name='primePério' value='".$ev['E/P-MontantPP']."'/>";
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prime Unique <input style='width:80px;' type='text' name='primeUnique' value='".$ev['E/P-MontantPU']."'/>";
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Effet <input style='width:80px;' type='text' name='dateEffet' value='".date('d/m/Y',strtotime($ev['E/P-DateEffet']))."'/>";
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date Envoi Cie <input style='width:80px;' type='text' name='dateEnvoi' value='".date('d/m/Y',strtotime($ev['E/P-DateEnvoi']))."'/>";
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Médical ? ";
+					if($ev['E/P-AcceptMedicale'] == 1){
+						$code.='<input name="medicale" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="medicale" type="checkbox"/>';
+					}
+
+					$code.="<br/>Date Retour <input style='width:80px;' type='text' name='dateRetour' value='".date('d/m/Y',strtotime($ev['E/P-DateRetour']))."'/>";
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Remise<input style='width:80px;' type='text' name='dateRemise' value='".date('d/m/Y',strtotime($ev['E/P-DateRemise']))."'/>";
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Formalisé ";
+					if($ev['E/P-ObligationConseils'] == 1){
+						$code.='<input name="formalise" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="formalise" type="checkbox"/>';
+					}
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scoring ";
+					if($ev['E/P-Scoring'] == 1){
+						$code.='<input name="scoring" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="scoring" type="checkbox"/>';
+					}
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tracfin ";
+					if($ev['E/P-Tracfin'] == 1){
+						$code.='<input name="tracfin" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="tracfin" type="checkbox"/>';
+					}
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Complet ";
+					if($ev['E/P-DossierComplet'] == 1){
+						$code.='<input name="complet" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="complet" type="checkbox"/>';
+					}
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Classé Jamais Formalisé ";
+					if($ev['E/P-ClasséJamaisFormalisé'] == 1){
+						$code.='<input name="pdc" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="pdc" type="checkbox"/>';
+					}
+
+					$code.="<br/><br/>
+					<b>Commentaire : </b><input style='width:500px;' type='text' name='primePério' value='".$ev['E/P-Commentaire']."'/><br/><br/>
+					<b>Frais négociés</b>&nbsp;&nbsp;&nbsp;&nbsp;
+					Entrée &nbsp;<input style='width:30px;' type='text' name='fraisEnt' value='".$ev['E/P-FraisEntNégo']."'/>%&nbsp;&nbsp;&nbsp;
+					Gestion &nbsp;<input style='width:30px;' type='text' name='gestionEnt' value='".$ev['E/P-GestEntNégo']."'/>%&nbsp;&nbsp;&nbsp;
+					Transfert &nbsp;<input style='width:30px;' type='text' name='transEnt' value='".$ev['E/P-TransEntNégo']."'/>%&nbsp;&nbsp;&nbsp;
+					Fond € &nbsp;<input style='width:30px;' type='text' name='tauxInvtEuro' value='".$ev['E/P-TauxInvtEuro']."'/>%&nbsp;&nbsp;&nbsp;
+					Fond UC &nbsp;<input style='width:30px;' type='text' name='tauxInvtUC' value='".$ev['E/P-TauxInvtUC']."'/>%&nbsp;&nbsp;&nbsp;
+					Autre UC &nbsp;<input style='width:30px;' type='text' name='tauxInvtUCAutre' value='".$ev['E/P-TauxInvtUCAutres']."'/>%&nbsp;&nbsp;&nbsp;
+					<br/><br/>
+					<b>Choix commission</b>&nbsp;&nbsp;&nbsp;
+					<select name='commission'><option></option>";
+					foreach($commissions as $com){
+						if($com['C/P-NumID'] == $ev['E/P-NumCom']){
+							$code.="<option value='".$com['C/P-NumID']."' selected>".$com['C/P-ProtocoleNom']." - ".$com['C/P-ProtocoleAnnée']." - ".$com['C/P-DétailExplicatif']." - Escompte : ".$com['C/P-ComEsc']." - Linéaire : ".$com['C/P-ComLin']."</option>";
+						} else {
+							$code.="<option value='".$com['C/P-NumID']."'>".$com['C/P-ProtocoleNom']." - ".$com['C/P-ProtocoleAnnée']." - ".$com['C/P-DétailExplicatif']." - Escompte : ".$com['C/P-ComEsc']." - Linéaire : ".$com['C/P-ComLin']."</option>";
+						}
+					}
+					$code.="</select>
+					<br/><br/>
+						<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
+						<input type='hidden' name='idEv' value='".$ev['E/P-NumID']."'/>
+						<button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Modifer</button>
+					</form>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<form action='index.php?action=deleteEvProduit' method='post' style='display:inline;'>
+						<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
+						<input type='hidden' name='idEv' value='".$ev['E/P-NumID']."'/>
+						<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Suprimmer</button>
+					</form>
+					</div>";
+				} 
+				$code.='
+			</div>
+		</div>
+	</div>
+
+	<div class="col-lg-12">
 		<div class="panel panel-danger">
 			<div class="panel-heading">
 				<h3 class="panel-title">Historique des anomalies éventuelles</h3>
@@ -1727,17 +1867,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-12">
-		<div class="panel panel-warning">
-			<div class="panel-heading">
-				<h3 class="panel-title">Différentes phases de mise en place des mes dossiers</h3>
-			</div>
-			<div class="panel-body">
-				<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-				<button type="submit" class="btn btn-success" style="float:right;"><i class="fa fa-save"></i> Valider Modifications</button>
-			</div>
-		</div>
-	</div>
+
 	';
 
 	return($code);

@@ -40,7 +40,9 @@ class Controller{
 			'ficheClientProduit' => 'FicheClientProduitAction',
 			'addClientProduit' => 'AddClientProduitAction',
 			'deleteClientProduit' => 'DeleteClientProduitAction',
-			'modifClientProduit1' => 'ModifClientProduit1Action'
+			'modifClientProduit1' => 'ModifClientProduit1Action',
+			'deleteEvProduit' => 'DeleteEvProduitAction',
+			'modifEvProduit' => 'ModifEvProduitAction'
 			);
 	}
 
@@ -808,12 +810,36 @@ class Controller{
 		$types_prescripteur = $res_typ_pre->fetchALL(PDO::FETCH_ASSOC);
 
 		//Requete Evenement par produits
-		$query_typ_pre = "SELECT * FROM `type prescripteur`";
+		$query_ev = "SELECT * FROM `evenements par produits` WHERE `E/P-NumProduitClient` = ".$_GET['idProduit'].";";
 		$pdo->exec("SET NAMES UTF8");
-		$res_typ_pre = $pdo->query($query_typ_pre);
-		$types_prescripteur = $res_typ_pre->fetchALL(PDO::FETCH_ASSOC);
+		$res_ev = $pdo->query($query_ev);
+		$evenements = $res_ev->fetchALL(PDO::FETCH_ASSOC);
 
-		AffichePage(AfficheFicheClientProduit($produits[0],$personnes,$produits_liste,$situations,$codes,$maitre,$fractionnements,$types_prescripteur));
+		//Requete Type Evenemnt
+		$query_typ_ev = "SELECT * FROM `type evenements contrat` ORDER BY `EVE-Nom`";
+		$pdo->exec("SET NAMES UTF8");
+		$res_typ_ev = $pdo->query($query_typ_ev);
+		$type_evenements = $res_typ_ev->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete Realisateur
+		$query_cons = "SELECT * FROM `conseillers`";
+		$pdo->exec("SET NAMES UTF8");
+		$res_cons = $pdo->query($query_cons);
+		$realisateurs = $res_cons->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete Apporteurs
+		$query_app = "SELECT * FROM `apporteurs`";
+		$pdo->exec("SET NAMES UTF8");
+		$res_app = $pdo->query($query_app);
+		$apporteurs = $res_app->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete Commissions
+		$query_com = "SELECT * FROM `commissions par produit` WHERE `C/P-NumPdt` = ".$produits[0]['P/C-NumProduit']."";
+		$pdo->exec("SET NAMES UTF8");
+		$res_com = $pdo->query($query_com);
+		$commissions = $res_com->fetchALL(PDO::FETCH_ASSOC);
+
+		AffichePage(AfficheFicheClientProduit($produits[0],$personnes,$produits_liste,$situations,$codes,$maitre,$fractionnements,$types_prescripteur,$evenements,$type_evenements,$realisateurs,$apporteurs,$commissions));
 	}
 
 	//Ajout d'un produit à un client
@@ -904,7 +930,6 @@ class Controller{
 		} else {
 			$clauseAcc = 1;
 		}
-		echo $frac."<br/>";
 		$query = "UPDATE `produits par clients` SET
 				  `P/C-Type Prescripteur`= '$typePrescripteur',
 				  `P/C-DossierConcurrent`= $concur,
@@ -933,6 +958,59 @@ class Controller{
 				  `P/C-ClauseAcceptée`= $clauseAcc,
 				  `P/C-Commentaire`= '$commentaire'
 				  WHERE `P/C-NumID`= $idProduit
+				  ";
+		$pdo = BDD::getConnection();
+		echo $query;
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit);
+	}
+
+	//Supression d'un evenement d'un produit d'un client
+	public function DeleteEvProduitAction(){
+		extract($_POST);
+		$query = "DELETE FROM `evenements par produits` WHERE `E/P-NumID`=$idEv";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit);
+	}
+
+	//Modification d'un évenement d'un produit d'un client
+	public function ModifEvProduitAction(){
+		extract($_POST);
+		/*if(empty($concur)){
+			$concur = 0;
+		} else {
+			$concur = 1;
+		}*/
+		$query = "UPDATE `evenements par produits` SET
+				  `E/P-DateSignature`= '$',
+				  `E/P-Apporteur`= '$',
+				  `E/P-Réalisateur`= '$',
+				  `E/P-DossierEnvoyéClt`= '$',
+				  `E/P-MontantPP`= '$',
+				  `E/P-MontantPU`= '$',
+				  `E/P-DateEffet`= '$',
+				  `E/P-DateEnvoi`= '$',
+				  `E/P-AcceptMedicale`= '$',
+				  `E/P-DateRetour`= '$',
+				  `E/P-DateRemise`= '$',
+				  `E/P-ObligationConseils`= '$',
+				  `E/P-Scoring`= '$',
+				  `E/P-Tracfin`= '$',
+				  `E/P-DossierComplet`= '$',
+				  `E/P-ClaséJamaisFormalisé`= '$',
+				  `E/P-Commentaire`= '$',
+				  `E/P-`= '$',
+				  `E/P-`= '$',
+				  `E/P-`= '$',
+				  `E/P-`= '$',
+				  `E/P-`= '$',
+				  `E/P-`= '$',
+				  `E/P-`= '$',
+				  `E/P-`= '$'
+				  WHERE `E/P-NumID`= $idEv
 				  ";
 		$pdo = BDD::getConnection();
 		echo $query;

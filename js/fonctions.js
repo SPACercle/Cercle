@@ -219,12 +219,13 @@ $(document).ready(function() {
 	//Cache le formulaire d'ajout d'un lien
 	$('#ajoutLienType').hide();
 
-	//Cache la liste des types
-	$('#lienType').hide();
-
 	//Afficher le formulaire de création de lien
 	$('#ajoutLien').click(function(){
+		$('#formProduitClient').empty();
 		$('#ajoutLienType').show();
+
+		//Cache la liste des types
+		$('#lienType').hide();
 	});
 
 	//Quand la personne est glissé dans la boite, la selection du type s'affiche
@@ -334,18 +335,18 @@ $(document).ready(function() {
 		xhr.send("idType="+idType+"&idComp="+idComp+"&isCom="+isCom);
 	});
 
-
-	$('#produitListe').find("#destinationFields").mouseenter(function(){
-		$('body').mouseup(function(){
-			$('#formAddProduit').submit();
-		});
+	//Soummission formulaire ajout produit
+	$('#produitListe').find("#destinationFields").bind('DOMNodeInserted', function() {
+		$('#formAddProduit').submit();
 	});
+
 
 	//Cache le formaulaire d'ajout
 	$('#formProduitClient').hide();
 
 	//Afficher le formulaire de création de lien
 	$('#ajoutProduit').click(function(){
+		$('#ajoutLienType').empty();
 		$('#formProduitClient').show();
 	});
 
