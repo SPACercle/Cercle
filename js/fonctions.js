@@ -221,7 +221,6 @@ $(document).ready(function() {
 
 	//Afficher le formulaire de création de lien
 	$('#ajoutLien').click(function(){
-		$('#formProduitClient').empty();
 		$('#ajoutLienType').show();
 
 		//Cache la liste des types
@@ -335,21 +334,18 @@ $(document).ready(function() {
 		xhr.send("idType="+idType+"&idComp="+idComp+"&isCom="+isCom);
 	});
 
-	//Soummission formulaire ajout produit
+	//Soummission formulaire ajout produit dès qu'un prodit est glissé dans la case
 	$('#produitListe').find("#destinationFields").bind('DOMNodeInserted', function() {
 		$('#formAddProduit').submit();
 	});
-
 
 	//Cache le formaulaire d'ajout
 	$('#formProduitClient').hide();
 
 	//Afficher le formulaire de création de lien
 	$('#ajoutProduit').click(function(){
-		$('#ajoutLienType').empty();
 		$('#formProduitClient').show();
 	});
-
 
 	//FIN ONGLET SOLUTIONS RETENUES
 

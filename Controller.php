@@ -42,7 +42,7 @@ class Controller{
 			'deleteClientProduit' => 'DeleteClientProduitAction',
 			'modifClientProduit1' => 'ModifClientProduit1Action',
 			'deleteEvProduit' => 'DeleteEvProduitAction',
-			'modifEvProduit' => 'ModifEvProduitAction'
+			'modifEvProduit' => 'ModifEvProduitAction',
 			);
 	}
 
@@ -688,11 +688,24 @@ class Controller{
 	//Modification d'une relation d'un client
 	public function ModifClientRelationelAction(){
 		extract($_POST);
+		//Modification du lien
 		$query = "UPDATE`relations par personne` SET `R/P-NumApporteur`= $idApp, `R/P-NumReco` = $pers, `R/P-Type` = $type, `R/P-Commentaire` = '$commentaire'
 				  WHERE `R/P-NumApporteur`= $idApp AND `R/P-NumReco` = $idReco AND `R/P-Type` = $idType";
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
+		//Modification du lien inverse
+		$query2 = "SELECT `REL-NumInverse` FROM `relations` WHERE `REL-Num` = $idType";
+		$pdo->exec("SET NAMES UTF8");
+		$res2 = $pdo->query($query2);
+		$res22 = $res2->fetchALL(PDO::FETCH_ASSOC);
+		$type_inverse = $res22[0]['REL-NumInverse'];
+		if($type_inverse != 0){
+			$query3 = "UPDATE `relations par personne` SET `R/P-Type` = $type WHERE `R/P-NumApporteur` = $idReco AND `R/P-NumReco` = $idApp";
+			echo $query3;
+			$pdo->exec("SET NAMES UTF8");
+			$res3 = $pdo->exec($query3);
+		}
 		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=relationel");
 	}
 
@@ -729,6 +742,7 @@ class Controller{
 
 	//Fiche produits d'un produit client
 	public function FicheClientProduitAction(){
+		Auth::setInfo('page','Fiche Produit');
 		//Le produit
 		$query_prod = "SELECT prod.`PDT-Nom`, comp.`CIE-Nom`, typ_sit.`TSC-Nom`, cli.`CLT-Nom`, cli.`CLT-Prénom`, comp.`CIE-NumID`, cli.`CLT-Conseiller`, prod_cli.*, cli.`CLT-NumID`
 					   FROM `produits par clients` prod_cli, `produits` prod, `compagnies` comp, `type situations contrats` typ_sit, `clients et prospects` cli

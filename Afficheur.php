@@ -137,7 +137,7 @@ function AfficheClient($clients,$types,$filtre){
 			if(in_array($cli['CLT-Conseiller'],Auth::getInfo('portsRestreint'))){
 				$code.= '<tr style="cursor:url(\'img/lock.png\'), pointer;">';
 			} else {
-				$code.= '<tr onclick="window.open(\'index.php?action=ficheClient&idClient='.$cli['CLT-NumID'].'\');" class="rowClient" target="_blank">';
+				$code.= '<tr onclick="window.open(\'index.php?action=ficheClient&idClient='.$cli['CLT-NumID'].'&onglet=general\');" class="rowClient" target="_blank">';
 			}
 			//DEBUT REQUETE ETAT AVEC SMILEY
 			$smiley = 1;
@@ -339,26 +339,41 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	<div class="panel-body">
 	<div class="tab-content">';
 	//Onglet Génréral
-	$code.=AfficheFicheClientGeneral($client,$types_client,$conseillers,$civilites,$situations,$sensibilites);
+	if($_GET['onglet'] == "general"){
+		$code.=AfficheFicheClientGeneral($client,$types_client,$conseillers,$civilites,$situations,$sensibilites);
+	}
 	//Onglet Personel
-	if($client['CLT-PrsMorale'] == 0){
-		$code.=AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilites,$situations,$sensibilites);
+	if($_GET['onglet'] == "personel"){
+		if($client['CLT-PrsMorale'] == 0){
+			$code.=AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilites,$situations,$sensibilites);
+		}
 	}
 	//Onglet Professionel
-	$code.=AfficheFicheClientProfessionnel($client,$categories,$professions,$status);
+	if($_GET['onglet'] == "pro"){
+		$code.=AfficheFicheClientProfessionnel($client,$categories,$professions,$status);
+	}
 	//Onglet Revenus
-	if($client['CLT-PrsMorale'] == 0){
-		$code.=AfficheFicheClientRevenus($client,$types_revenus,$revenus);
+	if($_GET['onglet'] == "revenus"){
+		if($client['CLT-PrsMorale'] == 0){
+			$code.=AfficheFicheClientRevenus($client,$types_revenus,$revenus);
+		}
 	}
 	//Onglet Historique
-	$code.=AfficheFicheClientHistorique($client,$types_historique,$historiques);
+	if($_GET['onglet'] == "historique"){
+		$code.=AfficheFicheClientHistorique($client,$types_historique,$historiques);
+	}
 	//Onglet Relationel
-	$code.=AfficheFicheClientRelationel($client,$types_relation,$relations,$personnes);
+	if($_GET['onglet'] == "relationel"){
+		$code.=AfficheFicheClientRelationel($client,$types_relation,$relations,$personnes);
+	}
 	//Onglet Besoin
-	$code.=AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli);
-
+	if($_GET['onglet'] == "besoin"){
+		$code.=AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli);
+	}
 	//Onglet Solutions retenues
-	$code.=AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits);
+	if($_GET['onglet'] == "solution"){
+		$code.=AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits);
+	}
 
 	//Le reste à faire
 	$code.='
@@ -373,101 +388,101 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	';
 	//Menu du côté
 	if($client['CLT-PrsMorale'] == 0){
-		if(!isset($_GET['onglet'])){
-			$menu = '<li class="active"><a href="#general" data-toggle="tab"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
+		if(isset($_GET['onglet'])  && $_GET['onglet'] == "general"){
+			$menu = '<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=general"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
 		} else {
-			$menu = '<li><a href="#general" data-toggle="tab"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
+			$menu = '<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=general"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "personel"){
-			$menu.='<li class="active"><a href="#personel" data-toggle="tab"><i class="fa fa-user fa-lg"></i><b> Personnel</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=personel"><i class="fa fa-user fa-lg"></i><b> Personnel</b></a></li>';
 		} else {
-			$menu.='<li><a href="#personel" data-toggle="tab"><i class="fa fa-user fa-lg"></i><b> Personnel</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=personel"><i class="fa fa-user fa-lg"></i><b> Personnel</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "pro"){
-			$menu.='<li class="active"><a href="#pro" data-toggle="tab"><i class="fa fa-suitcase fa-lg"></i><b> Professionnel</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=pro"><i class="fa fa-suitcase fa-lg"></i><b> Professionnel</b></a></li>';
 		} else {
-			$menu.='<li><a href="#pro" data-toggle="tab"><i class="fa fa-suitcase fa-lg"></i><b> Professionnel</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=pro"><i class="fa fa-suitcase fa-lg"></i><b> Professionnel</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "revenus"){
-			$menu.='<li class="active"><a href="#revenus" data-toggle="tab"><i class="fa fa-euro fa-lg"></i><b> Revenus</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=revenus"><i class="fa fa-euro fa-lg"></i><b> Revenus</b></a></li>';
 		} else {
-			$menu.='<li><a href="#revenus" data-toggle="tab"><i class="fa fa-euro fa-lg"></i><b> Revenus</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=revenus"><i class="fa fa-euro fa-lg"></i><b> Revenus</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "historique"){
-			$menu.='<li class="active"><a href="#historique" data-toggle="tab"><i class="fa fa-clock-o fa-lg"></i><b> Historique</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=historique"><i class="fa fa-clock-o fa-lg"></i><b> Historique</b></a></li>';
 		} else {
-			$menu.='<li><a href="#historique" data-toggle="tab"><i class="fa fa-clock-o fa-lg"></i><b> Historique</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=historique"><i class="fa fa-clock-o fa-lg"></i><b> Historique</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "relationel"){
-			$menu.='<li class="active"><a href="#relationel" data-toggle="tab"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=relationel"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
 		} else {
-			$menu.='<li><a href="#relationel" data-toggle="tab"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=relationel"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "besoin"){
-			$menu.='<li class="active"><a href="#besoin" data-toggle="tab"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		} else {
-			$menu.='<li><a href="#besoin" data-toggle="tab"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "profil"){
-			$menu.='<li class="active"><a href="#profil" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=profil"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
 		} else {
-			$menu.='<li><a href="#profil" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=profil"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "tracfin"){
-			$menu.='<li class="active"><a href="#tracfin" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=tracfin"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
 		} else {
-			$menu.='<li><a href="#tracfin" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=tracfin"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "solution"){
-			$menu.='<li class="active"><a href="#solution" data-toggle="tab"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=solution"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
 		} else {
-			$menu.='<li><a href="#solution" data-toggle="tab"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=solution"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "liquidite"){
-			$menu.='<li class="active"><a href="#liquidite" data-toggle="tab"><i class="fa fa-euro fa-lg"></i><b> Liquidités financières</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=liquidite"><i class="fa fa-euro fa-lg"></i><b> Liquidités financières</b></a></li>';
 		} else {
-			$menu.='<li><a href="#liquidite" data-toggle="tab"><i class="fa fa-euro fa-lg"></i><b> Liquidités financières</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=liquidite"><i class="fa fa-euro fa-lg"></i><b> Liquidités financières</b></a></li>';
 		}
 	} else {
-		if(!isset($_GET['onglet'])){
-			$menu = '<li class="active"><a href="#general" data-toggle="tab"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
+		if(isset($_GET['onglet'])  && $_GET['onglet'] == "general"){
+			$menu = '<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=general"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
 		} else {
-			$menu = '<li><a href="#general" data-toggle="tab"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
+			$menu = '<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=general"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "pro"){
-			$menu.='<li class="active"><a href="#pro" data-toggle="tab"><i class="fa fa-suitcase fa-lg"></i><b> Professionnel</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=pro"><i class="fa fa-suitcase fa-lg"></i><b> Professionnel</b></a></li>';
 		} else {
-			$menu.='<li><a href="#pro" data-toggle="tab"><i class="fa fa-suitcase fa-lg"></i><b> Professionnel</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=pro"><i class="fa fa-suitcase fa-lg"></i><b> Professionnel</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "historique"){
-			$menu.='<li class="active"><a href="#historique" data-toggle="tab"><i class="fa fa-clock-o fa-lg"><b> Historique</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=historique"><i class="fa fa-clock-o fa-lg"><b> Historique</b></a></li>';
 		} else {
-			$menu.='<li><a href="#historique" data-toggle="tab"><i class="fa fa-clock-o fa-lg"></i><b> Historique</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=historique"><i class="fa fa-clock-o fa-lg"></i><b> Historique</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "relationel"){
-			$menu.='<li class="active"><a href="#relationel" data-toggle="tab"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=relationel"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
 		} else {
-			$menu.='<li><a href="#relationel" data-toggle="tab"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=relationel"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "besoin"){
-			$menu.='<li class="active"><a href="#besoin" data-toggle="tab"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		} else {
-			$menu.='<li><a href="#besoin" data-toggle="tab"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "profil"){
-			$menu.='<li class="active"><a href="#profil" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=profil"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
 		} else {
-			$menu.='<li><a href="#profil" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=profil"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "tracfin"){
-			$menu.='<li class="active"><a href="#tracfin" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=tracfin"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
 		} else {
-			$menu.='<li><a href="#tracfin" data-toggle="tab"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=tracfin"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "solution"){
-			$menu.='<li class="active"><a href="#solution" data-toggle="tab"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=solution"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
 		} else {
-			$menu.='<li><a href="#solution" data-toggle="tab"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=solution"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
 		}
 	}
 	$_SESSION['menu'] = $menu; 
@@ -479,7 +494,7 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 function AfficheFicheClientGeneral($client,$types_client,$conseillers,$civilites,$situations,$sensibilites){
 	$code='
 	<div class="tab-pane fade in';
-	if(!isset($_GET['onglet'])){
+	if(isset($_GET['onglet']) && $_GET['onglet'] == "general"){
 		$code.=' active';
 	}
 	$code.='" id="general">

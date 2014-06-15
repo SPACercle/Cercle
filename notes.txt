@@ -1,6 +1,4 @@
-Base Client : Bouton Destinataire Couriers => Demander infos
-
-Fiche Client : Bouton Courriers => bug ?
+Base Client : Bouton Destinataire Couriers => A faire
 
 Fiche Client : Bouton A faire : Arborescence groupe (PDF)
 
@@ -13,8 +11,6 @@ Base de données : Synchro schéma : Type Historique => collone sensibilité à 
 								   Visualisation Portefeuille => collone VIS-AccesRestreint (0 ou 1)
 								   Type situation contrat => +1 ligne "non défini" (mettre toutes les lignes null à 16 ???)
 								   Fractionnement => +1 ligne "non défini" (mettre toutes les lignes null à 5)
-
-Fiche Client : Onglet Relationel : Modification dans l'autre personne aussi
 
 
   
