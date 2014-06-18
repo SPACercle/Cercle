@@ -43,6 +43,10 @@ class Controller{
 			'modifClientProduit1' => 'ModifClientProduit1Action',
 			'deleteEvProduit' => 'DeleteEvProduitAction',
 			'modifEvProduit' => 'ModifEvProduitAction',
+			'addEvProduit' => 'AddEvProduitClientAction',
+			'addAnomalieProduit' => 'AddAnomalieProduitAction',
+			'deleteAnomalieProduit' => 'DeleteAnomalieProduitAction',
+			'modifAnomalieProduit' => 'ModifAnomalieProduitAction'
 			);
 	}
 
@@ -829,7 +833,7 @@ class Controller{
 		$res_ev = $pdo->query($query_ev);
 		$evenements = $res_ev->fetchALL(PDO::FETCH_ASSOC);
 
-		//Requete Type Evenemnt
+		//Requete Type Evenement
 		$query_typ_ev = "SELECT * FROM `type evenements contrat` ORDER BY `EVE-Nom`";
 		$pdo->exec("SET NAMES UTF8");
 		$res_typ_ev = $pdo->query($query_typ_ev);
@@ -853,7 +857,19 @@ class Controller{
 		$res_com = $pdo->query($query_com);
 		$commissions = $res_com->fetchALL(PDO::FETCH_ASSOC);
 
-		AffichePage(AfficheFicheClientProduit($produits[0],$personnes,$produits_liste,$situations,$codes,$maitre,$fractionnements,$types_prescripteur,$evenements,$type_evenements,$realisateurs,$apporteurs,$commissions));
+		//Requete Type Historique Anomalie
+		$query_typ_ann = "SELECT * FROM `type historique anomalie`";
+		$pdo->exec("SET NAMES UTF8");
+		$res_typ_ann = $pdo->query($query_typ_ann);
+		$type_anomalies = $res_typ_ann->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete Anomalies
+		$query_ann = "SELECT * FROM `anomalies par produits` WHERE `A/P-NumDossier` = ".$produits[0]['P/C-NumID']."";
+		$pdo->exec("SET NAMES UTF8");
+		$res_ann = $pdo->query($query_ann);
+		$anomalies = $res_ann->fetchALL(PDO::FETCH_ASSOC);
+
+		AffichePage(AfficheFicheClientProduit($produits[0],$personnes,$produits_liste,$situations,$codes,$maitre,$fractionnements,$types_prescripteur,$evenements,$type_evenements,$realisateurs,$apporteurs,$commissions,$anomalies,$type_anomalies));
 	}
 
 	//Ajout d'un produit à un client
@@ -974,7 +990,6 @@ class Controller{
 				  WHERE `P/C-NumID`= $idProduit
 				  ";
 		$pdo = BDD::getConnection();
-		echo $query;
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
 		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit);
@@ -993,41 +1008,173 @@ class Controller{
 	//Modification d'un évenement d'un produit d'un client
 	public function ModifEvProduitAction(){
 		extract($_POST);
-		/*if(empty($concur)){
-			$concur = 0;
+		if(empty($env)){
+			$env = 0;
 		} else {
-			$concur = 1;
-		}*/
+			$env = 1;
+		}
+		if(empty($medicale)){
+			$medicale = 0;
+		} else {
+			$medicale = 1;
+		}
+		if(empty($scoring)){
+			$scoring = 0;
+		} else {
+			$scoring = 1;
+		}
+		if(empty($tracfin)){
+			$tracfin = 0;
+		} else {
+			$tracfin = 1;
+		}
+		if(empty($complet)){
+			$complet = 0;
+		} else {
+			$complet = 1;
+		}
+		if(empty($pdc)){
+			$pdc = 0;
+		} else {
+			$pdc = 1;
+		}
+		if(empty($formalise)){
+			$formalise = 0;
+		} else {
+			$formalise = 1;
+		}
 		$query = "UPDATE `evenements par produits` SET
-				  `E/P-DateSignature`= '$',
-				  `E/P-Apporteur`= '$',
-				  `E/P-Réalisateur`= '$',
-				  `E/P-DossierEnvoyéClt`= '$',
-				  `E/P-MontantPP`= '$',
-				  `E/P-MontantPU`= '$',
-				  `E/P-DateEffet`= '$',
-				  `E/P-DateEnvoi`= '$',
-				  `E/P-AcceptMedicale`= '$',
-				  `E/P-DateRetour`= '$',
-				  `E/P-DateRemise`= '$',
-				  `E/P-ObligationConseils`= '$',
-				  `E/P-Scoring`= '$',
-				  `E/P-Tracfin`= '$',
-				  `E/P-DossierComplet`= '$',
-				  `E/P-ClaséJamaisFormalisé`= '$',
-				  `E/P-Commentaire`= '$',
-				  `E/P-`= '$',
-				  `E/P-`= '$',
-				  `E/P-`= '$',
-				  `E/P-`= '$',
-				  `E/P-`= '$',
-				  `E/P-`= '$',
-				  `E/P-`= '$',
-				  `E/P-`= '$'
-				  WHERE `E/P-NumID`= $idEv
+				  `E/P-DateSignature`= CASE WHEN '$dateSignature' <> '' THEN STR_TO_DATE('$dateSignature','%d/%m/%Y') ELSE null END,";
+				  if(!empty($apporteur)){
+				  	$query.="`E/P-Apporteur`= '$apporteur',";
+				  } else {
+				  	$query.="`E/P-Apporteur`= null,";
+				  }
+				  if(!empty($realisateur)){
+				  	$query.="`E/P-Réalisateur`= '$realisateur',";
+				  } else {
+				  	$query.="`E/P-Réalisateur`= null,";
+				  }
+				  $query.="`E/P-DossierEnvoyéClt`= $env,";
+				  if(!empty($primePério)){
+				  	$query.="`E/P-MontantPP`= '$primePério',";
+				  } else {
+				  	$query.="`E/P-MontantPP`= null,";
+				  }
+				  if(!empty($primeUnique)){
+				  	$query.="`E/P-MontantPU`= '$primeUnique',";
+				  } else {
+				  	$query.="`E/P-MontantPU`= null,";
+				  }
+				  $query.="
+				  `E/P-DateEffet`= CASE WHEN '$dateEffet' <> '' THEN STR_TO_DATE('$dateEffet','%d/%m/%Y') ELSE null END,
+				  `E/P-DateEnvoi`= CASE WHEN '$dateEnvoi' <> '' THEN STR_TO_DATE('$dateEnvoi','%d/%m/%Y') ELSE null END,
+				  `E/P-AcceptMedicale`= $medicale,
+				  `E/P-DateRetour`= CASE WHEN '$dateRetour' <> '' THEN STR_TO_DATE('$dateRetour','%d/%m/%Y') ELSE null END,
+				  `E/P-DateRemise`= CASE WHEN '$dateRemise' <> '' THEN STR_TO_DATE('$dateRemise','%d/%m/%Y') ELSE null END,
+				  `E/P-ObligationConseils`= $formalise,
+				  `E/P-Scoring`= $scoring,
+				  `E/P-Tracfin`= $tracfin,
+				  `E/P-DossierComplet`= $complet,
+				  `E/P-ClasséJamaisFormalisé`= $pdc,
+				  `E/P-Commentaire`= '$commentaire',";
+				   if(!empty($fraisEnt)){
+			  		$query.="`E/P-FraisEntNégo`= $fraisEnt,";
+				   } else {
+				  	$query.="`E/P-FraisEntNégo`= null,";
+				  }
+				   if(!empty($gestionEnt)){
+				  	$query.="`E/P-GestEntNégo`= $gestionEnt,";
+					} else {
+				  	$query.="`E/P-GestEntNégo`= null,";
+				  }
+				  if(!empty($transEnt)){
+				  	$query.="`E/P-TransEntNégo`= $transEnt,";
+				   } else {
+				  	$query.="`E/P-TransEntNégo`= null,";
+				  }
+				   if(!empty($tauxInvtEuro)){
+				  	$query.="`E/P-TauxInvtEuro`= $tauxInvtEuro,";
+				  } else {
+				  	$query.="`E/P-TauxInvtEuro`= 0,";
+				  }
+				   if(!empty($tauxInvtUC)){
+				  $query.="`E/P-TauxInvtUC`= $tauxInvtUC,";
+					} else {
+				  	$query.="`E/P-TauxInvtUC`= 0,";
+				  }
+					if(!empty($tauxInvtUCAutre)){
+				 	$query.="`E/P-TauxInvtUCAutres`= $tauxInvtUCAutre,";
+				 } else {
+				  	$query.="`E/P-TauxInvtUCAutres`= 0,";
+				  }
+				  if(!empty($commission)){
+				  $query.="`E/P-NumCom`= '$commission',";
+					} else {
+				  	$query.="`E/P-NumCom`= null,";
+				  }
+				$query.="
+				  `E/P-NumEvenement` = '$typeEv'
+				  WHERE `E/P-NumID`= '$idEv'
 				  ";
 		$pdo = BDD::getConnection();
-		echo $query;
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit);
+	}
+
+	//Ajout d'un evenement d'un produit d'un client
+	public function AddEvProduitClientAction(){
+		extract($_POST);
+		$query = "INSERT INTO `evenements par produits` (`E/P-NumProduitClient`,`E/P-Réalisateur`) VALUES ($idProduit,$idRealisateur)";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit);
+	}
+
+	//Ajout d'une anomalie d'un produit d'un client
+	public function AddAnomalieProduitAction(){
+		extract($_POST);
+		if(empty($cloture)){
+			$cloture = 0;
+		} else {
+			$cloture = 1;
+		}
+		$query = "INSERT INTO `anomalies par produits` VALUES (null,$idProduit,$type,CASE WHEN '$date' <> '' THEN STR_TO_DATE('$date','%d/%m/%Y') ELSE null END,$cloture,CASE WHEN '$dateCloture' <> '' THEN STR_TO_DATE('$dateCloture','%d/%m/%Y') ELSE null END,'$commentaire')";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit);
+	}
+
+	//Supression d'une anomalie d'un produit d'un client
+	public function DeleteAnomalieProduitAction(){
+		extract($_POST);
+		$query = "DELETE FROM `anomalies par produits` WHERE `A/P-NumID`=$idAnomalie";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit);
+	}
+
+	//Modification d'une anomalie d'un produit d'un client
+	public function ModifAnomalieProduitAction(){
+		extract($_POST);
+		if(empty($cloture)){
+			$cloture = 0;
+		} else {
+			$cloture = 1;
+		}
+		$query = "UPDATE `anomalies par produits` SET
+				  `A/P-NumAnomalie`= '$type',
+				  `A/P-Date`= CASE WHEN '$date' <> '' THEN STR_TO_DATE('$date','%d/%m/%Y') ELSE null END,
+				  `A/P-Cloture`= $cloture,
+				  `A/P-DateCloture`= CASE WHEN '$dateCloture' <> '' THEN STR_TO_DATE('$dateCloture','%d/%m/%Y') ELSE null END,
+				  `A/P-Commentaire` = '$commentaire'
+				  WHERE `A/P-NumID`= '$idAnomalie'
+				  ";
+		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
 		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit);

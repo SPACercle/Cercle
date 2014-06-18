@@ -276,7 +276,7 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	$code='
 	<h4>'.$client["CLT-Nom"].' '.$client["CLT-Prénom"].'</h4>
 	<form style="display:inline;" action="index.php?action=courrierClient" method="post"/><button type="submit" class="btn btn-default"><i class="fa fa-envelope"></i> Courrier</button></form>
-	<form style="display:inline;" action="index.php?action=arboClient" method="post"/><button type="submit" class="btn btn-default"><i class="fa fa-print"></i> Arborescence Groupe</button></form>
+	<a type="button" href="pdf/arboGroupe.php?idClient='.$client['CLT-NumID'].'" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Arborescence Groupe</a>
 	<form style="display:inline;" action="index.php?action=supClient" method="post"/><input type="hidden" value="'.$client['CLT-NumID'].'" name="idClient"/><button onclick="return confirm(\'Voulez-vous vraiment supprimer ce client ?\')" type="submit" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> Suppression Client</button></form>';
 	//DEBUT REQUETE ETAT AVEC SMILEY
 	$pdo = BDD::getConnection();
@@ -644,7 +644,15 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 					<label>Nationalité : </label>
 					<input type="text" name="nationalite" style="width:110px;" value="'.$client['CLT-Nationalité'].'"/><br/><br/>
 					<button type="button" class="btn btn-default">Eléments préparatoires</button>&nbsp;&nbsp;&nbsp;&nbsp;<br/><br/>
-					<button type="button" class="btn btn-default">Mandat Administratif</button>&nbsp;&nbsp;&nbsp;&nbsp;
+					<a type="button" onclick="date()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Mandat Administratif</a>&nbsp;
+					<script>
+					function date() {
+					    var date = prompt("A quelle date souhaites-tu l\'émettre ?","");
+					    if (date != null) {
+					        window.open("pdf/mandat.php?idClient='.$client['CLT-NumID'].'&date="+date);
+					    }
+					}
+					</script>
 					<label>Mandat Administratif&nbsp;&nbsp;</label>';
 					if($client['CLT-MandatGestion'] == 1){
 						$code.='<input type="checkbox" name="mandatGestion" checked>';
@@ -652,7 +660,16 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 						$code.='<input type="checkbox" name="mandatGestion">'; 
 					}
 					$code.='<br/><br/>
-					<button type="button" class="btn btn-default">Infos Pré-contractuelles</button>&nbsp;&nbsp;&nbsp;&nbsp;
+					<a type="button" onclick="date_pre1()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Infos Précontractuelles</a>&nbsp;
+					<script>
+					function date_pre1() {
+					    var date1 = prompt("A quelle date souhaites-tu émettre le premier document ?","");
+					    var date2 = prompt("A quelle date souhaites-tu émettre le second document ?","");
+					    if (date1 != null && date2 != null) {
+					        window.open("pdf/info-pre.php?idClient='.$client['CLT-NumID'].'&date1="+date1+"&date2="+date2);
+					    }
+					}
+					</script>
 					<label>Info-Précontractuelles&nbsp;&nbsp;</label>';
 					if($client['CLT-InfoPreContrat'] == 1){
 						$code.='<input type="checkbox" name="infoPre" checked>';
@@ -780,7 +797,16 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 				}
 				$code.='
 				<br/><br/>
-				<button type="button" class="btn btn-default">Mandat Pro Administratif</button>&nbsp;
+				<a type="button" onclick="date()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Mandat Pro Administratif</a>&nbsp;
+				<script>
+				function date() {
+				    var x;
+				    var date = prompt("A quelle date souhaites-tu l\'émettre ?","");
+				    if (date != null) {
+				        window.open("pdf/mandatPro.php?idClient='.$client['CLT-NumID'].'&date="+date);
+				    }
+				}
+				</script>
 				<button type="button" class="btn btn-default">Mandat Placement</button><br/><br/>
 				<button type="button" class="btn btn-default">Ordre de remplacement</button>&nbsp;
 			</div>
@@ -1534,7 +1560,7 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 	return($code);
 }
 
-function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situations,$codes,$maitre,$fractionnements,$types_prescripteur,$evenements,$type_evenements,$realisateurs,$apporteurs,$commissions){
+function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situations,$codes,$maitre,$fractionnements,$types_prescripteur,$evenements,$type_evenements,$realisateurs,$apporteurs,$commissions,$anomalies,$type_anomalies){
 	$code='
 	<div class="col-lg-12">
 		<div class="panel panel-info">
@@ -1750,7 +1776,9 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					}
 					$code.="</select>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date signature <input style='width:80px;' type='text' name='dateSignature' value='".date('d/m/Y',strtotime($ev['E/P-DateSignature']))."'/>";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date signature <input style='width:80px;' type='text' name='dateSignature' value='";
+							if($ev['E/P-DateSignature']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateSignature']));}
+							$code.="'/>";
 
 					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apporteur <select name='apporteur'><option></option>";
 					foreach($apporteurs as $app){
@@ -1783,9 +1811,13 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 
 					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prime Unique <input style='width:80px;' type='text' name='primeUnique' value='".$ev['E/P-MontantPU']."'/>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Effet <input style='width:80px;' type='text' name='dateEffet' value='".date('d/m/Y',strtotime($ev['E/P-DateEffet']))."'/>";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Effet <input style='width:80px;' type='text' name='dateEffet' value='";
+							if($ev['E/P-DateEffet']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateEffet']));}
+							$code.="'/>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date Envoi Cie <input style='width:80px;' type='text' name='dateEnvoi' value='".date('d/m/Y',strtotime($ev['E/P-DateEnvoi']))."'/>";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date Envoi Cie <input style='width:80px;' type='text' name='dateEnvoi' value='";
+							if($ev['E/P-DateEnvoi']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateEnvoi']));}
+							$code.="'/>";
 
 					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Médical ? ";
 					if($ev['E/P-AcceptMedicale'] == 1){
@@ -1794,9 +1826,13 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 						$code.='<input name="medicale" type="checkbox"/>';
 					}
 
-					$code.="<br/>Date Retour <input style='width:80px;' type='text' name='dateRetour' value='".date('d/m/Y',strtotime($ev['E/P-DateRetour']))."'/>";
+					$code.="<br/>Date Retour <input style='width:80px;' type='text' name='dateRetour' value='";
+							if($ev['E/P-DateRetour']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateRetour']));}
+							$code.="'/>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Remise<input style='width:80px;' type='text' name='dateRemise' value='".date('d/m/Y',strtotime($ev['E/P-DateRemise']))."'/>";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Remise<input style='width:80px;' type='text' name='dateRemise' value='";
+							if($ev['E/P-DateRemise']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateRemise']));}
+							$code.="'/>";
 
 					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Formalisé ";
 					if($ev['E/P-ObligationConseils'] == 1){
@@ -1834,7 +1870,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					}
 
 					$code.="<br/><br/>
-					<b>Commentaire : </b><input style='width:500px;' type='text' name='primePério' value='".$ev['E/P-Commentaire']."'/><br/><br/>
+					<b>Commentaire : </b><input style='width:500px;' type='text' name='commentaire' value='".$ev['E/P-Commentaire']."'/><br/><br/>
 					<b>Frais négociés</b>&nbsp;&nbsp;&nbsp;&nbsp;
 					Entrée &nbsp;<input style='width:30px;' type='text' name='fraisEnt' value='".$ev['E/P-FraisEntNégo']."'/>%&nbsp;&nbsp;&nbsp;
 					Gestion &nbsp;<input style='width:30px;' type='text' name='gestionEnt' value='".$ev['E/P-GestEntNégo']."'/>%&nbsp;&nbsp;&nbsp;
@@ -1866,6 +1902,15 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					</form>
 					</div>";
 				} 
+
+				$code.="
+				<form method='post' action='index.php?action=addEvProduit'>
+					<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
+					<input type='hidden' name='idRealisateur' value='".Auth::getInfo('id')."'/>
+					<button style='float:right;' type='submit' class='btn btn-success'><i class='fa fa-plus'></i> Ajouter Evenement</button>
+				</form>
+				";
+
 				$code.='
 			</div>
 		</div>
@@ -1876,14 +1921,81 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 			<div class="panel-heading">
 				<h3 class="panel-title">Historique des anomalies éventuelles</h3>
 			</div>
-			<div class="panel-body">
-				<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-				<button type="submit" class="btn btn-success" style="float:right;"><i class="fa fa-save"></i> Valider Modifications</button>
+				<div class="panel-body">
+					<div class="table-responsive">
+				      	<table class="table">
+				        <thead>
+				          <tr>
+				            <th>Type anomalie</th>
+				            <th>Date</th>
+				            <th>Cloture</th>
+				            <th>Date Cloture</th>
+				            <th>Commentaire</th>
+				            <th></th>
+				            <th></th>
+				          </tr>
+				        </thead>
+						<tbody>';
+						foreach ($anomalies as $ann) {
+							$code.='<tr><td><form action="index.php?action=modifAnomalieProduit" method="post">
+									<input type="hidden" name="idProduit" value="'.$produit['P/C-NumID'].'"/>
+									<input type="hidden" name="idAnomalie" value="'.$ann['A/P-NumID'].'"/><select name="type">';
+							foreach ($type_anomalies as $typ) {
+								if($typ['HIA-NumID'] == $ann['A/P-NumAnomalie']){
+									$code.="<option value='".$typ['HIA-NumID']."' selected>".$typ['HIA-Nom']."</option>";
+								} else {
+									$code.="<option value='".$typ['HIA-NumID']."'>".$typ['HIA-Nom']."</option>";
+								}
+							}
+							$code.="</select></td>
+							<td><input type='text' name='date' style='width:70px;' value='";
+							if($ann['A/P-Date']!=null){$code.=date('d/m/Y',strtotime($ann['A/P-Date']));}
+							$code.="'/></td><td>";
+							if($ann['A/P-Cloture'] == 1){
+								$code.='<input name="cloture" type="checkbox" checked/>';
+							} else {
+								$code.='<input name="cloture" type="checkbox"/>';
+							}
+							$code.="</td><td><input type='text' style='width:70px;' name='dateCloture' value='";
+							if($ann['A/P-DateCloture']!=null){$code.=date('d/m/Y',strtotime($ann['A/P-DateCloture']));}
+							$code.="'/></td>
+							<td><input style='width:300px;' type='text' name='commentaire' value='".$ann['A/P-Commentaire']."'/></td>
+							<td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Modifer</button></form></td>
+							<td><form action='index.php?action=deleteAnomalieProduit' method='post'>
+									<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
+									<input type='hidden' name='idAnomalie' value='".$ann['A/P-NumID']."'/>
+									<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Suprimmer</button>
+								</form>
+							</td></tr>
+							";
+						}
+						$code.='
+						<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+						<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+						<tr>
+							<form action="index.php?action=addAnomalieProduit" method="post">
+							<input type="hidden" name="idProduit" value="'.$produit['P/C-NumID'].'"/>
+							<td><select name="type" required><option></option>';
+							foreach ($type_anomalies as $typ) {
+								$code.="<option value='".$typ['HIA-NumID']."'>".$typ['HIA-Nom']."</option>";
+							}
+							$code.="</select></td>
+							<td><input type='text' style='width:70px;' name='date' /></td><td>
+							<input name='cloture' type='checkbox'/>
+							</td><td><input type='text' style='width:70px;' name='dateCloture' /></td>
+							<td><input style='width:300px;' type='text' name='commentaire'/></td>
+							<td><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus'></i> Ajouter</button></td>
+							<td></td></tr>
+							</form>
+						</tr>
+						</table></tbody>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 
-	';
+	";
 
 	return($code);
 }
