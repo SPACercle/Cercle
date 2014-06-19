@@ -677,7 +677,16 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 						$code.='<input type="checkbox" name="infoPre">'; 
 					}
 					$code.='<br/><br/>
-					<button type="button" class="btn btn-default">Mandat Placement</button>&nbsp;&nbsp;&nbsp;&nbsp;
+					<a type="button" onclick="date_place()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Mandat Placement</a>&nbsp;
+					<script>
+					function date_place() {
+					    var date = prompt("A quelle date souhaites-tu émettre le premier document ?","");
+					    var risques = prompt("Quels risques ?","");
+					    if (date != null && risques != null) {
+					        window.open("pdf/mandatPlacement.php?idClient='.$client['CLT-NumID'].'&date="+date+"&risques="+risques);
+					    }
+					}
+					</script>
 					<label>Mandat Placement Exclusif&nbsp;&nbsp;</label>';
 					if($client['CLT-MandatCourtage'] == 1){
 						$code.='<input type="checkbox" name="mandatCourtage" checked>';
@@ -693,7 +702,16 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 						$code.='<input type="checkbox" name="lettreMission">'; 
 					}
 					$code.='<br/><br/>
-					<button type="button" class="btn btn-default">Ordre de remplacement</button>&nbsp;&nbsp;&nbsp;&nbsp;
+					<a type="button" onclick="date_ordre()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Ordre de remplacement</a>&nbsp;
+					<script>
+					function date_ordre() {
+					    var date = prompt("A quelle date souhaites-tu émettre le document ?","");
+					    var num = prompt("Merci d\'indiquer les N° de contracts ainsi que les Compagnies dans lesquels ces contract ont été souscrits","");
+					    if (date != null && num != null) {
+					        window.open("pdf/ordreRemp.php?idClient='.$client['CLT-NumID'].'&date="+date+"&num="+num);
+					    }
+					}
+					</script>
 					<label>Ordre de remplacement&nbsp;&nbsp;</label>';
 					if($client['CLT-MandatCourtage'] == 1){
 						$code.='<input type="checkbox" name="ordreRemp" checked>';
@@ -807,8 +825,31 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 				    }
 				}
 				</script>
-				<button type="button" class="btn btn-default">Mandat Placement</button><br/><br/>
-				<button type="button" class="btn btn-default">Ordre de remplacement</button>&nbsp;
+				<a type="button" onclick="date_place()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Mandat Placement</a>&nbsp;
+				<script>
+				function date_place() {
+				    var x;
+				    var date = prompt("A quelle date souhaites-tu l\'émettre ?","");
+				    var risques = prompt("Risques ?","");
+				    var siret = prompt("N° de siret de l\'entreprise ?","");
+				    var rep = prompt("Représentant de l\'entreprise ?","");
+				    if (date != null) {
+				        window.open("pdf/mandatPlacementPro.php?idClient='.$client['CLT-NumID'].'&date="+date+"&risques="+risques+"&siret="+siret+"&rep="+rep);
+				    }
+				}
+				</script><br/><br/>
+				<a type="button" onclick="date_remp()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Ordre de remplacement</a>&nbsp;
+				<script>
+				function date_remp() {
+				    var x;
+				    var date = prompt("A quelle date souhaites-tu l\'émettre ?","");
+				    var num = prompt("Merci d\'indiquer les N° de contrats ainsi que les compagniers dans lequels ces contrats ont été souscrits","");
+				    var siret = prompt("N° de siret de l\'entreprise ?","");
+				    var rep = prompt("Représentant de l\'entreprise ?","");
+				    if (date != null) {
+				        window.open("pdf/ordreRempPro.php?idClient='.$client['CLT-NumID'].'&date="+date+"&num="+num+"&siret="+siret+"&rep="+rep);
+				    }
+				}</script>&nbsp;
 			</div>
 		</div>
 	</div>
@@ -1482,7 +1523,24 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 		$code.=' active';
 	}
 	$code.='" id="solution">
-	<button class="btn btn-success" id="ajoutProduit" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Produit</button><br/>
+
+	<button class="btn btn-success" id="ajoutProduit" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Produit</button>
+
+	<a type="button" onclick="dev_cons()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Devoir de conseil</a>&nbsp;
+	<script>
+	function dev_cons() {
+	    window.open("pdf/devoirConseil.php?idClient='.$client['CLT-NumID'].'");
+	}
+	</script>&nbsp;&nbsp;&nbsp;&nbsp;
+
+	<a type="button" onclick="rec_cont()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Recapitulatif Contrats</a>&nbsp;
+	<script>
+	function rec_cont() {
+	    window.open("pdf/recapContrat.php?idClient='.$client['CLT-NumID'].'");
+	}
+	</script>&nbsp;&nbsp;&nbsp;&nbsp;
+
+	<br/><br/>
 	<div class="table-responsive">
       	<table class="table">
         <thead>

@@ -27,4 +27,6 @@ Base Client : Manque des clients pour Coudeyras
 Fiche Client : Onglet Historique : Bug affichage quand c'est une société
 
 Fiche Client : Onglet Perso : PDF Elements Préparatoires (Formulaire avant PDF)
+
+Fiche Client : Onglet Perso : PDF Lettre de mission (Formulaire avant PDF)
   
