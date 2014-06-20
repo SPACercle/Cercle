@@ -28,6 +28,7 @@ if(isset($_POST) && !empty($_POST['identifiant']) && !empty($_POST['mdp'])){
             $prenom = $row['CON-Prénom'];
             $dpt = $row['CON-DptRattachement'];
             $numId =  $row['CON-NumID'];
+            $orias = $row['CON-NumORIAS'];
         }
         $port_query ="SELECT * FROM `visualisation portefeuilles` v, `conseillers` c WHERE v.`VIS-NumUtilisateur` = ".$numId." AND v.`VIS-NumORIAS` = c.`CON-NumORIAS`"; 
         $res_port = $pdo->query($port_query);
@@ -41,6 +42,7 @@ if(isset($_POST) && !empty($_POST['identifiant']) && !empty($_POST['mdp'])){
             'dpt' => $dpt,
             'port' => $trow,
             'id' => $numId,
+            'orias' => $orias,
             'modeAgence' => 1,
             'portSelect' => null,
             'nomPortSelect' => null,
