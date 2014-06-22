@@ -226,7 +226,7 @@
 			array_push($dejaPasse,$nom);
 			foreach ($res6 as $r) {
 				if($r['TPD-Nom'] == $nom){
-					$content.="<div style='position:absolute;top:".$i.";left:33;color:#54644A;'>- ".$r['BES-Nom']."</div>";
+					$content.="<div style='position:absolute;top:".$i.";left:33;color:#54644A;'>- ".$r['BES-Nom'].", ".$r['OCC-Nom']."</div>";
 					$i = $i + 15;
 				}
 			}

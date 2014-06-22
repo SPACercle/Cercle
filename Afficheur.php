@@ -455,7 +455,7 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=pro"><i class="fa fa-suitcase fa-lg"></i><b> Professionnel</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "historique"){
-			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=historique"><i class="fa fa-clock-o fa-lg"><b> Historique</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=historique"><i class="fa fa-clock-o fa-lg"></i><b> Historique</b></a></li>';
 		} else {
 			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=historique"><i class="fa fa-clock-o fa-lg"></i><b> Historique</b></a></li>';
 		}
@@ -889,12 +889,13 @@ function AfficheFicheClientRevenus($client,$types_revenus,$revenus){
 				$code.='</select>
 				<input type="text" name="annee" style="width:100px;" value="'.$revenu['R/C-Année'].'" required/>
 				<input type="text" name="montant" style="width:100px;" value="'.$revenu['R/C-Montant'].'"required/>
-				<input type="submit" value="Modifier"/>
+				<button type="submit" class="btn btn-warning btn-xs"><i class="fa fa-pencil fa-lg"></i> Enregistrer</button>
+			
 			</form>
 			<form method="post" action="index.php?action=deleteClientRevenu" style="display:inline;">
 				<input type="hidden" name="idRevenu" value="'.$revenu['R/C-NumID'].'"/>
 				<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
-				<input type="submit" value="Supprimer"/>
+				<button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o fa-lg"></i> Supprimer</button>
 			</form><br/>';
 		}
 		$code.='
@@ -1007,11 +1008,11 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 				$code.="";
 			}
 			$code.='"/></td>
-			<td><input type="submit" value="Modifier"/></form></td>
+			<td><button type="submit" class="btn btn-warning btn-xs"><i class="fa fa-pencil fa-lg"></i> Enregistrer</button></form></td>
 			<td><form method="post" action="index.php?action=deleteClientHistorique" style="display:inline;">
 				<input type="hidden" name="idHistorique" value="'.$historique['H/C-NumID'].'"/>
 				<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
-				<input type="submit" value="Supprimer"/>
+				<button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o fa-lg"></i> Supprimer</button>
 			</form></td>
 			</tr>';
 		}
@@ -1035,7 +1036,7 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 			<td><textarea name="commentaire" rows="2" cols="75"></textarea></td>
 			<td><input type="checkbox" name="cloture"></td>
 			<td><input type="text" name="dateCloture" style="width:100px;"/></td>
-			<td><input type="submit" value="Ajouter"/></td>
+			<td><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-plus fa-lg"></i> Ajouter</button></td>
 			<td></td>
 		</form>
 		</table></tbody>
@@ -1089,7 +1090,7 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 			}
 			$code.='</select></td>
 			<td><textarea name="commentaire" rows="1" cols="75">'.$relation['R/P-Commentaire'].'</textarea></td>
-			<td><button type="submit" class="btn btn-warning btn-xs"><i class="fa fa-pencil fa-lg"></i> Modifier</button></td></form>
+			<td><button type="submit" class="btn btn-warning btn-xs"><i class="fa fa-pencil fa-lg"></i> Enregistrer</button></td></form>
 			<td>
 				<form method="post" action="index.php?action=deleteClientRelationel" style="display:inline;">
 					<input type="hidden" name="idApp" value="'.$relation['R/P-NumApporteur'].'"/>
@@ -2052,9 +2053,9 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 			</div>
 		</div>
 	</div>
-
 	";
-
+	$menu = '<li><a href="index.php?action=ficheClient&idClient='.$produit['P/C-NumClient'].'&onglet=solution"><i class="fa fa-backward fa-lg"></i><b> Retour Fiche Client</b></a></li>';
+	$_SESSION['menu'] = $menu; 
 	return($code);
 }
 ?>

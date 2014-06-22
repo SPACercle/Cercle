@@ -146,7 +146,7 @@ class Controller{
 			AND con.`CON-NumID` = $id 
 			AND cli.`CLT-Civilité` = civ.`CIV-NumID`
 			AND cli.`CLT-Statut` = sta.`SPR-NumID`
-			AND pro.`PRO-NumID` = cli.`CLT-Profession`
+			AND cli.`CLT-Profession` = pro.`PRO-NumID`
 			AND cli.`CLT-Type` = typ.`TYP-NumID`";
 			//Si il y a un filtre
 			if(isset($_POST['filtre']) && $_POST['filtre'] != 'all'){
@@ -879,7 +879,8 @@ class Controller{
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
-		header("Location: index.php?action=ficheClient&idClient=$idClient&onglet=solution");
+		$idProduit = $pdo->lastInsertId();
+		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit."");
 	}
 
 	//Supression d'un produit d'un client
