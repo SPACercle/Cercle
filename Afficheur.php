@@ -643,7 +643,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 					<input type="text" name="nbEnfants" style="width:110px;" value="'.$client['CLT-NbEnfants'].'"/><br/><br/>
 					<label>Nationalité : </label>
 					<input type="text" name="nationalite" style="width:110px;" value="'.$client['CLT-Nationalité'].'"/><br/><br/>
-					<button type="button" class="btn btn-default">Eléments préparatoires</button>&nbsp;&nbsp;&nbsp;&nbsp;<br/><br/>
+					<button type="button" onClick="window.open(\'elements.php?idClient='.$client['CLT-NumID'].'\',\'Eléments Préparatoires\',\'toolbar=no,status=no,width=800,height=800,scrollbars=yes,location=no,resize=yes,menubar=non\')" class="btn btn-default">Eléments préparatoires</button>&nbsp;&nbsp;&nbsp;&nbsp;<br/><br/>
 					<a type="button" onclick="date()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Mandat Administratif</a>&nbsp;
 					<script>
 					function date() {
