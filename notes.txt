@@ -1,4 +1,4 @@
-Fiche Client : Onglet Perso : PDF Elements Préparatoires (Formulaire avant PDF)
+Cercle : Logo Recap Contrats
 
 Base client : Smiley vérification sur contrats
 
@@ -6,7 +6,9 @@ Fiche Client : Onglet Pro => A faire : filtre catégorie/profession
 
 Base Client : Bouton Destinataire Couriers => A faire
 
-MySQL : Trigger sauvergarde
+MySQL : Trigger sauvegarde
+
+Documentation : Liste de tous les outils
 
 ---------------------------------------------------------------------------------------------------------
 

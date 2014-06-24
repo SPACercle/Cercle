@@ -97,7 +97,7 @@ if(!(Auth::isLogged())){
           <li <?php if(isset($_GET['action']) && preg_match("#[c|C]lient#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=client" onclick="$('#myModal').modal('show')"><b><img src="img/client.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Base Clients</b></a></li>
           <li><a href="#"><b><img src="img/partenaire.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Bases Partenaires</b></a></li>
           <li><a href="#"><b><img src="img/produit.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Compagnies et Produits</b></a></li>
-          <li><a href="#"><img src="img/procedure.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp;<b> Procédures</b></a></li>
+          <li <?php if(isset($_GET['action']) && preg_match("#procedure#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=procedure"><img src="img/procedure.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp;<b> Procédures</b></a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right navbar-user">

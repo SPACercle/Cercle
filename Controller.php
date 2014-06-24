@@ -46,7 +46,8 @@ class Controller{
 			'addEvProduit' => 'AddEvProduitClientAction',
 			'addAnomalieProduit' => 'AddAnomalieProduitAction',
 			'deleteAnomalieProduit' => 'DeleteAnomalieProduitAction',
-			'modifAnomalieProduit' => 'ModifAnomalieProduitAction'
+			'modifAnomalieProduit' => 'ModifAnomalieProduitAction',
+			'procedure' => 'ProcedureAction'
 			);
 	}
 
@@ -1179,6 +1180,12 @@ class Controller{
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
 		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit);
+	}
+
+	//Affichage des procédures
+	public function ProcedureAction(){
+		Auth::setInfo('page','Procédures');
+		AffichePage(AfficheProcedure());
 	}
 
 }

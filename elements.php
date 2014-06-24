@@ -422,7 +422,22 @@ $pdo = BDD::getConnection();
 $pdo->exec("SET NAMES UTF8");
 $res = $pdo->query($query);
 $res = $res->fetchALL(PDO::FETCH_ASSOC);
-$res = $res[0];
+//Si la ligne du client existe déjà dans la base
+if(isset($res[0])){
+    $res = $res[0];
+//Sinon on la créé
+} else {
+  $query = "INSERT INTO `elements` (`ELT-NumClt`) VALUES (".$idClient.")";
+  $pdo = BDD::getConnection();
+  $pdo->exec("SET NAMES UTF8");
+  $res = $pdo->exec($query);
+
+  $query = "SELECT cli.`CLT-NumID`, cli.`CLT-Nom`, cli.`CLT-Prénom`, el.* FROM `clients et prospects` cli, `elements` el WHERE cli.`CLT-NumID`=$idClient AND el.`ELT-NumClt`=$idClient";
+  $pdo->exec("SET NAMES UTF8");
+  $res = $pdo->query($query);
+  $res = $res->fetchALL(PDO::FETCH_ASSOC);
+  $res = $res[0];
+}
 ?>
 
 <!DOCTYPE html>
@@ -563,7 +578,7 @@ $res = $res[0];
                 if($res['ELT-IRCANTEC'] == 1){
                   echo "checked";
                 }
-                echo 'CRAMM/></center></td>
+                echo '/></center></td>
               </tr>
               <tr>
                 <td><span style="font-color:#7E3300;border:1px solid black;padding:2px;background-color:#BBAE98;"><b>Professions Libérales</b></span></td>

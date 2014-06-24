@@ -29,7 +29,7 @@ function AfficheDroits($droits) {
 	$code.= " <h4 style='display:inline;'>Fonction : </h4>".$droits[0]['FON-Nom']."<br/>";
 	$code.= "</div>";
 	$code.= "<div class='well'>";
-	$code.= "<h3>Autorisations d'accès associés</h3><br/>";
+	$code.= "<h4>Autorisations d'accès associés</h4><br/>";
 	$code.= " <h4 style='display:inline;'>Programmation ";
 	if($droits[0]['CON-AutAccèsProgrammation'] == 1){
 		$code.="<img src='img/valid.gif'/></h4><br/><br/>";
@@ -579,7 +579,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 			<div class="col-lg-6">
 				 <div class="panel panel-info">
 		             <div class="panel-heading">
-		              <h3 class="panel-title">Contact Perso</h3>
+		              <h4 class="panel-title">Contact Perso</h4>
 		             </div>
 		            <div class="panel-body">
 					<label>Téléphone Portable : </label>
@@ -614,7 +614,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 			<div class="col-lg-6">
 				  <div class="panel panel-info">
 		             <div class="panel-heading">
-		                <h3 class="panel-title">Particularités Client</h3>
+		                <h4 class="panel-title">Particularités Client</h4>
 		             </div>
 		            <div class="panel-body">
 					<label>Date Naissance : </label>
@@ -643,7 +643,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 					<input type="text" name="nbEnfants" style="width:110px;" value="'.$client['CLT-NbEnfants'].'"/><br/><br/>
 					<label>Nationalité : </label>
 					<input type="text" name="nationalite" style="width:110px;" value="'.$client['CLT-Nationalité'].'"/><br/><br/>
-					<button type="button" onClick="window.open(\'elements.php?idClient='.$client['CLT-NumID'].'\',\'Eléments Préparatoires\',\'toolbar=no,status=no,width=800,height=800,scrollbars=yes,location=no,resize=yes,menubar=non\')" class="btn btn-default">Eléments préparatoires</button>&nbsp;&nbsp;&nbsp;&nbsp;<br/><br/>
+					<button type="button" onClick="window.open(\'elements.php?idClient='.$client['CLT-NumID'].'\',\'Eléments Préparatoires\',\'toolbar=no,status=no,width=800,height=800,scrollbars=yes,location=no,resize=yes,menubar=non\')" class="btn btn-default"><i class="fa fa-check-square-o"></i> Eléments préparatoires</button>&nbsp;&nbsp;&nbsp;&nbsp;<br/><br/>
 					<a type="button" onclick="date()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Mandat Administratif</a>&nbsp;
 					<script>
 					function date() {
@@ -694,7 +694,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 						$code.='<input type="checkbox" name="mandatCourtage">'; 
 					}
 					$code.='<br/><br/>
-					<button type="button" class="btn btn-default">Lettre de Mission</button>&nbsp;&nbsp;&nbsp;&nbsp;
+					<button type="button" class="btn btn-default" disabled="disabled">Lettre de Mission</button>&nbsp;&nbsp;&nbsp;&nbsp;
 					<label>Lettre de Mission&nbsp;&nbsp;</label>';
 					if($client['CLT-LettreMission'] == 1){
 						$code.='<input type="checkbox" name="lettreMission" checked>';
@@ -743,7 +743,7 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 	<div class="col-lg-6">
 		 <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">Contact Professionnel</h3>
+              <h4 class="panel-title">Contact Professionnel</h4>
             </div>
             <div class="panel-body">
             	<label>Raison Sociale : </label>
@@ -771,7 +771,7 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 	<div class="col-lg-6">
 		 <div class="panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">Informations Professionnelles</h3>
+              <h4 class="panel-title">Informations Professionnelles</h4>
             </div>
             <div class="panel-body">
             	<label>Catégorie : </label>
@@ -1111,11 +1111,11 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 
 		<div id="ajoutLienType">
 
-			<h5 style="display:inline;margin-left:10px;">Lien à créer <span style="color:#A5260A">(Glissez ici les éléments)</span></h5>
+			<h4 style="display:inline;margin-left:10px;">Lien à créer <span style="color:#A5260A">(Glissez ici les éléments)</span></h4>
 
 	        <div id="fieldChooser" tabIndex="1">
 	        	<div id="lienPers">
-		            <div id="sourceFields"><h3 style="display:inline;"><span style="color:#A5260A">Personne</span></h3>';
+		            <div id="sourceFields"><h4 style="display:inline;"><span style="color:#A5260A">Personne</span></h4>';
 		               foreach ($personnes as $pers) {
 							$code.="<div>".$pers['CLT-Nom']." ".$pers['CLT-Prénom']."<input type='hidden' name='pers' value='".$pers['CLT-NumID']."'/></div>";
 						}
@@ -1123,7 +1123,7 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 		            </div>
 		        </div>
 	            <div id="lienType">
-		            <div id="sourceFields"><h3 style="display:inline;"><span style="color:#A5260A">Type</span></h3>';
+		            <div id="sourceFields"><h4 style="display:inline;"><span style="color:#A5260A">Type</span></h4>';
 		               foreach ($type_relation as $type) {
 							$code.="<div>".$type['REL-Nom']."<input type='hidden' name='type' value='".$type['REL-Num']."'/></div>";
 						}
@@ -1165,7 +1165,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
               <div id="myTabContent" class="tab-content">
               	
                 <div class="tab-pane fade active in" id="retraite">
-                	<h5>En Retraite, le client souhaite</h5>
+                	<h4>En Retraite, le client souhaite</h4>
 					<div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1191,7 +1191,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
-				        <h3>Ajouter un besoin </h3>
+				        <h4>Ajouter un besoin </h4>
 				        <form action="index.php?action=addClientBesoin" method="post"/>
 	                	Besoin : <select id="besoin2" name="idBesoin">
 	                	<option>Choisir...</option>';
@@ -1215,7 +1215,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
                 </div>
 
                 <div class="tab-pane fade in" id="prevoyance">
-                	<h5>En Prévoyance, le client souhaite</h5>
+                	<h4>En Prévoyance, le client souhaite</h4>
                 	<div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1241,7 +1241,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
-				        <h3>Ajouter un besoin </h3>
+				        <h4>Ajouter un besoin </h4>
 				        <form action="index.php?action=addClientBesoin" method="post"/>
 	                	Besoin : <select id="besoin3" name="idBesoin2">
 	                	<option>Choisir...</option>';
@@ -1265,7 +1265,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
                 </div>
 
                 <div class="tab-pane fadein" id="prevoyancePost">
-                	<h5>En Prévoyance Post-Activité, le client souhaite</h5>
+                	<h4>En Prévoyance Post-Activité, le client souhaite</h4>
                 	<div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1291,7 +1291,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
-				        <h3>Ajouter un besoin </h3>
+				        <h4>Ajouter un besoin </h4>
 				        <form action="index.php?action=addClientBesoin" method="post"/>
 	                	Besoin : <select id="besoin4" name="idBesoin3">
 	                	<option>Choisir...</option>';
@@ -1315,7 +1315,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
                 </div>
 
                 <div class="tab-pane fade in" id="sante">
-                	<h5>En Santé, le client souhaite</h5>
+                	<h4>En Santé, le client souhaite</h4>
                 	<div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1341,7 +1341,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
-				        <h3>Ajouter un besoin </h3>
+				        <h4>Ajouter un besoin </h4>
 				        <form action="index.php?action=addClientBesoin" method="post"/>
 	                	Besoin : <select id="besoin5" name="idBesoin4">
 	                	<option>Choisir...</option>';
@@ -1365,7 +1365,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
                 </div>
 
                 <div class="tab-pane fade in" id="epargne">
-                	<h5>En Epargne, le client souhaite</h5>
+                	<h4>En Epargne, le client souhaite</h4>
                 	<div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1391,7 +1391,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
-				        <h3>Ajouter un besoin </h3>
+				        <h4>Ajouter un besoin </h4>
 				        <form action="index.php?action=addClientBesoin" method="post"/>
 	                	Besoin : <select id="besoin6" name="idBesoin5">
 	                	<option>Choisir...</option>';
@@ -1415,7 +1415,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
                 </div>
 
                 <div class="tab-pane fade in" id="chomage">
-                	<h5>En Chômage, le client souhaite</h5>
+                	<h4>En Chômage, le client souhaite</h4>
                 	<div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1441,7 +1441,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
-				        <h3>Ajouter un besoin </h3>
+				        <h4>Ajouter un besoin </h4>
 				        <form action="index.php?action=addClientBesoin" method="post"/>
 	                	Besoin : <select id="besoin7" name="idBesoin6">
 	                	<option>Choisir...</option>';
@@ -1465,7 +1465,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
                 </div>
 
                 <div class="tab-pane fade in" id="pret">
-                <h5>En Prêt, le client souhaite</h5>
+                <h4>En Prêt, le client souhaite</h4>
                 <div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1491,7 +1491,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
-				        <h3>Ajouter un besoin </h3>
+				        <h4>Ajouter un besoin </h4>
 				        <form action="index.php?action=addClientBesoin" method="post"/>
 	                	Besoin : <select id="besoin8" name="idBesoin7">
 	                	<option>Choisir...</option>';
@@ -1573,7 +1573,7 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 	</div>
 
 	<div id="formProduitClient">
-	<h3>Création Produit Client</h3><br/>
+	<h4>Création Produit Client</h4><br/>
 
 	Type Produit :
 	<select name="type" id="typeProduit"><option value="rien">Choisir...</option>';
@@ -1624,7 +1624,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 	<div class="col-lg-12">
 		<div class="panel panel-info">
 			<div class="panel-heading">
-				<h3 class="panel-title">Infos produit</h3>
+				<h4 class="panel-title">Infos produit</h4>
 			</div>
 			<div class="panel-body">
 				<form action="index.php?action=modifClientProduit1" method="post">
@@ -1820,7 +1820,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 	<div class="col-lg-12">
 		<div class="panel panel-warning">
 			<div class="panel-heading">
-				<h3 class="panel-title">Différentes phases de mise en place des mes dossiers</h3>
+				<h4 class="panel-title">Différentes phases de mise en place des mes dossiers</h4>
 			</div>
 			<div class="panel-body" style="font-size:11px;">';
 				foreach ($evenements as $ev) {
@@ -1978,7 +1978,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 	<div class="col-lg-12">
 		<div class="panel panel-danger">
 			<div class="panel-heading">
-				<h3 class="panel-title">Historique des anomalies éventuelles</h3>
+				<h4 class="panel-title">Historique des anomalies éventuelles</h4>
 			</div>
 				<div class="panel-body">
 					<div class="table-responsive">
@@ -2056,6 +2056,99 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 	";
 	$menu = '<li><a href="index.php?action=ficheClient&idClient='.$produit['P/C-NumClient'].'&onglet=solution"><i class="fa fa-backward fa-lg"></i><b> Retour Fiche Client</b></a></li>';
 	$_SESSION['menu'] = $menu; 
+	return($code);
+}
+
+//Affichage des procédures
+function AfficheProcedure(){
+	$code = '
+	<div class="col-lg-6">
+		<h4>Stéphane Scalabrino</h4>
+		<a type="button" onclick="tracfin()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Tracfin</a>
+		<script>
+		function tracfin() {
+		    window.open("pdf/tracfin.php");
+		}
+		</script>
+		<hr/>
+
+		<h4>Sylvain Maillard</h4>
+		<a type="button" onclick="orias()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Vérif Orias</a>
+		<script>
+		function orias() {
+		    window.open("pdf/traitement.php");
+		}
+		</script>
+		<hr/>
+
+		<h4>Ali Tazi</h4>
+		<a type="button" onclick="sinistre()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Sinistres</a>
+		<script>
+		function sinistre() {
+		    window.open("pdf/sinistre.php");
+		}
+		</script>
+		<a type="button" onclick="rh()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Dossier RH</a>
+		<script>
+		function rh() {
+		    window.open("pdf/traitement.php");
+		}
+		</script>
+		<hr/>
+	</div>
+
+	<div class="col-lg-6">
+		<h4>Delphine Taton et Carine Scalabrino</h4>
+		<a type="button" onclick="traitement()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Traitement Dossier</a>
+		<script>
+		function traitement() {
+		    window.open("pdf/traitement.php");
+		}
+		</script>
+		<a type="button" onclick="incident()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Incident de Gestion</a>
+		<script>
+		function incident() {
+		    window.open("pdf/incident.php");
+		}
+		</script>
+			<a type="button" onclick="incident2()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Incident de Mise en Place</a>
+		<script>
+		function incident2() {
+		    window.open("pdf/incident2.php");
+		}
+		</script>
+		<hr/>
+
+		<h4>Stéphane Saulnier</h4>
+		<a type="button" onclick="confident()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Confidentalité et Secret Professionel</a>
+		<script>
+		function confident() {
+		    window.open("pdf/confident.php");
+		}
+		</script>
+		<a type="button" onclick="respect()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Respect du Secret Médical</a>
+		<script>
+		function respect() {
+		    window.open("pdf/respect.php");
+		}
+		</script>
+		<hr/>
+
+		<h4>Alain Gazoni</h4>
+		<a type="button" onclick="reclamation()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Réclamations</a>
+		<script>
+		function reclamation() {
+		    window.open("pdf/reclamation.php");
+		}
+		</script>
+		<a type="button" onclick="cnil()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> CNIL</a>
+		<script>
+		function cnil() {
+		    window.open("pdf/cnil.php");
+		}
+		</script>
+	</div>
+	';
 	return($code);
 }
 ?>

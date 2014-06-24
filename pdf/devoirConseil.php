@@ -120,17 +120,17 @@
 
 	<page_header>
 		<div style='position:absolute;top:0;left:0'><img style='width:250px;height:48px;' src='../img/logos/".$logo."' ALT=''></div>
-		<div style='position:absolute;top:-;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
-		<div style='position:absolute;top:83;left:20'><span>".$res2[0]['CON-Adresse']."</span></div>
-		<div style='position:absolute;top:99;left:20'><span>".$res2[0]['CON-Adresse2']."</span></div>
-		<div style='position:absolute;top:114;left:20'><span>".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div>
+		<div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
+		<span style='font-size:10px;color:#6F6F46'><div style='position:absolute;top:63;left:20'>".$res2[0]['CON-Adresse']."</div>
+		<div style='position:absolute;top:73;left:20'>".$res2[0]['CON-Adresse2']."</div>
+		<div style='position:absolute;top:84;left:20'>".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</div></span>
     </page_header>
 
     <span style='font-size:12px'><i>
-    	
-    <div style='position:absolute;top:133;left:230;'><i><h4>Formalisation du Devoir de conseil</h4></i></div>
+    
+    <div style='position:absolute;top:133;left:50;border:1px solid black;padding:5px;padding-left:200px;padding-right:200px;'><i><h4 style='margin-top:0px;'>Formalisation du Devoir de conseil</h4></i></div>
 
-    <div style='position:absolute;top:173;left:150'>(Loi n°2005-1564 du 15 décembre 2005 complétée par le décret n°2006-1091 du 30 aout 2006)</div>
+    <div style='position:absolute;top:159;left:150'>(Loi n°2005-1564 du 15 décembre 2005 complétée par le décret n°2006-1091 du 30 aout 2006)</div>
 
     <div style='position:absolute;top:201;left:25'>".$res2[0]['CIV-NomDétaillé']." ".$res2[0]['CLT-Nom'].",</div>
 
@@ -152,7 +152,7 @@
 	<div style='position:absolute;top:498;left:25'>Vous êtes né(e) le ".date('d/m/Y',strtotime($res2[0]['CLT-DateNaissance']))."</div>
 	<div style='position:absolute;top:554;left:25'>Vous êtes ".$res2[0]['SIT-Nom'].""; 
 	 if($res2[0]['CLT-NbEnfants'] != null){
-	 	$content.="et vous avez ".$res2[0]['CLT-NbEnfants']." enfant(s)";
+	 	$content.=" et vous avez ".$res2[0]['CLT-NbEnfants']." enfant(s)";
 	 }
 	$content.="</div>";
 
@@ -161,7 +161,7 @@
 	}
 
 	$content.="
-	<div style='position:absolute;top:598;left:25'><h4><i>II- Informations relatives à vos besoins</i></h4></div>
+	<div style='position:absolute;top:598;left:25'><h4><i>II- Informations relatives à vos besoins actuels</i></h4></div>
 
 	<b><i><u><div style='position:absolute;top:647;left:33'>Vous souhaitez étudier sur un contrat spécifique </div>
 	<div style='position:absolute;top:664;left:33'>votre couverture en matière de ...</div></u></i></b>";
@@ -186,6 +186,8 @@
 	<div style='position:absolute;top:1000;left:700'>Page 1/3</div>
 	</span>
 
+	<div style='position:absolute;top:1015;left:700;border:1px solid black;font-size:9px;padding-left:10px;padding-right:10px;'>Paraphe<br/><br/><br/><br/></div>
+
     <page_footer>
     	<span style='font-size:10px'>
     	<b><div style='position:absolute;top:1015;left:90'><span>Siège Social : ".$res2[0]['CON-Adresse']." ".$res2[0]['CON-Adresse2']." ".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div></b>
@@ -202,10 +204,10 @@
 
 	<page_header>
 		<div style='position:absolute;top:0;left:0'><img style='width:250px;height:48px;' src='../img/logos/".$logo."' ALT=''></div>
-		<div style='position:absolute;top:-;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
-		<div style='position:absolute;top:83;left:20'><span>".$res2[0]['CON-Adresse']."</span></div>
-		<div style='position:absolute;top:99;left:20'><span>".$res2[0]['CON-Adresse2']."</span></div>
-		<div style='position:absolute;top:114;left:20'><span>".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div>
+		<div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
+		<span style='font-size:10px;color:#6F6F46'><div style='position:absolute;top:63;left:20'>".$res2[0]['CON-Adresse']."</div>
+		<div style='position:absolute;top:73;left:20'>".$res2[0]['CON-Adresse2']."</div>
+		<div style='position:absolute;top:84;left:20'>".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</div></span>
     </page_header>
 
     <span style='font-size:11px'>
@@ -257,6 +259,7 @@
 
 	$content.="
 	<div style='position:absolute;top:1000;left:700'>Page 2/3</div>
+	<div style='position:absolute;top:1015;left:700;border:1px solid black;font-size:9px;padding-left:10px;padding-right:10px;'>Paraphe<br/><br/><br/><br/></div>
 	</span>
 
     <page_footer>
@@ -275,10 +278,10 @@
 
 	<page_header>
 		<div style='position:absolute;top:0;left:0'><img style='width:250px;height:48px;' src='../img/logos/".$logo."' ALT=''></div>
-		<div style='position:absolute;top:-;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
-		<div style='position:absolute;top:83;left:20'><span>".$res2[0]['CON-Adresse']."</span></div>
-		<div style='position:absolute;top:99;left:20'><span>".$res2[0]['CON-Adresse2']."</span></div>
-		<div style='position:absolute;top:114;left:20'><span>".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div>
+		<div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
+		<span style='font-size:10px;color:#6F6F46'><div style='position:absolute;top:63;left:20'>".$res2[0]['CON-Adresse']."</div>
+		<div style='position:absolute;top:73;left:20'>".$res2[0]['CON-Adresse2']."</div>
+		<div style='position:absolute;top:84;left:20'>".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</div></span>
     </page_header>
 
     <span style='font-size:12px'><i>
@@ -391,12 +394,13 @@
 
 	<div style='position:absolute;top:".($i+62).";left:25'>Fait à ".$res2[0]['CLT-Ville'].", le ".$date." en deux exemplaires, dont un pour ".$res2[0]['CIV-Nom']." ".$res2[0]['CLT-Prénom']."  ".$res2[0]['CLT-Nom']." qui reconnait l'a voir reçu.</div>
 
-	<div style='position:absolute;top:".($i+350).";left:501'> ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</div>
-	<div style='position:absolute;top:".($i+350).";left:184'>".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</div>
-	<div style='position:absolute;top:".($i+325).";left:473'> L'intermédiaire en Assurances</div>
-	<div style='position:absolute;top:".($i+325).";left:191'>Le Candidat à l'Assurance</div>
+	<div style='position:absolute;top:".($i+150).";left:501'> ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</div>
+	<div style='position:absolute;top:".($i+150).";left:184'>".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</div>
+	<div style='position:absolute;top:".($i+125).";left:473'> L'intermédiaire en Assurances</div>
+	<div style='position:absolute;top:".($i+125).";left:191'>Le Candidat à l'Assurance</div>
 	
 	<div style='position:absolute;top:1000;left:700'>Page 3/3</div>
+	<div style='position:absolute;top:1015;left:700;border:1px solid black;font-size:9px;padding-left:10px;padding-right:10px;'>Paraphe<br/><br/><br/><br/></div>
 
 	</span>
 
@@ -415,6 +419,6 @@
     require_once(dirname(__FILE__).'/html2pdf/html2pdf.class.php');
     $html2pdf = new HTML2PDF('P','A4','fr');
     $html2pdf->WriteHTML($content);
-    $html2pdf->Output('Mandat Pro.pdf');
+    $html2pdf->Output('Devoir Conseil.pdf');
 
 ?>

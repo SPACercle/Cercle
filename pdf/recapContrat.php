@@ -71,7 +71,7 @@
 		
 		WHERE (((`Type Client`.`TYP-Nom`)='Client') AND ((`visualisation portefeuilles`.`VIS-NumUtilisateur`)=".$_SESSION['Auth']['id'].") AND ((`Produits par Clients`.`P/C-NumClient`)=".$_GET['idClient'].") AND ((`Produits par Clients`.`P/C-DossierConcurrent`)=0))
 
-		ORDER BY `Type Produit`.`TPD-Nom`,`Produits par Clients`.`P/C-NumContrat`;
+		ORDER BY `compagnies`.`CIE-Nom`,`produits`.`PDT-Nom`,`evenements par produits`.`E/P-DateEffet` DESC;
 	";
 
 	$query3="
@@ -150,7 +150,8 @@
     $content="<page backright='5mm' backleft='5mm'>
 
 	<page_header>
-		<div style='position:absolute;top:-;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>    
+		<div style='position:absolute;top:-;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>  
+		<div style='position:absolute;top:0;left:0'><img style='width:250px;height:48px;' src='../img/logos/".$logo."' ALT=''></div>  
 	</page_header>
 
     <span style='font-size:12px'>
@@ -229,7 +230,7 @@
 		}
 		$i = $i + 50;
 		
-		$content.="
+		$content.="<span style='font-size:10px'>
 		<div style='position:absolute;top:".$i.";left:0;color:#95847A;'><h4><i>Dossiers Externes à titre indicatif</i></h4></div>";
 		$i = $i +1;
 		$content.="
@@ -241,13 +242,13 @@
 
 		foreach ($res4 as $r) {
 			if(!in_array($r['TPD-Nom'],$tab_produit)){
-				$i = $i +24;
+				$i = $i +15;
 				array_push($tab_produit,$r['TPD-Nom']);
 				$content.="
 				<div style='position:absolute;top:".$i.";left:0;color:#95847A;'><b><u><i>".$r['TPD-Nom']."</i></u></b></div>";
-				$i = $i +28;
+				$i = $i +15;
 			} else {
-				$i = $i +28;
+				$i = $i +15;
 			}
 			$content.="
 			<div style='position:absolute;top:".$i.";left:0;color:#49628C;'>".$r['CIE-Nom']." - ".$r['PDT-Nom']." N° ".$r['P/C-NumContrat']."</div>
@@ -257,7 +258,7 @@
 			<div style='position:absolute;top:".$i.";left:525;color:#95847A;'> Prime annuelle</div>";
 		}
 			
-	$content.="
+	$content.="</span>
 	</span>
 
 	</page>";
@@ -265,7 +266,7 @@
     require_once(dirname(__FILE__).'/html2pdf/html2pdf.class.php');
     $html2pdf = new HTML2PDF('P','A4','fr');
     $html2pdf->WriteHTML($content);
-    $html2pdf->Output('Mandat Pro.pdf');
+    $html2pdf->Output('Récapitulatif Contrats.pdf');
 
 
 ?>
