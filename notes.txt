@@ -1,10 +1,4 @@
-Cercle : Logo Recap Contrats
-
 Base client : Smiley vérification sur contrats
-
-Fiche Client : Onglet Pro => A faire : filtre catégorie/profession
-
-Base Client : Bouton Destinataire Couriers => A faire
 
 MySQL : Trigger sauvegarde
 

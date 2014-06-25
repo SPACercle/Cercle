@@ -2070,10 +2070,28 @@ function AfficheProcedure(){
 		    window.open("pdf/tracfin.php");
 		}
 		</script>
+		<a type="button" onclick="scoring()" target="_blank" class="btn btn-default disabled"><i class="fa fa-print"></i> Scoring</a>
+		<script>
+		function scoring() {
+		    window.open("pdf/scoring.php");
+		}
+		</script>
+		<a type="button" onclick="tracfin_an()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Tracfin Anomalies</a>
+		<script>
+		function tracfin_an() {
+		    window.open("pdf/tracfinAnomalie.php");
+		}
+		</script>
+		<a type="button" onclick="scoring_an()" target="_blank" class="btn btn-default disabled"><i class="fa fa-print"></i> Scoring Anomalies</a>
+		<script>
+		function scoring_an() {
+		    window.open("pdf/scoringAnomalie.php");
+		}
+		</script>
 		<hr/>
 
 		<h4>Sylvain Maillard</h4>
-		<a type="button" onclick="orias()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Vérif Orias</a>
+		<a type="button" onclick="orias()" target="_blank" class="btn btn-default disabled"><i class="fa fa-print"></i> Vérif Orias</a>
 		<script>
 		function orias() {
 		    window.open("pdf/traitement.php");
@@ -2088,7 +2106,7 @@ function AfficheProcedure(){
 		    window.open("pdf/sinistre.php");
 		}
 		</script>
-		<a type="button" onclick="rh()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Dossier RH</a>
+		<a type="button" onclick="rh()" target="_blank" class="btn btn-default disabled"><i class="fa fa-print"></i> Dossier RH</a>
 		<script>
 		function rh() {
 		    window.open("pdf/traitement.php");
@@ -2111,7 +2129,7 @@ function AfficheProcedure(){
 		    window.open("pdf/incident.php");
 		}
 		</script>
-			<a type="button" onclick="incident2()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Incident de Mise en Place</a>
+			<a type="button" onclick="incident2()" target="_blank" class="btn btn-default disabled"><i class="fa fa-print"></i> Incident de Mise en Place</a>
 		<script>
 		function incident2() {
 		    window.open("pdf/incident2.php");
@@ -2151,4 +2169,231 @@ function AfficheProcedure(){
 	';
 	return($code);
 }
+
+//Affichage des compagnies
+function AfficheCompagnie($compagnies){
+	$code="
+	<form style='display:inline;' action='index.php?action=compagnie' method='post'>
+	<input type='text' class='form-control' style='display:inline;width:200px;' name='recherche'/>
+	<span class='input-group-btn' style='display:inline;'>
+	<button class='btn btn-default' type='submit' style='display:inline;'><i class='fa fa-search'></i></button>
+	</span>
+	</form>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<button class='btn btn-default' style='display:inline;' onclick=\"window.location.reload()\"><i class='fa fa-refresh'></i> Actualiser</button>
+	";
+	$code.= "<hr/><div class='col-lg-12'><div class='table-responsive'>
+	<table class='table table-hover tablesorter'>
+	<thead>
+	<tr>
+	<th>ACP</th>
+	<th>Compagnie <i class='fa fa-sort'></i></th>
+	<th>Adresse <i class='fa fa-sort'></i></th>
+	<th>CP <i class='fa fa-sort'></i></th>
+	<th>Ville <i class='fa fa-sort'></i></th>
+	<th>Accueil Tel</th>
+	<th>Fax</th>
+	<th>Site Internet</th>
+	<th>Tarid Internet</th>
+	</tr>
+	</thead>
+	<tbody>";
+	foreach($compagnies as $comp){
+		$code.='<tr onclick="window.open(\'index.php?action=ficheCompagnie&idComp='.$comp['CIE-NumID'].'&onglet=general\');" class="rowClient" target="_blank">';
+		$code.="
+			<td>";
+			if($comp['CIE-ACP'] == 1){
+				$code.="<img width=15 height=15 src='img/check.jpg'/>";
+			}
+		$code.="
+			</td>
+			<td><b>".$comp['CIE-Nom']."</b></td>
+			<td>".$comp['CIE-Adresse']."</td>
+			<td>".$comp['CIE-CodePostal']."</td>
+			<td>".$comp['CIE-Ville']."</td>
+			<td style='width:100px;'>".$comp['CIE-AccueilTel']."</td>
+			<td style='width:100px;'>".$comp['CIE-Fax']."</td>
+			<td>".$comp['CIE-SiteInternet']."</td>
+			<td>".$comp['CIE-TarifInternet']."</td>
+		";
+		$code.="</tr>";
+	}
+	$code .= "</tbody></table></div></div>";
+	return($code);
+}
+
+//Affichage de la fiche compagnie
+function AfficheFicheCompagnie($compagnie,$contacts){
+	$code='<div class="panel-body">
+	<div class="tab-content">';
+
+	//Onglet Génréral
+	if($_GET['onglet'] == "general"){
+		$code.=AfficheFicheCompagnieGeneral($compagnie);
+	} 
+	$code.='</div></div>';
+	if($_GET['onglet'] == "contact"){
+		$code.=AfficheFicheCompagnieContact($contacts,$compagnie[0]['CIE-NumID']);
+	} 
+	$code.='</div></div>';
+
+	//Menu du côté
+	if(isset($_GET['onglet'])  && $_GET['onglet'] == "general"){
+		$menu = '<li class="active"><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=general"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
+	} else {
+		$menu = '<li><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=general"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
+	}
+	if(isset($_GET['onglet'])  && $_GET['onglet'] == "contact"){
+		$menu.= '<li class="active"><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=contact"><i class="fa fa-list-alt fa-lg"></i><b> Contacts</b></a></li>';
+	} else {
+		$menu.= '<li><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=contact"><i class="fa fa-list-alt fa-lg"></i><b> Contact</b></a></li>';
+	}
+
+	$_SESSION['menu'] = $menu; 
+
+	return($code);
+}
+
+//Affichage de la fiche compagnie - onglet Général
+function AfficheFicheCompagnieGeneral($compagnie){
+	$code='
+	<form action="index.php?action=modifCompagnieGeneral" method="post">
+	<input type="hidden" name="idComp" value="'.$compagnie[0]['CIE-NumID'].'"/> 
+		<div class="col-lg-4">
+			<div class="form-group">
+				<label>Adresse : </label><br/>
+				<input type="text" class="form-control" style="width:275px;" name="adresse" value="'.$compagnie[0]['CIE-Adresse'].'"/> 
+			</div>
+
+			<div class="form-group">
+				<label>Code Postal : </label><br/>
+				<input type="text" class="form-control" style="width:275px;" name="codePostal" value="'.$compagnie[0]['CIE-CodePostal'].'"/> 
+			</div>
+
+			<div class="form-group">
+				<label>Ville : </label><br/>
+				<input type="text" class="form-control" style="width:275px;" name="ville" value="'.$compagnie[0]['CIE-Ville'].'"/> 
+			</div>
+
+			<div class="form-group">
+				<label>Accueil Tel : </label><br/>
+				<input type="text" class="form-control" style="width:275px;" name="tel" value="'.$compagnie[0]['CIE-AccueilTel'].'"/> 
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="form-group">
+				<label>Fax : </label><br/>
+				<input type="text" class="form-control" style="width:275px;" name="fax" value="'.$compagnie[0]['CIE-Fax'].'"/> 
+			</div>
+
+			<div class="form-group">
+				<label>Commentaire : </label><br/>
+				<input type="text" class="form-control" style="width:275px;" name="com" value="'.$compagnie[0]['CIE-Commentaire'].'"/> 
+			</div>
+
+			<div class="form-group">
+				<label>Site Internet : </label><br/>
+				<input type="text" class="form-control" style="width:275px;" name="site" value="'.$compagnie[0]['CIE-SiteInternet'].'"/> 
+			</div>
+
+			<div class="form-group">
+				<label>Tarif Internet : </label><br/>
+				<input type="text" class="form-control" style="width:275px;" name="tarif" value="'.$compagnie[0]['CIE-TarifInternet'].'"/> 
+			</div>
+		</div>
+
+		<div class="col-lg-4">
+			<div class="form-group">
+				<label>ACP : </label><br/>';
+				if($compagnie[0]['CIE-ACP'] == 1){
+					$code.='<input type="checkbox" name="acp" checked/>';
+				} else {
+					$code.='<input type="checkbox" name="acp"/>';
+				}
+			$code.='
+			</div>
+		</div>
+
+		<div class="col-lg-12">
+			<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Valider Modifications</button>
+		</div>
+	</form>
+	';
+	return($code);
+}
+
+//Affichage de la fiche compagnie - onglet Contacts
+function AfficheFicheCompagnieContact($contacts,$idComp){
+	$code="
+	<a type='button' onclick='impr()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Imprimer</a>
+	<script>
+	function impr() {
+	    window.open(\"pdf/contactCompagnie.php?idComp=".$idComp."\");
+	}
+	</script><br/><br/>
+	<div class='table-responsive'>
+	<table class='table table-hover tablesorter'>
+	<thead>
+	<tr>
+	<th>Nom/Service</th>
+	<th>Prénom</th>
+	<th>Tel Bureau</i></th>
+	<th>Mail</th>
+	<th>Tel Portable</th>
+	<th>Fax</th>
+	<th>Fonction</th>
+	<th>Horaires Ouverture</th>
+	<th>Commentaire</th>
+	<th></th>
+	<th></th>
+	</tr>
+	</thead>
+	<tbody>";
+	foreach($contacts as $cont){
+		$code.='<tr><form action="index.php?action=modifCompagnieContact" method="post">
+			    <input type="hidden" name="idComp" value="'.$cont['C/C-Num'].'"/> 
+			    <input type="hidden" name="idNom" value="'.$cont['C/C-Nom'].'"/>
+			    <input type="hidden" name="idPrenom" value="'.$cont['C/C-Prénom'].'"/>
+		';
+		$code.="
+			<td><input type='text' name='nom' value='".$cont['C/C-Nom']."' required/></td>
+			<td><input type='text' name='prenom' value='".$cont['C/C-Prénom']."' required/></td>
+			<td><input type='text' name='tel' value='".$cont['C/C-TelBureau']."'/></td>
+			<td><input type='text' name='mail' value='".$cont['C/C-Mail']."'/></td>
+			<td><input type='text' name='port' value='".$cont['C/C-TelPortable']."'/></td>
+			<td><input type='text' name='fax' value='".$cont['C/C-Fax']."'/></td>
+			<td><input type='text' name='fonction' value='".$cont['C/C-Fonction']."'/></td>
+			<td><input type='text' name='horaire' value='".$cont['C/C-HorairesOuverture']."'/></td>
+			<td><input type='text' name='com' value='".$cont['C/C-Commentaire']."'/></td>
+			<td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button></form></td>
+			<td>
+				<form action='index.php?action=deleteCompagnieContact' method='post'>
+					<input type='hidden' name='idComp' value='".$cont['C/C-Num']."'/>
+					<input type='hidden' name='idNom' value='".$cont['C/C-Nom']."'/>
+					<input type='hidden' name='idPrenom' value='".$cont['C/C-Prénom']."'/>
+					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Suprimmer</button>
+				</form>
+			</td>						
+		";
+		$code.="</form></tr>";
+	}
+	$code.="
+	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+	<td><form action='index.php?action=addCompagnieContact' method='post'><input type='text' name='nom' required/></td>
+	<td><input type='text' name='prenom' required/></td>
+	<td><input type='text' name='tel'/></td>
+	<td><input type='text' name='mail'/></td>
+	<td><input type='text' name='port'/></td>
+	<td><input type='text' name='fax'/></td>
+	<td><input type='text' name='fonction'/></td>
+	<td><input type='text' name='horaire'/></td>
+	<td><input type='text' name='com'/></td>
+	<td><input type='hidden' name='idComp' value='".$cont['C/C-Num']."'/><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
+	";
+	$code .= "</tbody></table></div>";
+	return($code);
+}
+
 ?>

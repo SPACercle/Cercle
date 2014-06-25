@@ -47,7 +47,13 @@ class Controller{
 			'addAnomalieProduit' => 'AddAnomalieProduitAction',
 			'deleteAnomalieProduit' => 'DeleteAnomalieProduitAction',
 			'modifAnomalieProduit' => 'ModifAnomalieProduitAction',
-			'procedure' => 'ProcedureAction'
+			'procedure' => 'ProcedureAction',
+			'compagnie' => 'CompagnieAction',
+			'ficheCompagnie' => 'FicheCompagnieAction',
+			'modifCompagnieGeneral' => 'ModifCompagnieGeneralAction',
+			'modifCompagnieContact' => 'ModifCompagnieContactAction',
+			'addCompagnieContact' => 'AddCompagnieContactAction',
+			'deleteCompagnieContact' => 'DeleteCompagnieContactAction'
 			);
 	}
 
@@ -1186,6 +1192,118 @@ class Controller{
 	public function ProcedureAction(){
 		Auth::setInfo('page','Procédures');
 		AffichePage(AfficheProcedure());
+	}
+
+	//Affichage des compagnies
+	public function CompagnieAction(){
+		Auth::setInfo('page','Compagnies');
+
+		//Requete Compagnies
+		$query = "SELECT * FROM `compagnies`";
+			if(isset($_POST['recherche'])){
+				$query.=" WHERE `CIE-Nom` LIKE '".$_POST['recherche']."%'";
+			}
+		$query.="ORDER BY `CIE-Nom`;";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->query($query);
+		$compagnies = $res->fetchALL(PDO::FETCH_ASSOC);
+
+		AffichePage(AfficheCompagnie($compagnies));
+	}
+
+	//Fiche compagnie
+	public function FicheCompagnieAction(){
+		if(!empty($_GET["idComp"])){
+			extract($_GET);
+
+			//Requete compagnie
+			$query = "SELECT * FROM `compagnies` WHERE `CIE-NumID` = $idComp;";
+			$pdo = BDD::getConnection();
+			$pdo->exec("SET NAMES UTF8");
+			$res = $pdo->query($query);
+			$compagnie = $res->fetchALL(PDO::FETCH_ASSOC);
+
+			//Requete contact
+			$query = "SELECT * FROM `compagnies contacts` WHERE `C/C-Num` = $idComp ORDER BY `C/C-Nom`;";
+			$pdo->exec("SET NAMES UTF8");
+			$res = $pdo->query($query);
+			$contacts = $res->fetchALL(PDO::FETCH_ASSOC);
+
+			Auth::setInfo('page',$compagnie[0]['CIE-Nom']);
+
+			AffichePage(AfficheFicheCompagnie($compagnie,$contacts));
+		} else {
+			AffichePage(AffichePageMessage("Erreur !"));
+		}
+	}
+
+	//Modification de l'onglet général d'une fiche compagnie
+	public function ModifCompagnieGeneralAction(){
+		extract($_POST);
+		if(!isset($acp)){
+			$acp = 0;
+		} else {
+			$acp = 1;
+		}
+		$query = "UPDATE `compagnies` 
+				  SET `CIE-Adresse`= '$adresse',
+				  	  `CIE-CodePostal`= $codePostal,
+				  	  `CIE-Ville`= '$ville',
+				  	  `CIE-AccueilTel`= '$tel',
+				  	  `CIE-Fax`= '$fax',
+				  	  `CIE-Commentaire`= '$com',
+				  	  `CIE-SiteInternet`= '$site',
+				  	  `CIE-TarifInternet`= '$tarif',
+				  	  `CIE-ACP`= $acp
+				  WHERE `CIE-NumID` = $idComp;
+		";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=general");
+	}
+
+	//Modification de l'onglet contact d'une fiche compagnie
+	public function ModifCompagnieContactAction(){
+		extract($_POST);
+		$query = "UPDATE `compagnies contacts` 
+				  SET `C/C-Nom`= '$nom',
+				  	  `C/C-Prénom`= '$prenom',
+				  	  `C/C-TelBureau`= '$tel',
+				  	  `C/C-Mail`= '$mail', 
+				  	  `C/C-TelPortable`= '$port',
+				  	  `C/C-Fax`= '$fax',
+				  	  `C/C-Fonction`= '$fonction',
+				  	  `C/C-HorairesOuverture`= '$horaire',
+				  	  `C/C-Commentaire`= '$com'
+				  WHERE `C/C-Num` = $idComp AND `C/C-Nom` = '$idNom' AND `C/C-Prénom` = '$idPrenom';
+		";
+		echo $query;
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=contact");
+	}
+
+	//Ajout d'un contact de l'onglet contact d'une fiche compagnie
+	public function AddCompagnieContactAction(){
+		extract($_POST);
+		$query = "INSERT INTO `compagnies contacts` VALUES ($idComp,'$nom','$prenom','$tel','$mail','$port','$fax','$fonction','$horaire','$com');";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=contact");
+	}
+
+	//Supression d'un contact de l'onglet contact d'une fiche compagnie
+	public function DeleteCompagnieContactAction(){
+		extract($_POST);
+		$query = "DELETE FROM `compagnies contacts` WHERE `C/C-Num` = $idComp AND `C/C-Nom` = '$idNom' AND `C/C-Prénom` = '$idPrenom'";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=contact");
 	}
 
 }
