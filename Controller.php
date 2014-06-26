@@ -53,7 +53,9 @@ class Controller{
 			'modifCompagnieGeneral' => 'ModifCompagnieGeneralAction',
 			'modifCompagnieContact' => 'ModifCompagnieContactAction',
 			'addCompagnieContact' => 'AddCompagnieContactAction',
-			'deleteCompagnieContact' => 'DeleteCompagnieContactAction'
+			'deleteCompagnieContact' => 'DeleteCompagnieContactAction',
+			'modifCompagnieContactLoc' => 'ModifCompagnieContactLocAction',
+			'addCompagnieContactLoc' => 'AddCompagnieContactLocAction'
 			);
 	}
 
@@ -1230,9 +1232,47 @@ class Controller{
 			$res = $pdo->query($query);
 			$contacts = $res->fetchALL(PDO::FETCH_ASSOC);
 
+			//Requete départements
+			$query = "SELECT DISTINCT `Regions par Inspecteurs`.`R/I-NumDptRattachement`, `Departements et Regions`.`DPT-Nom`, `Departements et Regions`.`DPT-Num` FROM `Regions par Inspecteurs` INNER JOIN `Departements et Regions` ON `Regions par Inspecteurs`.`R/I-NumDptRattachement` = `Departements et Regions`.`DPT-Num`;";
+			$pdo->exec("SET NAMES UTF8");
+			$res = $pdo->query($query);
+			$departements = $res->fetchALL(PDO::FETCH_ASSOC);
+
+			//Requete contacts locaux
+			$query = "
+			SELECT DISTINCT `Compagnies Inspecteurs`.`INS-NumID`, `Compagnies Inspecteurs`.`INS-NumCie`, `Compagnies Inspecteurs`.`INS-Nom`, `Compagnies Inspecteurs`.`INS-Prénom`, `Compagnies Inspecteurs`.`INS-TelBureau`, `Compagnies Inspecteurs`.`INS-Mail`, `Compagnies Inspecteurs`.`INS-TelPortable`, `Compagnies Inspecteurs`.`INS-Fax`, `Compagnies Inspecteurs`.`INS-Fonction`, `Compagnies Inspecteurs`.`INS-Commentaire`, Compagnies.`CIE-NumID`, Compagnies.`CIE-Nom`, `Regions par Inspecteurs`.`R/I-NumDptRattachement`
+			FROM (Compagnies INNER JOIN `Compagnies Inspecteurs` ON Compagnies.`CIE-NumID` = `Compagnies Inspecteurs`.`INS-NumCie`) LEFT JOIN `Regions par Inspecteurs` ON `Compagnies Inspecteurs`.`INS-NumID` = `Regions par Inspecteurs`.`R/I-NumInspecteur`
+			WHERE (((Compagnies.`CIE-NumID`)=".$idComp."));
+			";
+			$pdo->exec("SET NAMES UTF8");
+			$res = $pdo->query($query);
+			$contactsLoc = $res->fetchALL(PDO::FETCH_ASSOC);
+
+			//Requete codes
+			$query = "
+			SELECT `Codes Compagnies`.`COD-NumID`, `Codes Compagnies`.`COD-NumConseiller`, Compagnies.`CIE-NumID`, `Codes Compagnies`.`COD-NomCodeMere`, Compagnies.`CIE-Nom`, `Codes Compagnies`.`COD-Détail`, `Codes Compagnies`.`COD-NumCie`, `Codes Compagnies`.`COD-Identifiant`, `Codes Compagnies`.`COD-Code`, `Codes Compagnies`.`COD-TypeCode`, `Codes Compagnies`.`COD-CodeMere`, `Codes Compagnies`.`COD-MP`, `Codes Compagnies`.`COD-MPDir`, `Codes Compagnies`.`COD-Transféré`, `visualisation portefeuilles`.`VIS-NumUtilisateur`, `departements et regions`.`DPT-Nom`, `departements et regions`.`DPT-Région`, `visualisation portefeuilles`.`VIS-NumORIAS`, `visualisation portefeuilles`.`VIS-NumID`, Conseillers.`CON-NumID`, Conseillers.`CON-Couleur`, Conseillers.`CON-Nom`, Conseillers.`CON-Prénom`, Conseillers.`CON-Société`, Conseillers.`CON-NumRCS`, Conseillers.`CON-RCSVille`, Conseillers.`CON-Logo`, Conseillers.`CON-Tel`, Conseillers.`CON-Fax`, Conseillers.`CON-Internet`, Conseillers.`CON-Adresse`, Conseillers.`CON-Adresse2`, Conseillers.`CON-CP`, Conseillers.`CON-VIlle`, Conseillers.`CON-APE`, Conseillers.`CON-CapitalSocial`, Compagnies.`CIE-NumID`
+			FROM `visualisation portefeuilles` INNER JOIN ((Conseillers INNER JOIN (Compagnies INNER JOIN `Codes Compagnies` ON Compagnies.`CIE-NumID` = `Codes Compagnies`.`COD-NumCie`) ON Conseillers.`CON-NumID` = `Codes Compagnies`.`COD-NumConseiller`) LEFT JOIN `departements et regions` ON Conseillers.`CON-DptRattachement` = `departements et regions`.`DPT-Num`) ON `visualisation portefeuilles`.`VIS-NumORIAS` = Conseillers.`CON-NumORIAS`
+			WHERE (((`visualisation portefeuilles`.`VIS-NumUtilisateur`)=".$_SESSION['Auth']['id'].") AND ((Compagnies.`CIE-NumID`) Like ".$idComp." And (Compagnies.`CIE-NumID`) Like ".$idComp." ";
+			if(Auth::getInfo('modeAgence') != 1){
+				$query.="AND `visualisation portefeuilles`.`VIS-NumORIAS`=".$_SESSION['Auth']['orias']."";
+			}
+			$query.="))
+			ORDER BY `Codes Compagnies`.`COD-NomCodeMere`, Compagnies.`CIE-Nom`;
+			";
+			$pdo->exec("SET NAMES UTF8");
+			$res = $pdo->query($query);
+			$codes = $res->fetchALL(PDO::FETCH_ASSOC);
+
+			//Requete courtiers
+			$query = "SELECT `CON-Nom`,`CON-Prénom`,`CON-NumID` FROM `conseillers`";
+			$pdo->exec("SET NAMES UTF8");
+			$res = $pdo->query($query);
+			$courtiers = $res->fetchALL(PDO::FETCH_ASSOC);
+
+
 			Auth::setInfo('page',$compagnie[0]['CIE-Nom']);
 
-			AffichePage(AfficheFicheCompagnie($compagnie,$contacts));
+			AffichePage(AfficheFicheCompagnie($compagnie,$contacts,$departements,$contactsLoc,$codes,$courtiers));
 		} else {
 			AffichePage(AffichePageMessage("Erreur !"));
 		}
@@ -1303,7 +1343,45 @@ class Controller{
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
-		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=contact");
+		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=contact&dep=".$idDep."");
+	}
+
+	//Modification de l'onglet contact locaux d'une fiche compagnie
+	public function ModifCompagnieContactLocAction(){
+		extract($_POST);
+		$query = "UPDATE `compagnies inspecteurs` 
+				  SET `INS-Nom`= '$nom',
+				  	  `INS-Prénom`= '$prenom',
+				  	  `INS-TelBureau`= '$tel',
+				  	  `INS-Mail`= '$mail', 
+				  	  `INS-TelPortable`= '$port',
+				  	  `INS-Fax`= '$fax',
+				  	  `INS-Fonction`= '$fonction',
+				  	  `INS-Commentaire`= '$com'
+				  WHERE `INS-NumID` = $idIns;
+		";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=contactLoc&dep=".$idDep."");
+	}
+
+	//Ajout d'un contact de l'onglet contact locaux d'une fiche compagnie
+	public function AddCompagnieContactLocAction(){
+		extract($_POST);
+		//Création de l'inspecteur
+		$query = "INSERT INTO `compagnies inspecteurs` VALUES (null,$idComp,'$nom','$prenom','$tel','$mail','$port','$fax','$fonction','$com');";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+
+		//Création du lien
+		$idIns = $pdo->lastInsertId();
+		$query = "INSERT INTO `regions par inspecteurs` VALUES (null,$idIns,$idDep);";
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+
+		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=contactLoc&dep=".$idDep."");
 	}
 
 }

@@ -2223,7 +2223,7 @@ function AfficheCompagnie($compagnies){
 }
 
 //Affichage de la fiche compagnie
-function AfficheFicheCompagnie($compagnie,$contacts){
+function AfficheFicheCompagnie($compagnie,$contacts,$departements,$contactsLoc,$codes,$courtiers){
 	$code='<div class="panel-body">
 	<div class="tab-content">';
 
@@ -2231,10 +2231,19 @@ function AfficheFicheCompagnie($compagnie,$contacts){
 	if($_GET['onglet'] == "general"){
 		$code.=AfficheFicheCompagnieGeneral($compagnie);
 	} 
-	$code.='</div></div>';
+	//Onglet Annuaire National
 	if($_GET['onglet'] == "contact"){
 		$code.=AfficheFicheCompagnieContact($contacts,$compagnie[0]['CIE-NumID']);
 	} 
+	//Onglet Contact Locaux
+	if($_GET['onglet'] == "contactLoc"){
+		$code.=AfficheFicheCompagnieContactLocaux($compagnie[0]['CIE-NumID'],$departements,$contactsLoc);
+	} 
+	//Onglet Codes
+	if($_GET['onglet'] == "code"){
+		$code.=AfficheFicheCompagnieCode($compagnie[0]['CIE-NumID'],$codes,$courtiers);
+	} 
+
 	$code.='</div></div>';
 
 	//Menu du côté
@@ -2244,9 +2253,19 @@ function AfficheFicheCompagnie($compagnie,$contacts){
 		$menu = '<li><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=general"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
 	}
 	if(isset($_GET['onglet'])  && $_GET['onglet'] == "contact"){
-		$menu.= '<li class="active"><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=contact"><i class="fa fa-list-alt fa-lg"></i><b> Contacts</b></a></li>';
+		$menu.= '<li class="active"><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=contact"><i class="fa fa-list-alt fa-lg"></i><b> Annuaire National</b></a></li>';
 	} else {
-		$menu.= '<li><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=contact"><i class="fa fa-list-alt fa-lg"></i><b> Contact</b></a></li>';
+		$menu.= '<li><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=contact"><i class="fa fa-list-alt fa-lg"></i><b> Annuaire National</b></a></li>';
+	}
+	if(isset($_GET['onglet'])  && $_GET['onglet'] == "contactLoc"){
+		$menu.= '<li class="active"><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=contactLoc"><i class="fa fa fa-users fa-lg"></i><b> Contact Locaux</b></a></li>';
+	} else {
+		$menu.= '<li><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=contactLoc"><i class="fa fa fa-users fa-lg"></i><b> Contact Locaux</b></a></li>';
+	}
+	if(isset($_GET['onglet'])  && $_GET['onglet'] == "code"){
+		$menu.= '<li class="active"><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=code"><i class="fa fa-lock fa-lg"></i><b> Codes</b></a></li>';
+	} else {
+		$menu.= '<li><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=code"><i class="fa fa-lock fa-lg"></i><b> Codes</b></a></li>';
 	}
 
 	$_SESSION['menu'] = $menu; 
@@ -2330,7 +2349,14 @@ function AfficheFicheCompagnieContact($contacts,$idComp){
 	function impr() {
 	    window.open(\"pdf/contactCompagnie.php?idComp=".$idComp."\");
 	}
-	</script><br/><br/>
+	</script>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a type='button' onclick='site()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Liste sites</a>
+	<script>
+	function site() {
+	    window.open(\"pdf/site.php\");
+	}
+	</script>
+	<br/><br/>
 	<div class='table-responsive'>
 	<table class='table table-hover tablesorter'>
 	<thead>
@@ -2390,7 +2416,163 @@ function AfficheFicheCompagnieContact($contacts,$idComp){
 	<td><input type='text' name='fonction'/></td>
 	<td><input type='text' name='horaire'/></td>
 	<td><input type='text' name='com'/></td>
-	<td><input type='hidden' name='idComp' value='".$cont['C/C-Num']."'/><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
+	<td><input type='hidden' name='idComp' value='".$idComp."'/><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
+	";
+	$code .= "</tbody></table></div>";
+	return($code);
+}
+
+//Affichage de la fiche compagnie - onglet Contacts Locaux
+function AfficheFicheCompagnieContactLocaux($idComp,$departements,$contactsLoc){
+	$code="
+	<form method='post' action='index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=contactLoc'>
+		<b>Choisir un Département : </b><select name='dep' required><option></option>";
+		foreach ($departements as $dep){
+			if( (!empty($_POST['dep']) && $_POST['dep'] == $dep['DPT-Num']) || (!empty($_GET['dep']) && $_GET['dep'] == $dep['DPT-Num']) ){
+				$code.="<option value='".$dep['DPT-Num']."' selected>".$dep['DPT-Nom']." (".$dep['DPT-Num'].")</option>";
+			} else {
+				$code.="<option value='".$dep['DPT-Num']."'>".$dep['DPT-Nom']." (".$dep['DPT-Num'].")</option>";
+			}
+		}
+		$code.="
+		</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button class='btn btn-default' type='submit' style='display:inline;'><i class='fa fa-search'></i> Filtrer</button>
+	</form>
+	<br/><br/>
+	<div class='table-responsive'>
+	<table class='table table-hover tablesorter'>
+	<thead>
+	<tr>
+	<th>Nom/Service</th>
+	<th>Prénom</th>
+	<th>Tel Bureau</i></th>
+	<th>Mail</th>
+	<th>Tel Portable</th>
+	<th>Fax</th>
+	<th>Fonction</th>
+	<th>Commentaire</th>
+	<th>Département rattachés</th>
+	<th>Délégation Régionale</th>
+	<th></th>
+	</tr>
+	</thead>
+	<tbody>";
+	if(!empty($_GET['dep'])){
+		 $_POST['dep'] = $_GET['dep'];
+	}
+	foreach($contactsLoc as $cont){
+		if(!empty($_POST['dep']) && $cont['R/I-NumDptRattachement'] == $_POST['dep']){
+			$code.='<tr><form action="index.php?action=modifCompagnieContactLoc" method="post">
+				    <input type="hidden" name="idIns" value="'.$cont['INS-NumID'].'"/> 
+				    <input type="hidden" name="idComp" value="'.$idComp.'"/>
+				    <input type="hidden" name="idDep" value="'.$_POST['dep'].'"/>
+			';
+			$code.="
+				<td><b><input type='text' name='nom' value='".$cont['INS-Nom']."' required/></b></td>
+				<td><input type='text' name='prenom' value='".$cont['INS-Prénom']."' required/></td>
+				<td><input type='text' name='tel' value='".$cont['INS-TelBureau']."'/></td>
+				<td><input type='text' name='mail' value='".$cont['INS-Mail']."'/></td>
+				<td><input type='text' name='port' value='".$cont['INS-TelPortable']."'/></td>
+				<td><input type='text' name='fax' value='".$cont['INS-Fax']."'/></td>
+				<td><input type='text' name='fonction' value='".$cont['INS-Fonction']."'/></td>
+				<td><input type='text' name='com' value='".$cont['INS-Commentaire']."'/></td>
+				<td><center><button type='button' onClick=\"window.open('depRatach.php?idIns=".$cont['INS-NumID']."','Départements rattachés','toolbar=no,status=no,width=500,height=500,scrollbars=yes,location=no,resize=yes,menubar=no')\" class='btn btn-info btn-xs'><i class='fa fa-external-link'></i></button></center></td>
+				<td><center><button type='button' onClick=\"window.open('delegRegional.php?idIns=".$cont['INS-NumID']."','Délégation Régionale','toolbar=no,status=no,width=1800,height=500,scrollbars=yes,location=no,resize=no,menubar=no')\" class='btn btn-info btn-xs'><i class='fa fa-external-link'></i></button></center></td>
+				<td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button></form></td>				
+			";
+			$code.="</form></tr>";
+		}
+	}
+	if(!empty($_POST['dep'])){
+		$code.="
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<td><form action='index.php?action=addCompagnieContactLoc' method='post'><input type='text' name='nom' required/></td>
+		<td><input type='text' name='prenom' required/></td>
+		<td><input type='text' name='tel'/></td>
+		<td><input type='text' name='mail'/></td>
+		<td><input type='text' name='port'/></td>
+		<td><input type='text' name='fax'/></td>
+		<td><input type='text' name='fonction'/></td>
+		<td><input type='text' name='com'/></td>
+		<td><input type='hidden' name='idComp' value='".$idComp."'/>
+			<input type='hidden' name='idDep' value='".$_POST['dep']."'/>
+			<button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form>
+		</td>
+		<td></td>
+		<td></td>
+		";
+	}
+	$code .= "</tbody></table></div>";
+	return($code);
+}
+
+//Affichage de la fiche compagnie - onglet Contacts Locaux
+function AfficheFicheCompagnieCode($idComp,$codes,$courtiers){
+	$code="
+	<div class='table-responsive'>
+	<table class='table table-hover tablesorter'>
+	<thead>
+	<tr>
+	<th>Courtier</th>
+	<th>Code Courtier</i></th>
+	<th>Compagnie</th>
+	<th>Source du Code</th>
+	<th>Code Maître</th>
+	<th>Identifiant</th>
+	<th>MDP</th>
+	<th>MDP Dirigeant</th>
+	<th>Détail</th>
+	<th>Transféré</th>
+	<th></th>
+	<th></th>
+	</tr>
+	</thead>
+	<tbody>";
+	foreach($codes as $c){
+	if($c['CON-Couleur'] == null){
+		$couleur = "#CCCCCC";
+	} else {
+		$couleur = $c['CON-Couleur'];
+	}
+	$code.='
+		<tr><form action="index.php?action=modifCompagnieCode" method="post">
+	    <input type="hidden" name="idCode" value="'.$c['COD-NumID'].'"/> 
+	';
+	$code.="
+		<td><b><button type='button' class='btn btn-primary btn-xs' style='background-color:".$couleur.";border-color:black;width:20px;height:15px;'></button>&nbsp;&nbsp;".$c['CON-Nom']." ".$c['CON-Prénom']."</b></td>
+		<td>".$c['COD-Code']."</td>
+		<td>".$c['CIE-Nom']."</td>
+		<td>".$c['COD-TypeCode']." ".$c['COD-NomCodeMere']."</td>
+		<td>".$c['COD-CodeMere']."</td>
+		<td>".$c['COD-Identifiant']."</td>
+		<td>".$c['COD-MP']."</td>
+		<td>".$c['COD-MPDir']."</td>
+		<td>".$c['COD-Détail']."</td>
+		<td>".$c['COD-Transféré']."</td>
+		<td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button></form></td>
+		<td><button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Suprimmer</button></form></td>				
+	";
+	$code.="</form></tr>";
+	}
+	$code.="
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td><form action='index.php?action=addCompagnieCode' method='post'></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
+		</tr>
 	";
 	$code .= "</tbody></table></div>";
 	return($code);
