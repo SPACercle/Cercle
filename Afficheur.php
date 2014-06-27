@@ -2181,7 +2181,13 @@ function AfficheCompagnie($compagnies){
 	</form>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<button class='btn btn-default' style='display:inline;' onclick=\"window.location.reload()\"><i class='fa fa-refresh'></i> Actualiser</button>
-	";
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a type='button' onclick='anom()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Anomalies Codes</a>
+	<script>
+	function anom() {
+	    window.open(\"pdf/anomalieCode.php\");
+	}
+	</script>";
 	$code.= "<hr/><div class='col-lg-12'><div class='table-responsive'>
 	<table class='table table-hover tablesorter'>
 	<thead>
@@ -2223,7 +2229,7 @@ function AfficheCompagnie($compagnies){
 }
 
 //Affichage de la fiche compagnie
-function AfficheFicheCompagnie($compagnie,$contacts,$departements,$contactsLoc,$codes,$courtiers){
+function AfficheFicheCompagnie($compagnie,$contacts,$departements,$contactsLoc,$codes,$courtiers,$compagnies,$codeMaitre){
 	$code='<div class="panel-body">
 	<div class="tab-content">';
 
@@ -2241,7 +2247,7 @@ function AfficheFicheCompagnie($compagnie,$contacts,$departements,$contactsLoc,$
 	} 
 	//Onglet Codes
 	if($_GET['onglet'] == "code"){
-		$code.=AfficheFicheCompagnieCode($compagnie[0]['CIE-NumID'],$codes,$courtiers);
+		$code.=AfficheFicheCompagnieCode($compagnie[0]['CIE-NumID'],$codes,$courtiers,$compagnies,$codeMaitre);
 	} 
 
 	$code.='</div></div>';
@@ -2509,15 +2515,30 @@ function AfficheFicheCompagnieContactLocaux($idComp,$departements,$contactsLoc){
 }
 
 //Affichage de la fiche compagnie - onglet Contacts Locaux
-function AfficheFicheCompagnieCode($idComp,$codes,$courtiers){
+function AfficheFicheCompagnieCode($idComp,$codes,$courtiers,$compagnies,$codeMaitre){
 	$code="
+	<a type='button' onclick='liste()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Liste des codes</a>
+	<script>
+	function liste() {
+	    window.open(\"pdf/codes.php?idComp=".$idComp."\");
+	}
+	</script>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a type='button' onclick='anom()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Anomalies Codes (".Auth::getInfo('page').")</a>
+	<script>
+	function anom() {
+	    window.open(\"pdf/anomalieCode.php?idComp=".$idComp."\");
+	}
+	</script>
+	<br/><br/>
 	<div class='table-responsive'>
 	<table class='table table-hover tablesorter'>
 	<thead>
 	<tr>
+	<th></th>
 	<th>Courtier</th>
-	<th>Code Courtier</i></th>
-	<th>Compagnie</th>
+	<th>Compagnie</i></th>
+	<th>Code Courtier</th>
 	<th>Source du Code</th>
 	<th>Code Maître</th>
 	<th>Identifiant</th>
@@ -2529,7 +2550,7 @@ function AfficheFicheCompagnieCode($idComp,$codes,$courtiers){
 	<th></th>
 	</tr>
 	</thead>
-	<tbody>";
+	<tbody style='font-size:11px;'>";
 	foreach($codes as $c){
 	if($c['CON-Couleur'] == null){
 		$couleur = "#CCCCCC";
@@ -2539,38 +2560,114 @@ function AfficheFicheCompagnieCode($idComp,$codes,$courtiers){
 	$code.='
 		<tr><form action="index.php?action=modifCompagnieCode" method="post">
 	    <input type="hidden" name="idCode" value="'.$c['COD-NumID'].'"/> 
+	    <input type="hidden" name="idComp" value="'.$idComp.'"/>
 	';
 	$code.="
-		<td><b><button type='button' class='btn btn-primary btn-xs' style='background-color:".$couleur.";border-color:black;width:20px;height:15px;'></button>&nbsp;&nbsp;".$c['CON-Nom']." ".$c['CON-Prénom']."</b></td>
-		<td>".$c['COD-Code']."</td>
-		<td>".$c['CIE-Nom']."</td>
-		<td>".$c['COD-TypeCode']." ".$c['COD-NomCodeMere']."</td>
-		<td>".$c['COD-CodeMere']."</td>
-		<td>".$c['COD-Identifiant']."</td>
-		<td>".$c['COD-MP']."</td>
-		<td>".$c['COD-MPDir']."</td>
-		<td>".$c['COD-Détail']."</td>
-		<td>".$c['COD-Transféré']."</td>
+		<td><b><button type='button' class='btn btn-primary btn-xs' style='background-color:".$couleur.";border-color:black;width:20px;height:15px;'></button></td>";
+		$code.="<td><select style='width:100px;' name='courtier'>";
+		foreach ($courtiers as $courtier) {
+			if($courtier['CON-NumID'] == $c['CON-NumID']){
+				$code.="<option value='".$courtier['CON-NumID']."' selected>".$courtier['CON-Nom']." ".$courtier['CON-Prénom']."</b></option>";
+			} else {
+				$code.="<option value='".$courtier['CON-NumID']."'>".$courtier['CON-Nom']." ".$courtier['CON-Prénom']."</b></option>";
+			}
+		}
+		$code.="</select></td><td><select name='compagnie'/>";
+		foreach ($compagnies as $comp) {
+			if($comp['CIE-NumID'] == $c['CIE-NumID']){
+				$code.="<option value='".$comp['CIE-NumID']."' selected>".$comp['CIE-Nom']."</b></option>";
+			} else {
+				$code.="<option value='".$comp['CIE-NumID']."'>".$comp['CIE-Nom']."</b></option>";
+			}
+		}
+		$code.="</td>
+		<td><input style='width:50px;' type='text' name='code' value='".$c['COD-Code']."'/></td>
+		<td><select name='typeCode'>";
+		if($c['COD-TypeCode'] == "Code"){
+			$code.="<option selected>Code</option>";
+		} else {
+			$code.="<option>Code</option>";
+		}
+		if($c['COD-TypeCode'] == "Sous Code"){
+			$code.="<option selected>Sous Code</option>";
+		} else {
+			$code.="<option>Sous Code</option>";						
+		}
+		$code.="</select>";
+		$code.="
+		<select name='nomCodeMere'>";
+		$tab = array("SPA","AGAPS","SOFRACO","Direct","Services","Inutilisé","Direct mutualisé");
+		foreach ($tab as $t) {
+			$code.=$c['COD-NomCodeMere']." == ".$t;
+			if($c['COD-NomCodeMere'] == $t){
+			$code.="<option selected>".$t."</option>";
+			} else {
+				$code.="<option>".$t."</option>";						
+			}
+		}
+		$code.="</select></td><td><select name='maitre'><option></option>";
+		foreach ($codeMaitre as $cm) {
+			if($c['COD-CodeMere'] == $cm['COD-Code'] && $c['COD-CodeMere'] != ''){
+				$code.="<option value='".$cm['COD-Code']."' selected>".$cm['COD-Code']." | ".$cm['COD-TypeCode']." | ".$cm['COD-NomCodeMere']." | ".$cm['CIE-Nom']."</option>";
+			} else {
+				$code.="<option value='".$cm['COD-Code']."'>".$cm['COD-Code']." | ".$cm['COD-TypeCode']." | ".$cm['COD-NomCodeMere']." | ".$cm['CIE-Nom']."</option>";
+			}
+		}
+		$code.="</select></td>
+		<td style='color:red;'><input style='width:100px;' type='text' name='identifiant' value='".$c['COD-Identifiant']."'/></td>
+		<td style='color:red;'><input style='width:100px;'type='text' name='mdp' value='".$c['COD-MP']."'/></td>
+		<td><input type='text' name='mdpDir' style='width:100px;' value='".$c['COD-MPDir']."'/></td>
+		<td><input type='text' name='detail' value='".$c['COD-Détail']."'/></td><td>";
+		if($c['COD-Transféré'] == 1){
+			$code.="<input type='checkbox' name='transfert' checked/>";
+		} else {
+			$code.="<input type='checkbox' name='transfert'/>";
+		}
+		$code.="
+		</td>
 		<td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button></form></td>
-		<td><button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Suprimmer</button></form></td>				
+		<td><form action='index.php?action=deleteCompagnieCode' method='post'>
+				<input type='hidden' name='idCode' value='".$c['COD-NumID']."'/>
+				<input type='hidden' name='idComp' value='".$idComp."'/>
+				<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Suprimmer</button>
+			</form>
+		</td>				
 	";
 	$code.="</form></tr>";
 	}
 	$code.="
-		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		<tr><td><form action='index.php?action=addCompagnieCode' method='post'></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td><form action='index.php?action=addCompagnieCode' method='post'><input type='hidden' name='idComp' value='".$idComp."'/></td>";
+		$code.="<td><select style='width:100px;' name='courtier'><option></option>";
+		foreach ($courtiers as $courtier) {
+				$code.="<option value='".$courtier['CON-NumID']."'>".$courtier['CON-Nom']." ".$courtier['CON-Prénom']."</b></option>";
+		}
+		$code.="</select></td><td><select name='compagnie'/><option></option>";
+		foreach ($compagnies as $comp) {
+			$code.="<option value='".$comp['CIE-NumID']."'>".$comp['CIE-Nom']."</b></option>";
+		}
+		$code.="</td>
+		<td><input style='width:50px;' type='text' name='code'/></td>
+		<td><select name='typeCode'><option></option><option>Code</option><option>Sous Code</option></select>
+		<select name='nomCodeMere'>";
+		$tab = array("SPA","AGAPS","SOFRACO","Direct","Services","Inutilisé","Direct mutualisé");
+		$code.="<option></option>";
+		foreach ($tab as $t) {
+			$code.="<option>".$t."</option>";						
+		}
+		$code.="</select></td><td><select name='maitre'><option></option>";
+		foreach ($codeMaitre as $cm) {
+			$code.="<option value='".$cm['COD-Code']."'>".$cm['COD-Code']." | ".$cm['COD-TypeCode']." | ".$cm['COD-NomCodeMere']." | ".$cm['CIE-Nom']."</option>";
+		}
+		$code.="</select></td>
+		<td style='color:red;'><input style='width:100px;' type='text' name='identifiant'/></td>
+		<td style='color:red;'><input style='width:100px;' type='text' name='mdp'/></td>
+		<td><input type='text' name='mdpDir' style='width:100px;'/></td>
+		<td><input type='text' name='detail'/></td><td>
+		<input type='checkbox' name='transfert'/>
+		</td>
 		<td><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
 		</tr>
 	";

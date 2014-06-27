@@ -55,7 +55,10 @@ class Controller{
 			'addCompagnieContact' => 'AddCompagnieContactAction',
 			'deleteCompagnieContact' => 'DeleteCompagnieContactAction',
 			'modifCompagnieContactLoc' => 'ModifCompagnieContactLocAction',
-			'addCompagnieContactLoc' => 'AddCompagnieContactLocAction'
+			'addCompagnieContactLoc' => 'AddCompagnieContactLocAction',
+			'deleteCompagnieCode' => 'DeleteCompagnieCodeAction',
+			'modifCompagnieCode' => 'ModifCompagnieCodeAction',
+			'addCompagnieCode' => 'AddCompagnieCodeAction'
 			);
 	}
 
@@ -1257,22 +1260,38 @@ class Controller{
 				$query.="AND `visualisation portefeuilles`.`VIS-NumORIAS`=".$_SESSION['Auth']['orias']."";
 			}
 			$query.="))
-			ORDER BY `Codes Compagnies`.`COD-NomCodeMere`, Compagnies.`CIE-Nom`;
+			ORDER BY `CON-Nom`, Compagnies.`CIE-Nom`;
 			";
 			$pdo->exec("SET NAMES UTF8");
 			$res = $pdo->query($query);
 			$codes = $res->fetchALL(PDO::FETCH_ASSOC);
 
 			//Requete courtiers
-			$query = "SELECT `CON-Nom`,`CON-Prénom`,`CON-NumID` FROM `conseillers`";
+			$query = "SELECT `CON-Nom`,`CON-Prénom`,`CON-NumID` FROM `conseillers` ORDER BY `CON-Nom`";
 			$pdo->exec("SET NAMES UTF8");
 			$res = $pdo->query($query);
 			$courtiers = $res->fetchALL(PDO::FETCH_ASSOC);
 
+			//Requete compagnies
+			$query = "SELECT `CIE-Nom`, `CIE-NumID` FROM `compagnies` ORDER BY `CIE-Nom`";
+			$pdo->exec("SET NAMES UTF8");
+			$res = $pdo->query($query);
+			$compagnies = $res->fetchALL(PDO::FETCH_ASSOC);
+
+			//Requetecode maitre
+			$query = "
+			SELECT `Codes Compagnies`.`COD-Code`, `Codes Compagnies`.`COD-TypeCode`, `Codes Compagnies`.`COD-NomCodeMere`, Compagnies.`CIE-Nom`,`Codes Compagnies`.`COD-CodeMere`
+			FROM Compagnies INNER JOIN `Codes Compagnies` ON Compagnies.`CIE-NumID` = `Codes Compagnies`.`COD-NumCie`
+			WHERE (((`Codes Compagnies`.`COD-TypeCode`)='Code') AND ((`Codes Compagnies`.`COD-NomCodeMere`)='SPA'))
+			ORDER BY `Codes Compagnies`.`COD-NomCodeMere`, Compagnies.`CIE-Nom`;
+			";
+			$pdo->exec("SET NAMES UTF8");
+			$res = $pdo->query($query);
+			$codeMaitre = $res->fetchALL(PDO::FETCH_ASSOC);
 
 			Auth::setInfo('page',$compagnie[0]['CIE-Nom']);
 
-			AffichePage(AfficheFicheCompagnie($compagnie,$contacts,$departements,$contactsLoc,$codes,$courtiers));
+			AffichePage(AfficheFicheCompagnie($compagnie,$contacts,$departements,$contactsLoc,$codes,$courtiers,$compagnies,$codeMaitre));
 		} else {
 			AffichePage(AffichePageMessage("Erreur !"));
 		}
@@ -1382,6 +1401,59 @@ class Controller{
 		$res = $pdo->exec($query);
 
 		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=contactLoc&dep=".$idDep."");
+	}
+
+	//Ajout d'un code de l'onglet codes d'une fiche compagnie
+	public function AddCompagnieCodeAction(){
+		extract($_POST);
+		if(!isset($transfert)){
+			$transfert = 0;
+		} else {
+			$transfert = 1;
+		}
+		$query = "INSERT INTO `codes compagnies` VALUES (null,$courtier,$compagnie,'$identifiant','$code','$mdp','$mdpDir','$typeCode','$nomCodeMere','$maitre',$transfert,'$detail');";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=code");
+	}
+
+	//Supression d'un code de l'onglet codes d'une fiche compagnie
+	public function DeleteCompagnieCodeAction(){
+		extract($_POST);
+		$query = "DELETE FROM `codes compagnies` WHERE `COD-NumID` = $idCode";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=code");
+	}
+
+	//Modification de l'onglet codes d'une fiche compagnie
+	public function ModifCompagnieCodeAction(){
+		extract($_POST);
+		if(!isset($transfert)){
+			$transfert = 0;
+		} else {
+			$transfert = 1;
+		}
+		$query = "UPDATE `codes compagnies` 
+				  SET `COD-NumConseiller`= $courtier,
+				  `COD-NumCie`= $compagnie,
+				  `COD-Identifiant`= '$identifiant',
+				  `COD-Code`= '$code',
+				  `COD-MP`= '$mdp',
+				  `COD-MPDir`= '$mdpDir',
+				  `COD-TypeCode`= '$typeCode',
+				  `COD-NomCodeMere`= '$nomCodeMere',
+				  `COD-CodeMere`= '$maitre',
+				  `COD-Transféré`= $transfert,
+				  `COD-Détail`= '$detail'
+				  WHERE `COD-NumID` = $idCode;
+		";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=code");
 	}
 
 }
