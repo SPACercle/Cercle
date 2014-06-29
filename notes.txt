@@ -1,5 +1,3 @@
-Compagnies : Bouton "Mes codes" et "Tous les codes"
-
 Compagnies : Logos compagnies
 
 Base client : Smiley vérification sur contrats

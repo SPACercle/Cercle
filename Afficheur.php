@@ -2187,7 +2187,23 @@ function AfficheCompagnie($compagnies){
 	function anom() {
 	    window.open(\"pdf/anomalieCode.php\");
 	}
-	</script>";
+	</script>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a type='button' onclick='code1()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Mes Codes</a>
+	<script>
+	function code1() {
+	    window.open(\"pdf/codes.php?idUser=".$_SESSION['Auth']['id']."\");
+	}
+	</script>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a type='button' onclick='code2()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Tous les Codes</a>
+	<script>
+	function code2() {
+		alert('Veuillez patienter durant la génération du document...');
+	    window.open(\"pdf/codes.php?all=all\");
+	}
+	</script>
+	";
 	$code.= "<hr/><div class='col-lg-12'><div class='table-responsive'>
 	<table class='table table-hover tablesorter'>
 	<thead>

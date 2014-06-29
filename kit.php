@@ -89,7 +89,12 @@ if(!(Auth::isLogged())){
         <!-- Menu du côté -->
         <ul class="nav navbar-nav side-nav" style="margin-top:9px;">
           <hr style="margin:0px;margin-top:1px;"/>
-          <?php if(isset($_SESSION['menu'])){ echo $_SESSION['menu']; unset($_SESSION['menu']); };?>
+          <?php 
+            if(isset($_SESSION['menu'])){ echo $_SESSION['menu']; unset($_SESSION['menu']); };
+            if(isset($_GET['action']) && $_GET['action'] == "ficheCompagnie"){
+              echo '<center><img src="img/logos_comp/'.$_GET['idComp'].'.png" width="150px" height:"150px" style="background-color:white;border:2px solid black"/></center>';
+           }
+          ?>
         </ul>
 
         <ul class="nav navbar-nav navbar-left navbar-user">
