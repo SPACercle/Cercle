@@ -189,7 +189,7 @@ function AfficheClient($clients,$types,$filtre){
 			}
 			$code.= "<td>";
 			if($cli['CLT-Sensibilite'] != 0 && $smiley != 1){
-				$code.="<img src='img/".$smileyMax.".png' style='width:20px;height:20px;'> ".$diffMax." mois";
+				$code.="<img src='img/".$smileyMax.".png' style='width:20px;height:20px;'/> ".$diffMax." mois";
 			} else {
 				$code.="";
 			}
@@ -322,7 +322,7 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 		}
 	}
 	//FIN REQUETE ETAT AVEC SMILEY
-	$code.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h4 style="display:inline;">Etat : <img src=\'img/'.$smileyMax.'.png\' style=\'width:20px;height:20px;;\'>';
+	$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h4 style='display:inline;'>Etat : <img src='img/".$smileyMax.".png' style='width:25px;height:25px;'/>";
 	$code.='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	';
 	if(isset($diffMax) && $diffMax != 0){
@@ -377,12 +377,27 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 
 	//Le reste à faire
 	$code.='
-		<div class="tab-pane fade in" id="profil">
-		</div>
-		<div class="tab-pane fade in" id="tracfin">
-		</div>
-		<div class="tab-pane fade in" id="liquidite">
-		</div>
+	<div class="tab-pane fade in';
+	if(isset($_GET['onglet']) && $_GET['onglet'] == "profil"){
+		$code.=' active';
+	}
+	$code.='" id="profil"><h3>Fonctionalité à venir</h3></div>';
+
+	$code.='
+	<div class="tab-pane fade in';
+	if(isset($_GET['onglet']) && $_GET['onglet'] == "tracfin"){
+		$code.=' active';
+	}
+	$code.='" id="tracfin"><h3>Fonctionalité à venir</h3></div>';
+
+	$code.='
+	<div class="tab-pane fade in';
+	if(isset($_GET['onglet']) && $_GET['onglet'] == "liquidite"){
+		$code.=' active';
+	}
+	$code.='" id="liquidite"><h3>Fonctionalité à venir</h3></div>';
+
+	$code.='
 	</div>
 	</div>
 	';
@@ -423,26 +438,30 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 		} else {
 			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		}
+		//Pas fait
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "profil"){
-			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=profil"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
+			$menu.='<li class="active"><a style="color:#606060;" href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=profil"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
 		} else {
-			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=profil"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
+			$menu.='<li><a style="color:#606060;" href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=profil"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
 		}
+		//Pas fait
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "tracfin"){
-			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=tracfin"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
+			$menu.='<li class="active"><a style="color:#606060;" href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=tracfin"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
 		} else {
-			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=tracfin"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
+			$menu.='<li><a style="color:#606060;" href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=tracfin"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "solution"){
 			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=solution"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
 		} else {
 			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=solution"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
 		}
+		//Pas fait
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "liquidite"){
-			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=liquidite"><i class="fa fa-euro fa-lg"></i><b> Liquidités financières</b></a></li>';
+			$menu.='<li class="active"><a style="color:#606060;" href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=liquidite"><i class="fa fa-euro fa-lg"></i><b> Liquidités financières</b></a></li>';
 		} else {
-			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=liquidite"><i class="fa fa-euro fa-lg"></i><b> Liquidités financières</b></a></li>';
+			$menu.='<li><a style="color:#606060;" href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=liquidite"><i class="fa fa-euro fa-lg"></i><b> Liquidités financières</b></a></li>';
 		}
+
 	} else {
 		if(isset($_GET['onglet'])  && $_GET['onglet'] == "general"){
 			$menu = '<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=general"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
@@ -469,15 +488,17 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 		} else {
 			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		}
+		//Pa fait
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "profil"){
-			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=profil"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
+			$menu.='<li class="active"><a style="color:#606060;" href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=profil"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
 		} else {
-			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=profil"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
+			$menu.='<li><a style="color:#606060;" href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=profil"><i class="fa fa-file fa-lg"></i><b> Profil Investisseur</b></a></li>';
 		}
+		//Pas fait
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "tracfin"){
-			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=tracfin"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
+			$menu.='<li class="active"><a style="color:#606060;" href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=tracfin"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
 		} else {
-			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=tracfin"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
+			$menu.='<li><a style="color:#606060;" href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=tracfin"><i class="fa fa-file fa-lg"></i><b> Procedure TRACFIN</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "solution"){
 			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=solution"><i class="fa fa-check-square fa-lg"></i><b> Solutions retenues</b></a></li>';
@@ -2404,15 +2425,15 @@ function AfficheFicheCompagnieContact($contacts,$idComp){
 			    <input type="hidden" name="idPrenom" value="'.$cont['C/C-Prénom'].'"/>
 		';
 		$code.="
-			<td><input type='text' name='nom' value='".$cont['C/C-Nom']."' required/></td>
+			<td><input style='width:200px;' type='text' name='nom' value='".$cont['C/C-Nom']."' required/></td>
 			<td><input type='text' name='prenom' value='".$cont['C/C-Prénom']."' required/></td>
-			<td><input type='text' name='tel' value='".$cont['C/C-TelBureau']."'/></td>
-			<td><input type='text' name='mail' value='".$cont['C/C-Mail']."'/></td>
-			<td><input type='text' name='port' value='".$cont['C/C-TelPortable']."'/></td>
-			<td><input type='text' name='fax' value='".$cont['C/C-Fax']."'/></td>
+			<td><input style='width:100px;' type='text' name='tel' value='".$cont['C/C-TelBureau']."'/></td>
+			<td><input style='width:210px;' type='text' name='mail' value='".$cont['C/C-Mail']."'/></td>
+			<td><input style='width:100px;' type='text' name='port' value='".$cont['C/C-TelPortable']."'/></td>
+			<td><input style='width:100px;' type='text' name='fax' value='".$cont['C/C-Fax']."'/></td>
 			<td><input type='text' name='fonction' value='".$cont['C/C-Fonction']."'/></td>
-			<td><input type='text' name='horaire' value='".$cont['C/C-HorairesOuverture']."'/></td>
-			<td><input type='text' name='com' value='".$cont['C/C-Commentaire']."'/></td>
+			<td><input style='width:100px;' type='text' name='horaire' value='".$cont['C/C-HorairesOuverture']."'/></td>
+			<td><input style='width:150px;' type='text' name='com' value='".$cont['C/C-Commentaire']."'/></td>
 			<td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button></form></td>
 			<td>
 				<form action='index.php?action=deleteCompagnieContact' method='post'>
@@ -2429,16 +2450,17 @@ function AfficheFicheCompagnieContact($contacts,$idComp){
 	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-	<td><form action='index.php?action=addCompagnieContact' method='post'><input type='text' name='nom' required/></td>
+	<td><form action='index.php?action=addCompagnieContact' method='post'><input style='width:200px;' type='text' name='nom' required/></td>
 	<td><input type='text' name='prenom' required/></td>
-	<td><input type='text' name='tel'/></td>
-	<td><input type='text' name='mail'/></td>
-	<td><input type='text' name='port'/></td>
-	<td><input type='text' name='fax'/></td>
+	<td><input style='width:100px;' type='text' name='tel'/></td>
+	<td><input style='width:210px;' type='text' name='mail'/></td>
+	<td><input style='width:100px; 'type='text' name='port'/></td>
+	<td><input style='width:100px; 'type='text' name='fax'/></td>
 	<td><input type='text' name='fonction'/></td>
-	<td><input type='text' name='horaire'/></td>
-	<td><input type='text' name='com'/></td>
+	<td><input style='width:100px;' type='text' name='horaire'/></td>
+	<td><input style='width:150;' type='text' name='com'/></td>
 	<td><input type='hidden' name='idComp' value='".$idComp."'/><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
+	<td></td>
 	";
 	$code .= "</tbody></table></div>";
 	return($code);

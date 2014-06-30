@@ -10,14 +10,14 @@
         $query = "
         SELECT * FROM `codes compagnies`, `conseillers`, `compagnies`
         WHERE `COD-NumConseiller` = ".$idUser." AND `CON-NumID` = `COD-NumConseiller` AND `COD-NumCie` = `CIE-NumID`
-        ORDER BY `COD-NomCodeMere`, `CIE-Nom`, `CON-NumID`;
+        ORDER BY `COD-NomCodeMere`, `CIE-Nom`, `CON-NumID`,`Codes Compagnies`.`COD-NomCodeMere`;
         ";
     } else {
         if(isset($all)){
             $query = "
             SELECT * FROM `codes compagnies`, `conseillers`, `compagnies`
             WHERE `CON-NumID` = `COD-NumConseiller` AND `COD-NumCie` = `CIE-NumID`
-            ORDER BY `CON-NumID`, `CIE-Nom`;
+            ORDER BY `CON-NumID`,`Codes Compagnies`.`COD-NomCodeMere`,`CIE-Nom`;
             ";
         } else {
             $query = "
@@ -46,6 +46,7 @@
 
     $i = 22;
     $tab = array();
+    $tab_nom_mere = array();
     foreach ($res as $r) {
         if($i > 1000){
          $content.="
@@ -56,6 +57,7 @@
             $i = 22;
         }
         if(!in_array($r['CON-NumID'],$tab)){
+            $tab_nom_mere = array();
             $i = 22;
             if(sizeof($tab) > 0){
                 $content.="
@@ -76,9 +78,12 @@
         $content.="
         <span style='color:red;'><u>";
         $i = $i + 7;
-        $content.="
-        <div style='position:absolute;top:".$i.";left:30;'><b>".$r['COD-NomCodeMere']."</b></div>";
-        $i = $i + 4;
+        if(!in_array($r['COD-NomCodeMere'],$tab_nom_mere)){
+            array_push($tab_nom_mere,$r['COD-NomCodeMere']);
+            $content.="
+            <div style='position:absolute;top:".($i-20).";left:30;'><h3>".$r['COD-NomCodeMere']."</h3></div>";
+            $i = $i + 10;
+        }
         $content.="
        
         <div style='position:absolute;top:".$i.";left:600'>Code Courtier</div>
@@ -97,7 +102,7 @@
         <div style='position:absolute;top:".$i.";left:500'> ".$r['COD-TypeCode']."</div>
         <div style='position:absolute;top:".$i.";left:400'>".$r['COD-CodeMere']."</div>";
         $i = $i + 20;
-        if($i < 1000){
+        if($i < 990){
             $content.="<div style='position:absolute;top:".($i+10).";left:30px;width:100%;'><hr/></div>";
         }
     }

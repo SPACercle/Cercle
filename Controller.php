@@ -187,7 +187,6 @@ class Controller{
 		if(!isset($filtre)){
 			$filtre = 1;
 		}
-
 		AffichePage(AfficheClient($clients,$types,$filtre));
 	}
 
@@ -434,7 +433,7 @@ class Controller{
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
-		header("Location: index.php?action=ficheClient&idClient=".$idClient."");
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=general");
 	}
 
 	//Suppression d'un client
@@ -892,7 +891,7 @@ class Controller{
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
 		$idProduit = $pdo->lastInsertId();
-		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit."");
+		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit."&onglet=solution");
 	}
 
 	//Supression d'un produit d'un client
