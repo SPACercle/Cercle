@@ -2713,4 +2713,221 @@ function AfficheFicheCompagnieCode($idComp,$codes,$courtiers,$compagnies,$codeMa
 	return($code);
 }
 
+//Affichage des partenaires
+function AffichePartenaire($accords,$partenaires,$types,$conseillers,$partenaires2){
+	$code='<div class="panel-body">
+	<div class="tab-content">';
+
+	//Onglet Accords
+	if($_GET['onglet'] == "accord"){
+		$code.=AffichePartenaireAccord($accords,$partenaires,$types,$conseillers);
+	}
+	//Onglet Fiche Partenaire
+	if($_GET['onglet'] == "fiche"){
+		$code.=AffichePartenaireFiche($partenaires2);
+	}
+	//Onglet Activité Partenaires
+	if($_GET['onglet'] == "activite"){
+		$code.=AffichePartenaireActivite();
+	}
+	//Onglet Listes (PDF)
+	if($_GET['onglet'] == "liste"){
+		$code.=AffichePartenaireListe();
+	}
+
+	//Menu du côté
+	if(isset($_GET['onglet'])  && $_GET['onglet'] == "accord"){
+		$menu= '<li class="active"><a href="index.php?action=partenaire&onglet=accord"><i class="fa fa-random fa-lg"></i><b> Affectations Accords</b></a></li>';
+	} else {
+		$menu= '<li><a href="index.php?action=partenaire&onglet=accord"><i class="fa fa-random fa-lg"></i></i><b> Affectations Accords</b></a></li>';
+	}
+	if(isset($_GET['onglet'])  && $_GET['onglet'] == "fiche"){
+		$menu.= '<li class="active"><a href="index.php?action=partenaire&onglet=fiche"><i class="fa fa-users fa-lg"></i><b> Fiche Partenaire</b></a></li>';
+	} else {
+		$menu.= '<li><a href="index.php?action=partenaire&onglet=fiche"><i class="fa fa-users fa-lg"></i><b> Fiche Partenaire</b></a></li>';
+	}
+	if(isset($_GET['onglet'])  && $_GET['onglet'] == "activite"){
+		$menu.= '<li class="active"><a href="index.php?action=partenaire&onglet=activite"><i class="fa fa-briefcase fa-lg"></i><b> Activité Partenaires</b></a></li>';
+	} else {
+		$menu.= '<li><a href="index.php?action=partenaire&onglet=activite"><i class="fa fa-briefcase fa-lg"></i><b> Activité Partenaires</b></a></li>';
+	}
+	if(isset($_GET['onglet'])  && $_GET['onglet'] == "liste"){
+		$menu.= '<li class="active"><a href="index.php?action=partenaire&onglet=liste"><i class="fa fa-file-text-o fa-lg"></i><b> Listes (PDF)</b></a></li>';
+	} else {
+		$menu.= '<li><a href="index.php?action=partenaire&onglet=liste"><i class="fa fa-file-text-o fa-lg"></i><b> Listes (PDF)</b></a></li>';
+	}
+
+	$code.='</div></div>';
+
+	$_SESSION['menu'] = $menu; 
+
+	return($code);
+}
+
+//Affichage des accords partenaires
+function AffichePartenaireAccord($accords,$partenaires,$types,$conseillers){
+	$code="<h3 style='display:inline;'>Affectations Accords Partenaires</h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a type='button' onclick='accord()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Imprimer</a>
+	<script>
+	function accord() {
+	    window.open(\"pdf/accord.php\");
+	}
+	</script><br/></br>
+	<div class='table-responsive' style='width:800px;'>
+	<table class='table table-hover tablesorter'>
+	<thead>
+	<tr>
+	<th>Partenaire</th>
+	<th>Type</i></th>
+	<th>Conseiller</th>
+	<th></th>
+	<th></th>
+	</tr>
+	</thead>
+	<tbody>";
+	foreach ($accords as $acc) {
+		$code.="<tr><form action='index.php?action=modifAccord' method='post'>
+		<td style='width:300px;'><select name='partenaire'>";
+		foreach ($partenaires as $part) {
+			if($acc['ACC-NumPartenaire'] == $part['CLT-NumID']){
+				$code.="<option value='".$part['CLT-NumID']."' selected>".$part['CLT-Nom']." ".$part['CLT-NomJeuneFille']." ".$part['CLT-Prénom']."</option>";
+			} else {
+				$code.="<option value='".$part['CLT-NumID']."'>".$part['CLT-Nom']." ".$part['CLT-NomJeuneFille']." ".$part['CLT-Prénom']."</option>";					
+			}
+		}
+		$code.="</select></td>
+
+		<td style='width:50px;'><select name='type'>";
+		foreach($types as $typ) {
+			if($acc['ACC-NumType'] == $typ['R/A-NumID']){
+				$code.="<option value='".$typ['R/A-NumID']."' selected>".$typ['R/A-Type']."</option>";
+			} else {
+				$code.="<option value='".$typ['R/A-NumID']."'>".$typ['R/A-Type']."</option>";					
+			}
+		}
+		$code.="</select></td>
+
+		<td style='width:150px;'><select name='conseiller'>";
+		foreach($conseillers as $con) {
+			if($acc['ACC-NumConseiller'] == $con['CON-NumID']){
+				$code.="<option value='".$con['CON-NumID']."' selected>".$con['CON-Nom']." ".$con['CON-Prénom']."</option>";
+			} else {
+				$code.="<option value='".$con['CON-NumID']."'>".$con['CON-Nom']." ".$con['CON-Prénom']."</option>";					
+			}
+		}
+		$code.="</select></td>";
+
+		$code.="
+		<td style='width:100px;'>
+			<input type='hidden' value='".$acc['ACC-NumID']."' name='idAcc'/>
+			<button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button>
+			</form>
+		</td>
+		<td><form action='index.php?action=deleteAccord' method='post'>
+				<input type='hidden' value='".$acc['ACC-NumID']."' name='idAcc'/>
+				<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-save'></i> Suprimmer</button>
+			</form>
+		</td>
+		</tr>";
+	}
+	$code.="
+	<tr><td></td><td></td><td></td><td></td><td></td></tr>
+	<tr><td></td><td></td><td></td><td></td><td></td></tr>
+	<tr><td></td><td></td><td></td><td></td><td></td></tr>
+	<form action='index.php?action=addAccord' method='post'>
+	<td style='width:300px;'><select name='partenaire' required><option></option>";
+		foreach ($partenaires as $part) {
+			$code.="<option value='".$part['CLT-NumID']."'>".$part['CLT-Nom']." ".$part['CLT-NomJeuneFille']." ".$part['CLT-Prénom']."</option>";					
+		}
+		$code.="</select></td>
+
+		<td style='width:50px;'><select name='type' required><option></option>";
+		foreach($types as $typ) {
+			$code.="<option value='".$typ['R/A-NumID']."'>".$typ['R/A-Type']."</option>";					
+		}
+		$code.="</select></td>
+
+		<td style='width:150px;'><select name='conseiller' required><option></option>";
+		foreach($conseillers as $con) {
+			$code.="<option value='".$con['CON-NumID']."'>".$con['CON-Nom']." ".$con['CON-Prénom']."</option>";					
+		}
+		$code.="</select>
+		<td><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
+		</td><td></td>
+	</form>";
+
+	$code .= "</tbody></table></div>";
+	return($code);
+}
+
+//Affichage des fiches partenaires
+function AffichePartenaireFiche($partenaires){
+	$code="
+	<form style='display:inline;' action='index.php?action=partenaire&onglet=fiche' method='post'>
+	<input type='text' class='form-control' style='display:inline;width:200px;' name='recherche'/>
+	<span class='input-group-btn' style='display:inline;'>
+	<button class='btn btn-default' type='submit' style='display:inline;'><i class='fa fa-search'></i></button>
+	</span>
+	</form>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<button class='btn btn-default' style='display:inline;' onclick=\"window.location.reload()\"><i class='fa fa-refresh'></i> Actualiser</button>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a type='button' onclick='promo()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Promotions</a>
+	<script>
+	function promo() {
+	    window.open(\"pdf/promo.php\");
+	}
+	</script>
+	";
+	$code.= "<hr/><div class='col-lg-12'><div class='table-responsive'>
+	<table class='table table-hover tablesorter'>
+	<thead>
+	<tr>
+	<th></th>
+	<th>Civilité <i class='fa fa-sort'></i></th>
+	<th>Société <i class='fa fa-sort'></i></th>
+	<th>Nom Client <i class='fa fa-sort'></i></th>
+	<th>Type <i class='fa fa-sort'></i></th>
+	<th>Profession <i class='fa fa-sort'></i></th>
+	<th>Promo <i class='fa fa-sort'></i></th>
+	</tr>
+	</thead>
+	<tbody>";
+	foreach ($partenaires as $part) {
+		if($part['CON-Couleur'] == null){
+			$couleur = "#CCCCCC";
+		} else {
+			$couleur = $part['CON-Couleur'];
+		}
+		$code.='<tr onclick="window.open(\'index.php?action=ficheClient&idClient='.$part['CLT-NumID'].'&onglet=general\');" class="rowClient" target="_blank">
+		<td><button type="button" class="btn btn-primary btn-xs" style="background-color:'.$couleur.';border-color:black;width:20px;height:15px;"></button></td>
+		<td>'.$part['CIV-Nom'].'</td>
+		<td>';
+		if($part['SPR-PersonneMorale'] == 1){$code.=$part['SPR-Nom'];}
+		$code.="</td>
+		<td><b>".$part['CLT-Nom']." ".$part['CLT-Prénom']."</b></td>
+		<td><i>".$part['TYP-Nom']." de ".$part['CON-Prénom']." ".$part['CON-Nom']."</i></td>
+		<td>".$part['PRO-Nom']."</td>
+		<td>".$part['CLT-Promotion']."</td>
+		</tr>
+		";
+	}
+	$code .= "</tbody></table></div></div>";
+	return($code);
+}
+
+//Affichage des activité partenaires
+function AffichePartenaireActivite(){
+	$code="";
+	return($code);
+}
+
+//Affichage des pdf
+function AffichePartenaireListe(){
+	$code="";
+	return($code);
+}
+
 ?>

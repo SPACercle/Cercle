@@ -99,8 +99,8 @@ if(!(Auth::isLogged())){
 
         <ul class="nav navbar-nav navbar-left navbar-user">
           <li <?php if(!isset($_GET['action'])){ echo "class='active'"; } ?>><a href="index.php"><b><img src="img/home.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp;Accueil</b></a></li>
-          <li <?php if(isset($_GET['action']) && preg_match("#[c|C]lient#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=client" onclick="$('#myModal').modal('show')"><b><img src="img/client.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Base Clients</b></a></li>
-          <li><a href="#"><b><img src="img/partenaire.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Bases Partenaires</b></a></li>
+          <li <?php if(isset($_GET['action']) && preg_match("#[c|C]lient#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=client" onclick="$('#myModal').modal('show')"><b><img src="img/client.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Clients</b></a></li>
+          <li <?php if(isset($_GET['action']) && preg_match("#partenaire#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=partenaire&onglet=accord"><b><img src="img/partenaire.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Partenaires</b></a></li>
           <li <?php if(isset($_GET['action']) && preg_match("#compagnie#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=compagnie"><b><img src="img/produit.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Compagnies</b></a></li>
           <li <?php if(isset($_GET['action']) && preg_match("#procedure#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=procedure"><b><img src="img/procedure.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Procédures</b></a></li>
         </ul>

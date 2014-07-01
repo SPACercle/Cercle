@@ -1,12 +1,24 @@
+A FAIRE AVANT LA FIN
+---------------------------------------------------------------------------------------------------------
+
 Compagnies : Logos compagnies
 
 Base client : Smiley vérification sur contrats
 
-MySQL : Trigger sauvegarde
 
-Documentation : Liste de tous les outils
 
+A LA FIN
 ---------------------------------------------------------------------------------------------------------
+
+Documentation : Liste de tous les outils (mettre à jour à la fin et recupérer)
+
+Récuperer tous les fichiers
+
+
+
+BDD
+---------------------------------------------------------------------------------------------------------
+
 
 Base de données : Synchro schéma (// = fait) : 
 

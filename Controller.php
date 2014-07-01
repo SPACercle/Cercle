@@ -58,7 +58,11 @@ class Controller{
 			'addCompagnieContactLoc' => 'AddCompagnieContactLocAction',
 			'deleteCompagnieCode' => 'DeleteCompagnieCodeAction',
 			'modifCompagnieCode' => 'ModifCompagnieCodeAction',
-			'addCompagnieCode' => 'AddCompagnieCodeAction'
+			'addCompagnieCode' => 'AddCompagnieCodeAction',
+			'partenaire' => 'PartenaireAction',
+			'addAccord' => 'AddAccordAction',
+			'modifAccord' => 'ModifAccordAction',
+			'deleteAccord' => 'DeleteAccordAction'
 			);
 	}
 
@@ -1455,4 +1459,93 @@ class Controller{
 		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=code");
 	}
 
+	//Affichage des parteaires
+	public function PartenaireAction(){
+		Auth::setInfo('page','Partenaires');
+
+		//Requete accords partenaires
+		$query = "SELECT acc.* FROM `accords partenaires` acc, `clients et prospects` cli WHERE cli.`CLT-NumID` = acc.`ACC-NumPartenaire` ORDER BY `CLT-Nom`";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->query($query);
+		$accords = $res->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete accords partenaires
+		$query = "SELECT `CLT-NumID`,`CLT-Nom`,`CLT-NomJeuneFille`,`CLT-Prénom` FROM `clients et prospects` cli, `professions` pro WHERE pro.`PRO-NumID` = cli.`CLT-Profession` AND pro.`PRO-Conseil` = 1 ORDER BY `CLT-Nom`";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->query($query);
+		$partenaires = $res->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete types
+		$query = "SELECT * FROM `type responsable`";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->query($query);
+		$types = $res->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete conseillers
+		$query = "SELECT * FROM `conseillers` ORDER BY `CON-Nom`";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->query($query);
+		$conseillers = $res->fetchALL(PDO::FETCH_ASSOC);
+
+		//Requete fiches partenaires
+		$query = "
+		SELECT Professions.`PRO-Conseil`, Professions.`PRO-Nom`, Professions.`PRO-Catégorie`, `Type Client`.`TYP-Nom`, Civilites.`CIV-Nom`, Professions.`PRO-Nom`, `Clients et Prospects`.`CLT-NumID`, `Clients et Prospects`.`CLT-Statut`, `Clients et Prospects`.`CLT-Type`, `Clients et Prospects`.`CLT-Promotion`, `Clients et Prospects`.`CLT-Réseau`, `Clients et Prospects`.`CLT-Syndicat`, `Clients et Prospects`.`CLT-Conseiller`, `Clients et Prospects`.`CLT-PrsMorale`, `Clients et Prospects`.`CLT-Civilité`, `Clients et Prospects`.`CLT-Nom`, `SPR-Nom`, `Statut Professionnel`.`SPR-Nom`, `Clients et Prospects`.`CLT-FJ-RS`, `Clients et Prospects`.`CLT-NomJeuneFille`, `Clients et Prospects`.`CLT-Prénom`,conseillers.`CON-NumORIAS`,conseillers.`CON-Nom`,conseillers.`CON-Prénom`,`SPR-PersonneMorale`,`CON-Couleur`
+		FROM conseillers INNER JOIN (Civilites RIGHT JOIN (Professions RIGHT JOIN (`Statut Professionnel` RIGHT JOIN (`Type Client` INNER JOIN `Clients et Prospects` ON `Type Client`.`TYP-NumID` = `Clients et Prospects`.`CLT-Type`) ON `Statut Professionnel`.`SPR-NumID` = `Clients et Prospects`.`CLT-Statut`) ON Professions.`PRO-NumID` = `Clients et Prospects`.`CLT-Profession`) ON Civilites.`CIV-NumID` = `Clients et Prospects`.`CLT-Civilité`) ON conseillers.`CON-NumID` = `Clients et Prospects`.`CLT-Conseiller`
+		WHERE (((Professions.`PRO-Conseil`)=1)";
+		if($_SESSION['Auth']['modeAgence'] == 0){
+			$query.="AND ((conseillers.`CON-NumORIAS`) Like ".$_SESSION['Auth']['orias'].")";
+		}
+		if(!empty($_POST['recherche'])){
+			$query.="AND `CLT-Nom` LIKE '".$_POST['recherche']."%'";
+		}
+		$query.="
+		)
+		ORDER BY `Clients et Prospects`.`CLT-Nom`, `Clients et Prospects`.`CLT-Prénom`;
+		";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->query($query);
+		$partenaires2 = $res->fetchALL(PDO::FETCH_ASSOC);
+
+		AffichePage(AffichePartenaire($accords,$partenaires,$types,$conseillers,$partenaires2));
+	}
+
+	//Ajout d'un accord partenaire
+	public function AddAccordAction(){
+		extract($_POST);
+		$query = "INSERT INTO `accords partenaires` VALUES (null,$partenaire,$conseiller,$type);";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=partenaire&onglet=accord");
+	}
+
+	//Supression d'un accord partenaire
+	public function DeleteAccordAction(){
+		extract($_POST);
+		$query = "DELETE FROM `accords partenaires` WHERE `ACC-NumID` = $idAcc";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=partenaire&onglet=accord");
+	}
+
+	//Modification d'un accord partenaire
+	public function ModifAccordAction(){
+		extract($_POST);
+		$query = "UPDATE `accords partenaires` 
+				  SET `ACC-NumPartenaire`= $partenaire,
+				  `ACC-NumType`= $type,
+				  `ACC-NumConseiller`= '$conseiller'
+				  WHERE `ACC-NumID` = $idAcc;
+		";
+		$pdo = BDD::getConnection();
+		$pdo->exec("SET NAMES UTF8");
+		$res = $pdo->exec($query);
+		header("Location: index.php?action=partenaire&onglet=accord");
+	}
 }
