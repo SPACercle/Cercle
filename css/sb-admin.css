@@ -169,3 +169,10 @@ table.tablesorter thead tr th:hover {
 .rowClient:hover {
   cursor:pointer;
 }
+
+.pdf {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  padding:0;
+}

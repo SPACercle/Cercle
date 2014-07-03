@@ -469,7 +469,7 @@ if(isset($res[0])){
 
   <!-- Contenu de la page -->
   <div class="col-lg-12">
-    <h2 style="display:inline;float:left;">Elements Préparatoires</h2><br/><span style="float:right"><a type="button" onClick="impr()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Impression</a></span><br/><br/>
+    <h2 style="display:inline;float:left;">Elements Préparatoires</h2><br/><span style="float:right"><a type="button" onClick="impr()" target="_blank" class="btn btn-primary"><img src='img/pdf.png' class='pdf'/> Impression</a></span><br/><br/>
     <?php
     echo "<script>
       function impr() {

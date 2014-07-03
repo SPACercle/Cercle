@@ -144,7 +144,7 @@ $contacts = $res->fetchALL(PDO::FETCH_ASSOC);
         <td><input type='text' name='fonction'/></td>
         <td><input type='text' name='horaire'/></td>
         <td><input type='text' name='com'/></td>
-        <td><input type='hidden' name='idAdd' value='".$cont['INS-NumID']."'/><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
+        <td><input type='hidden' name='idAdd' value='".$_GET['idIns']."'/><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
         ";
         echo "</tbody></table></div>";
       ?>

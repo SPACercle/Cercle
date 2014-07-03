@@ -212,6 +212,135 @@ $(document).ready(function() {
 		xhr.send("idBesoin="+idBesoin+"&idType="+idType);
 	});
 
+	$('#occurences').bind('DOMNodeInserted', function() {
+		if($('#occurences').text() == ""){
+			$('#form1').submit();
+		}
+	});
+	$('#occurences').change(function() {
+		$('#form1').submit();
+	});
+
+	$('#occurences2').bind('DOMNodeInserted', function() {
+		if($('#occurences2').text() == ""){
+			$('#form2').submit();
+		}
+	});
+	$('#occurences2').change(function() {
+		$('#form2').submit();
+	});
+
+	$('#occurences3').bind('DOMNodeInserted', function() {
+		if($('#occurences3').text() == ""){
+			$('#form3').submit();
+		}
+	});
+	$('#occurences3').change(function() {
+		$('#form3').submit();
+	});
+
+
+	$('#occurences4').bind('DOMNodeInserted', function() {
+		if($('#occurences4').text() == ""){
+			$('#form4').submit();
+		}
+	});
+	$('#occurences4').change(function() {
+		$('#form4').submit();
+	});
+
+
+	$('#occurences5').bind('DOMNodeInserted', function() {
+		if($('#occurences5').text() == ""){
+			$('#form5').submit();
+		}
+	});
+	$('#occurences5').change(function() {
+		$('#form5').submit();
+	});
+
+
+	$('#occurences6').bind('DOMNodeInserted', function() {
+		if($('#occurences6').text() == ""){
+			$('#form6').submit();
+		}
+	});
+	$('#occurences6').change(function() {
+		$('#form6').submit();
+	});
+
+
+	$('#occurences7').bind('DOMNodeInserted', function() {
+		if($('#occurences7').text() == ""){
+			$('#form7').submit();
+		}
+	});
+	$('#occurences7').change(function() {
+		$('#form7').submit();
+	});
+
+
+
+	//FIN ONGLET BESOIN
+
+	//DEBUT ONGLET BESOIN
+
+	//Cache le formulaire d'ajout d'un revnu
+	$('#formRevenu').hide();
+
+	//Afficher le formulaire de création de revenu
+	$('#ajoutRevenu').click(function(){
+		$('#formRevenu').show();
+	});
+
+	//FIN ONGLET BESOIN
+
+	//DEBUT ONGLET HISTORIQUE
+
+	//Cache le formulaire d'ajout d'un historique
+	$('#formHistorique').hide();
+
+	//Afficher le formulaire de création d'historique
+	$('#ajoutHistorique').click(function(){
+		$('#formHistorique').show();
+	});
+
+	//FIN ONGLET HISTORIQUE
+
+	//DEBUT ONGLET BESOIN
+
+	//Cache le formulaire d'ajout d'un historique
+	$('#formBesoin1').hide();
+	$('#formBesoin2').hide();
+	$('#formBesoin3').hide();
+	$('#formBesoin4').hide();
+	$('#formBesoin5').hide();
+	$('#formBesoin6').hide();
+	$('#formBesoin7').hide();
+
+	//Afficher le formulaire de création d'historique
+	$('#ajoutBesoin1').click(function(){
+		$('#formBesoin1').show();
+	});
+	$('#ajoutBesoin2').click(function(){
+		$('#formBesoin2').show();
+	});
+	$('#ajoutBesoin3').click(function(){
+		$('#formBesoin3').show();
+	});
+	$('#ajoutBesoin4').click(function(){
+		$('#formBesoin4').show();
+	});
+	$('#ajoutBesoin5').click(function(){
+		$('#formBesoin5').show();
+	});
+	$('#ajoutBesoin6').click(function(){
+		$('#formBesoin6').show();
+	});
+	$('#ajoutBesoin7').click(function(){
+		$('#formBesoin7').show();
+	});
+
 	//FIN ONGLET BESOIN
 
 	//DEBUT ONGLET RELATIONEL
@@ -243,6 +372,7 @@ $(document).ready(function() {
 	});
 
 	//FIN ONGLET RELATIONEL
+
 
 	//DEBUT ONGLET SOLUTION RETENUES
 
@@ -348,5 +478,37 @@ $(document).ready(function() {
 	});
 
 	//FIN ONGLET SOLUTIONS RETENUES
+
+	//DEBUT COMPAGNIES
+
+	$('#formContact').hide();
+
+	$('#ajoutContact').click(function(){
+		$('#formContact').show();
+	});
+
+	$('#formContactLoc').hide();
+
+	$('#ajoutContactLoc').click(function(){
+		$('#formContactLoc').show();
+	});
+
+	$('#formCode').hide();
+
+	$('#ajoutCode').click(function(){
+		$('#formCode').show();
+	});
+
+	//FIN COMPAGNIES
+
+	//DEBUT PARTENAIRES
+
+	$('#formAccord').hide();
+
+	$('#ajoutAccord').click(function(){
+		$('#formAccord').show();
+	});
+
+	//FIN PARTENAIRES
 
 });

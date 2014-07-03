@@ -78,7 +78,8 @@ function AfficheDroits($droits) {
 
 //Affichage de la liste des clients
 function AfficheClient($clients,$types,$filtre){
-	$code= "<form style='display:inline;' action='index.php?action=ajouterClient' method='post'/><button type='submit' class='btn btn-success'><i class='fa fa-plus'></i> Création Client</button></form>";
+	$code= "<span style='font-size:20px;'><b><u>Liste des Clients</u></b></span><br/><br/>
+	<form style='display:inline;' action='index.php?action=ajouterClient' method='post'/><button type='submit' class='btn btn-success'><i class='fa fa-plus'></i> Création Client</button></form>";
 	$code.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<form style='display:inline;' action='index.php?action=client' method='post'><select name='filtre'>";
 	foreach($types as $type){
 		if($filtre == $type['TYP-NumID']){
@@ -105,15 +106,16 @@ function AfficheClient($clients,$types,$filtre){
 	<input type='text' class='form-control' style='display:inline;width:200px;' name='recherche'/>
 	<span class='input-group-btn' style='display:inline;'>
 	<button class='btn btn-default' type='submit' style='display:inline;' onclick=\"$('#myModal').modal('show')\"><i class='fa fa-search'></i></button>
-	</span>
+	</span>";
+	$code.="
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class='btn btn-default' onclick=\"$('#myModal').modal('show')\"><i class='fa fa-refresh'></i> Actualiser</button>
 	</form>
 	";
 	$code.= "<hr/><div class='col-lg-12'><div class='table-responsive'>
-	<table class='table table-hover tablesorter'>
+	<table class='table table-hover tablesorter' id='clients'>
 	<thead>
 	<tr>
-	<th style='width:90px;'>Etat <i class='fa fa-sort'></i></th>
+	<th style='width:90px;'>Etat <i class='fa fa-sort' id='smileySort'></i></th>
 	<th style='width:65px;'>Civilité <i class='fa fa-sort'></i></th>
 	<th>Type <i class='fa fa-sort'></i></th>
 	<th>Nom Client <i class='fa fa-sort'></i></th>
@@ -125,6 +127,15 @@ function AfficheClient($clients,$types,$filtre){
 	</tr>
 	</thead>
 	<tbody>";
+	$code.='
+	<script>
+	setTimeout("tri()",1000);
+	setTimeout("tri()",3000);
+	setTimeout("tri()",7000); 
+	function tri() {
+    	$("#smileySort").click().click();
+	}
+	</script>';
 	foreach($clients as $cli){
 		$ok = false;
 		foreach(Auth::getInfo('port') as $port){
@@ -222,7 +233,7 @@ function AfficheClient($clients,$types,$filtre){
 //Affichage de l'ajout d'un client
 function AfficheClientAjout($formes){
 	$code = '
-	<h4>Création d\'un Client</h4>
+	<span style="font-size:20px;"><b><u>Ajout Client</u></b></span><br/><br/>
 	<div class="panel-body">
 	<ul class="nav nav-tabs">
 	<li class="active"><a href="#physique" data-toggle="tab">Personne physique</a></li>
@@ -274,9 +285,8 @@ function AfficheClientAjout($formes){
 //Affichage de la fiche client
 function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques,$types_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli,$type_produits,$compagnies,$produits){
 	$code='
-	<h4>'.$client["CLT-Nom"].' '.$client["CLT-Prénom"].'</h4>
-	<form style="display:inline;" action="index.php?action=courrierClient" method="post"/><button type="submit" class="btn btn-default"><i class="fa fa-envelope"></i> Courrier</button></form>
-	<a type="button" href="pdf/arboGroupe.php?idClient='.$client['CLT-NumID'].'" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Arborescence Groupe</a>
+	<h4 style="display:inline;">'.$client["CLT-Nom"].' '.$client["CLT-Prénom"].'</h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h5 style="display:inline;"><i>'.Auth::getInfo('ongletTitre').'</i></h5><br/><br/>
+	<form style="display:inline;" action="index.php?action=courrierClient" method="post"/><button type="submit" class="btn btn-primary disabled"><img src="img/pdf.png" class="pdf"/> Courrier</button></form>
 	<form style="display:inline;" action="index.php?action=supClient" method="post"/><input type="hidden" value="'.$client['CLT-NumID'].'" name="idClient"/><button onclick="return confirm(\'Voulez-vous vraiment supprimer ce client ?\')" type="submit" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> Suppression Client</button></form>';
 	//DEBUT REQUETE ETAT AVEC SMILEY
 	$pdo = BDD::getConnection();
@@ -434,9 +444,9 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=relationel"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "besoin"){
-			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin&idType=13"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		} else {
-			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin&idType=13"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		}
 		//Pas fait
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "profil"){
@@ -484,9 +494,9 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=relationel"><i class="fa fa-users fa-lg"></i><b> Relationel</b></a></li>';
 		}
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "besoin"){
-			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
+			$menu.='<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin&idType=13"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		} else {
-			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
+			$menu.='<li><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=besoin&idType=13"><i class="fa fa-money fa-lg"></i><b> Besoins</b></a></li>';
 		}
 		//Pa fait
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "profil"){
@@ -600,7 +610,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 			<div class="col-lg-6">
 				 <div class="panel panel-info">
 		             <div class="panel-heading">
-		              <h4 class="panel-title">Contact Perso</h4>
+		              <h4 class="panel-title"><b>Contact Perso</b></h4>
 		             </div>
 		            <div class="panel-body">
 					<label>Téléphone Portable : </label>
@@ -635,7 +645,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 			<div class="col-lg-6">
 				  <div class="panel panel-info">
 		             <div class="panel-heading">
-		                <h4 class="panel-title">Particularités Client</h4>
+		                <h4 class="panel-title"><b>Particularités Client</b></h4>
 		             </div>
 		            <div class="panel-body">
 					<label>Date Naissance : </label>
@@ -665,7 +675,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 					<label>Nationalité : </label>
 					<input type="text" name="nationalite" style="width:110px;" value="'.$client['CLT-Nationalité'].'"/><br/><br/>
 					<button type="button" onClick="window.open(\'elements.php?idClient='.$client['CLT-NumID'].'\',\'Eléments Préparatoires\',\'toolbar=no,status=no,width=800,height=800,scrollbars=yes,location=no,resize=yes,menubar=non\')" class="btn btn-default"><i class="fa fa-check-square-o"></i> Eléments préparatoires</button>&nbsp;&nbsp;&nbsp;&nbsp;<br/><br/>
-					<a type="button" onclick="date()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Mandat Administratif</a>&nbsp;
+					<a type="button" onclick="date()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Mandat Administratif</a>&nbsp;
 					<script>
 					function date() {
 					    var date = prompt("A quelle date souhaites-tu l\'émettre ?","");
@@ -681,7 +691,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 						$code.='<input type="checkbox" name="mandatGestion">'; 
 					}
 					$code.='<br/><br/>
-					<a type="button" onclick="date_pre1()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Infos Précontractuelles</a>&nbsp;
+					<a type="button" onclick="date_pre1()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Infos Précontractuelles</a>&nbsp;
 					<script>
 					function date_pre1() {
 					    var date1 = prompt("A quelle date souhaites-tu émettre le premier document ?","");
@@ -698,7 +708,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 						$code.='<input type="checkbox" name="infoPre">'; 
 					}
 					$code.='<br/><br/>
-					<a type="button" onclick="date_place()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Mandat Placement</a>&nbsp;
+					<a type="button" onclick="date_place()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Mandat Placement</a>&nbsp;
 					<script>
 					function date_place() {
 					    var date = prompt("A quelle date souhaites-tu émettre le premier document ?","");
@@ -715,7 +725,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 						$code.='<input type="checkbox" name="mandatCourtage">'; 
 					}
 					$code.='<br/><br/>
-					<button type="button" class="btn btn-default" disabled="disabled">Lettre de Mission</button>&nbsp;&nbsp;&nbsp;&nbsp;
+					<button type="button" class="btn btn-primary disabled"><img src="img/pdf.png" class="pdf"/> Lettre de Mission</button>&nbsp;&nbsp;&nbsp;&nbsp;
 					<label>Lettre de Mission&nbsp;&nbsp;</label>';
 					if($client['CLT-LettreMission'] == 1){
 						$code.='<input type="checkbox" name="lettreMission" checked>';
@@ -723,7 +733,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 						$code.='<input type="checkbox" name="lettreMission">'; 
 					}
 					$code.='<br/><br/>
-					<a type="button" onclick="date_ordre()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Ordre de remplacement</a>&nbsp;
+					<a type="button" onclick="date_ordre()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Ordre de remplacement</a>&nbsp;
 					<script>
 					function date_ordre() {
 					    var date = prompt("A quelle date souhaites-tu émettre le document ?","");
@@ -741,7 +751,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 					}
 					$code.='
 					</div>
-				</div>
+				</div>       
 			</div>
 
 			<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Valider Modifications</button>
@@ -764,7 +774,7 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 	<div class="col-lg-6">
 		 <div class="panel panel-info">
             <div class="panel-heading">
-              <h4 class="panel-title">Contact Professionnel</h4>
+              <h4 class="panel-title"><b>Contact Professionnel</b></h4>
             </div>
             <div class="panel-body">
             	<label>Raison Sociale : </label>
@@ -792,7 +802,7 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 	<div class="col-lg-6">
 		 <div class="panel panel-info">
             <div class="panel-heading">
-              <h4 class="panel-title">Informations Professionnelles</h4>
+              <h4 class="panel-title"><b>Informations Professionnelles</b></h4>
             </div>
             <div class="panel-body">
             	<label>Catégorie : </label>
@@ -836,7 +846,7 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 				}
 				$code.='
 				<br/><br/>
-				<a type="button" onclick="date()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Mandat Pro Administratif</a>&nbsp;
+				<a type="button" onclick="date()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Mandat Pro Administratif</a>&nbsp;
 				<script>
 				function date() {
 				    var x;
@@ -846,7 +856,7 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 				    }
 				}
 				</script>
-				<a type="button" onclick="date_place()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Mandat Placement</a>&nbsp;
+				<a type="button" onclick="date_place()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Mandat Placement</a>&nbsp;
 				<script>
 				function date_place() {
 				    var x;
@@ -859,7 +869,7 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 				    }
 				}
 				</script><br/><br/>
-				<a type="button" onclick="date_remp()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Ordre de remplacement</a>&nbsp;
+				<a type="button" onclick="date_remp()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Ordre de remplacement</a>&nbsp;
 				<script>
 				function date_remp() {
 				    var x;
@@ -888,6 +898,14 @@ function AfficheFicheClientRevenus($client,$types_revenus,$revenus){
 			$code.=' active';
 		}
 		$code.='" id="revenus">
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-success" id="ajoutRevenu"><i class="fa fa-plus fa-lg"></i> Ajouter un Revenu</button><br/>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<label>Type</label>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -921,6 +939,8 @@ function AfficheFicheClientRevenus($client,$types_revenus,$revenus){
 		}
 		$code.='
 		<br/><br/>
+		<div id="formRevenu">
+		<h4>Ajouter un Revenu</h4>
 		<form method="post" action="index.php?action=addClientRevenu">
 			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 			<select name="type" style="width:200px;" required><option></option>';
@@ -932,6 +952,7 @@ function AfficheFicheClientRevenus($client,$types_revenus,$revenus){
 			<input type="text" name="montant" style="width:100px;" required/>
 			<input type="submit" value="Ajouter"/>
 		</form>
+		</div>
 	</div>';
 	return($code);
 }
@@ -943,6 +964,7 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 			$code.=' active';
 		}
 		$code.='" id="historique">
+		<button class="btn btn-success" id="ajoutHistorique"><i class="fa fa-plus fa-lg"></i> Ajouter un Historique</button><br/><br/>
 		<div class="table-responsive">
       	<table class="table">
         <thead>
@@ -1038,10 +1060,8 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 			</tr>';
 		}
 	$code.=' 
-      	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		<form method="post" action="index.php?action=addClientHistorique">
+		<tr id="formHistorique">
+		<form method="post" action="index.php?action=addClientHistorique" id="formHistorique">
 			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 			<td style="min-width: 100px;"><input type="checkbox" name="demAssistante"> Assistante<br/>
 			<input type="checkbox" name="demCourtier"> Courtier</td> 
@@ -1060,6 +1080,7 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 			<td><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-plus fa-lg"></i> Ajouter</button></td>
 			<td></td>
 		</form>
+		</tr>
 		</table></tbody>
     </div></div>';
 	return($code);
@@ -1067,7 +1088,8 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 
 //Affichage de l'onglet Relationel
 function AfficheFicheClientRelationel($client,$type_relation,$relations,$personnes){
-	$code='<div class="tab-pane fade in';
+	$code='<a type="button" href="pdf/arboGroupe.php?idClient='.$client['CLT-NumID'].'" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Arborescence Groupe</a>
+	<div class="tab-pane fade in';
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "relationel"){
 			$code.=' active';
 		}
@@ -1124,9 +1146,6 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 			</tr>';
 		}
 		$code.='
-      	<tr><td></td><td></td><td></td><td></td><td></td></tr>
-      	<tr><td></td><td></td><td></td><td></td><td></td></tr>
-      	<tr><td></td><td></td><td></td><td></td><td></td></tr>
 
 		</table></tbody>
 
@@ -1168,25 +1187,140 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 
 //Affichage de l'onglet Besoin
 function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
-	$code='<div class="tab-pane fade in';
+	$code = "";
+	if(isset($_GET['idType']) && !$_SESSION['Auth']['dejaReload']){
+		$code.="<script>window.location.reload()</script>";
+		Auth::setInfo('dejaReload',true);
+	}
+	$retraite = false;
+	$prev = false;
+	$prevPost = false;
+	$sante = false;
+	$epargne = false;
+	$chomage = false;
+	$pret = false;
+	foreach ($besoins_cli as $besoin_cli){
+		if($besoin_cli['B/C-NumType'] == 13){
+			$retraite = true;
+		}
+		if($besoin_cli['B/C-NumType'] == 12){
+			$prev = true;
+		}
+		if($besoin_cli['B/C-NumType'] == 15){
+			$prevPost = true;
+		}
+		if($besoin_cli['B/C-NumType'] == 14){
+			$sante = true;
+		}
+		if($besoin_cli['B/C-NumType'] == 4){
+			$epargne = true;
+		}
+		if($besoin_cli['B/C-NumType'] == 6){
+			$chomage = true;
+		}
+		if($besoin_cli['B/C-NumType'] == 2){
+			$pret = true;
+		}
+	}
+	$code.='<div class="tab-pane fade in';
 		if(isset($_GET['onglet']) && $_GET['onglet'] == "besoin"){
 			$code.=' active';
 		}
 		$code.='" id="besoin">
 		<div class="bs-example">
              <ul class="nav nav-tabs" style="margin-bottom: 15px;">
-                <li class="active"><a href="#retraite" data-toggle="tab">Retraite</a></li>
-                <li><a href="#prevoyance" data-toggle="tab">Prévoyance</a></li>
-                <li><a href="#prevoyancePost" data-toggle="tab">Prévoyance Post-Activité</a></li>
-                <li><a href="#sante" data-toggle="tab">Santé</a></li>
-                <li><a href="#epargne" data-toggle="tab">Epargne</a></li>
-                <li><a href="#chomage" data-toggle="tab">Chômage</a></li>
-                <li><a href="#pret" data-toggle="tab">Prêt</a></li>
+                <li';
+                if(isset($_GET['idType']) && $_GET['idType'] == 13){
+                	$code.=" class='active'";
+                }
+                $code.='><a href="#retraite" data-toggle="tab">';
+                if($retraite){
+                	$code.='<b><span style="font-size:15px;">Retraite</span></b>';
+                } else {
+                	$code.='Retraite';
+                }
+                $code.='
+                </a></li>
+                <li';
+                if(isset($_GET['idType']) && $_GET['idType'] == 12){
+                	$code.=" class='active'";
+                }
+                $code.='><a href="#prevoyance" data-toggle="tab">';
+                if($prev){
+                	$code.='<b><span style="font-size:15px;">Prévoyance</span></b>';
+                } else {
+                	$code.='Prévoyance';
+                }
+                $code.='</a></li>
+                <li';
+                if(isset($_GET['idType']) && $_GET['idType'] == 15){
+                	$code.=" class='active'";
+                }
+                $code.='><a href="#prevoyancePost" data-toggle="tab">';
+                if($prevPost){
+                	$code.='<b><span style="font-size:15px;">Prévoyance Post-Activité</span></b>';
+                } else {
+                	$code.='Prévoyance Post-Activité';
+                }
+                $code.='
+                </a></li>
+                <li';
+                if(isset($_GET['idType']) && $_GET['idType'] == 14){
+                	$code.=" class='active'";
+                }
+                $code.='><a href="#sante" data-toggle="tab">';
+                if($sante){
+                	$code.='<b><span style="font-size:15px;">Santé</span></b>';
+                } else {
+                	$code.='Santé';
+                }
+                $code.='
+                </a></li>
+                <li';
+                if(isset($_GET['idType']) && $_GET['idType'] == 4){
+                	$code.=" class='active'";
+                }
+                $code.='><a href="#epargne" data-toggle="tab">';
+                if($epargne){
+                	$code.='<b><span style="font-size:15px;">Epargne</span></b>';
+                } else {
+                	$code.='Epargne';
+                }
+                $code.='
+                </a></li>
+                <li';
+                if(isset($_GET['idType']) && $_GET['idType'] == 6){
+                	$code.=" class='active'";
+                }
+                $code.='><a href="#chomage" data-toggle="tab">';
+                if($chomage){
+                	$code.='<b><span style="font-size:15px;">Chômage</span></b>';
+                } else {
+                	$code.='Chômage';
+                }
+                $code.='
+                </a></li>
+                <li';
+                if(isset($_GET['idType']) && $_GET['idType'] == 2){
+                	$code.=" class='active'";
+                }
+                $code.='><a href="#pret" data-toggle="tab">';
+                if($pret){
+                	$code.='<b><span style="font-size:15px;">Prêt</span></b>';
+                } else {
+                	$code.='Prêt';
+                }
+                $code.='
+                </a></li>
               </ul>
               <div id="myTabContent" class="tab-content">
               	
-                <div class="tab-pane fade active in" id="retraite">
-                	<h4>En Retraite, le client souhaite</h4>
+                <div class="tab-pane fade in';
+                if($_GET['idType'] == 13){
+                	$code.=" active";
+                }
+                $code.='" id="retraite">
+                	<h4>En Retraite, le client souhaite</h4><button class="btn btn-success" id="ajoutBesoin1" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Besoin</button><br/>
 					<div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1212,8 +1346,9 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
+						<div id="formBesoin1">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post"/>
+				        <form action="index.php?action=addClientBesoin" method="post" id="form1">
 	                	Besoin : <select id="besoin2" name="idBesoin">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1230,13 +1365,18 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		        		</select><br/><br/>
 		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 		                <input type="hidden" name="idType" value="13" />
-		        		<button class="btn btn-success" type="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		
 		        		</form>
+		        		</div>
 	        		</div>
                 </div>
 
-                <div class="tab-pane fade in" id="prevoyance">
-                	<h4>En Prévoyance, le client souhaite</h4>
+                <div class="tab-pane fade in';
+                if($_GET['idType'] == 12){
+                	$code.=" active";
+                }
+                $code.='" id="prevoyance">
+                	<h4>En Prévoyance, le client souhaite</h4><button class="btn btn-success" id="ajoutBesoin2" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Besoin</button><br/>
                 	<div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1262,8 +1402,9 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
+						<div id="formBesoin2">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post"/>
+				        <form action="index.php?action=addClientBesoin" method="post" id="form2"/>
 	                	Besoin : <select id="besoin3" name="idBesoin2">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1280,13 +1421,18 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		        		</select><br/><br/>
 		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 		                <input type="hidden" name="idType" value="12" />
-		        		<button class="btn btn-success" type="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		
 		        		</form>
+		        		</div>
 	        		</div>
                 </div>
 
-                <div class="tab-pane fadein" id="prevoyancePost">
-                	<h4>En Prévoyance Post-Activité, le client souhaite</h4>
+                <div class="tab-pane fade in';
+                if($_GET['idType'] == 15){
+                	$code.=" active";
+                }
+                $code.='" id="prevoyancePost">
+                	<h4>En Prévoyance Post-Activité, le client souhaite</h4><button class="btn btn-success" id="ajoutBesoin3" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Besoin</button><br/>
                 	<div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1312,8 +1458,9 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
+						<div id="formBesoin3">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post"/>
+				        <form action="index.php?action=addClientBesoin" method="post" id="form3"/>
 	                	Besoin : <select id="besoin4" name="idBesoin3">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1332,11 +1479,16 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		                <input type="hidden" name="idType" value="15" />
 		        		<button class="btn btn-success" type="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
 		        		</form>
+		        		</div>
 	        		</div>
                 </div>
 
-                <div class="tab-pane fade in" id="sante">
-                	<h4>En Santé, le client souhaite</h4>
+                <div class="tab-pane fade in';
+                if($_GET['idType'] == 14){
+                	$code.=" active";
+                }
+                $code.='" id="sante">
+                	<h4>En Santé, le client souhaite</h4><button class="btn btn-success" id="ajoutBesoin4" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Besoin</button><br/>
                 	<div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1362,8 +1514,9 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
+						<div id="formBesoin4">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post"/>
+				        <form action="index.php?action=addClientBesoin" method="post" id="form4"/>
 	                	Besoin : <select id="besoin5" name="idBesoin4">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1380,13 +1533,18 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		        		</select><br/><br/>
 		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 		                <input type="hidden" name="idType" value="14" />
-		        		<button class="btn btn-success" type="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		
 		        		</form>
+		        		</div>
 	        		</div>
                 </div>
 
-                <div class="tab-pane fade in" id="epargne">
-                	<h4>En Epargne, le client souhaite</h4>
+                <div class="tab-pane fade in';
+                if($_GET['idType'] == 4){
+                	$code.=" active";
+                }
+                $code.='" id="epargne">
+                	<h4>En Epargne, le client souhaite</h4><button class="btn btn-success" id="ajoutBesoin5" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Besoin</button><br/>
                 	<div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1412,8 +1570,9 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
+						<div id="formBesoin5">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post"/>
+				        <form action="index.php?action=addClientBesoin" method="post" id="form5"/>
 	                	Besoin : <select id="besoin6" name="idBesoin5">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1430,13 +1589,18 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		        		</select><br/><br/>
 		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 		                <input type="hidden" name="idType" value="4" />
-		        		<button class="btn btn-success" type="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		
 		        		</form>
+		        		</div>
 	        		</div>
                 </div>
 
-                <div class="tab-pane fade in" id="chomage">
-                	<h4>En Chômage, le client souhaite</h4>
+                <div class="tab-pane fade in';
+                if($_GET['idType'] == 6){
+                	$code.=" active";
+                }
+                $code.='" id="chomage">
+                	<h4>En Chômage, le client souhaite</h4><button class="btn btn-success" id="ajoutBesoin6" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Besoin</button><br/>
                 	<div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1462,8 +1626,9 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
+						<div id="formBesoin6">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post"/>
+				        <form action="index.php?action=addClientBesoin" method="post" id="form6"/>
 	                	Besoin : <select id="besoin7" name="idBesoin6">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1480,13 +1645,18 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		        		</select><br/><br/>
 		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 		                <input type="hidden" name="idType" value="6" />
-		        		<button class="btn btn-success" type="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		
 		        		</form>
+		        		</div>
 	        		</div>
                 </div>
 
-                <div class="tab-pane fade in" id="pret">
-                <h4>En Prêt, le client souhaite</h4>
+                <div class="tab-pane fade in';
+                if($_GET['idType'] == 2){
+                	$code.=" active";
+                }
+                $code.='" id="pret">
+                <h4>En Prêt, le client souhaite</h4><button class="btn btn-success" id="ajoutBesoin7" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Besoin</button><br/>
                 <div class="table-responsive">
 				      	<table class="table">
 				        <thead>
@@ -1512,8 +1682,9 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	                	}
 				        $code.='</table></tbody>
 						<br/><br/>
+						<div id="formBesoin7">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post"/>
+				        <form action="index.php?action=addClientBesoin" method="post" id="form7"/>
 	                	Besoin : <select id="besoin8" name="idBesoin7">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1530,8 +1701,9 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 		        		</select><br/><br/>
 		        		<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 		                <input type="hidden" name="idType" value="2" />
-		        		<button class="btn btn-success" type=="submit"><i class="fa fa-plus fa-lg"></i> Ajouter</button>
+		        		
 		        		</form>
+		        		</div>
 	        		</div>
                 </div>
             </div>
@@ -1548,14 +1720,14 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 
 	<button class="btn btn-success" id="ajoutProduit" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Produit</button>
 
-	<a type="button" onclick="dev_cons()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Devoir de conseil</a>&nbsp;
+	<a type="button" onclick="dev_cons()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Devoir de conseil</a>&nbsp;
 	<script>
 	function dev_cons() {
 	    window.open("pdf/devoirConseil.php?idClient='.$client['CLT-NumID'].'");
 	}
 	</script>&nbsp;&nbsp;&nbsp;&nbsp;
 
-	<a type="button" onclick="rec_cont()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Recapitulatif Contrats</a>&nbsp;
+	<a type="button" onclick="rec_cont()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Recapitulatif Contrats</a>&nbsp;
 	<script>
 	function rec_cont() {
 	    window.open("pdf/recapContrat.php?idClient='.$client['CLT-NumID'].'");
@@ -1645,7 +1817,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 	<div class="col-lg-12">
 		<div class="panel panel-info">
 			<div class="panel-heading">
-				<h4 class="panel-title">Infos produit</h4>
+				<h4 class="panel-title"><b>Infos produit</b></h4>
 			</div>
 			<div class="panel-body">
 				<form action="index.php?action=modifClientProduit1" method="post">
@@ -1841,7 +2013,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 	<div class="col-lg-12">
 		<div class="panel panel-warning">
 			<div class="panel-heading">
-				<h4 class="panel-title">Différentes phases de mise en place des mes dossiers</h4>
+				<h4 class="panel-title"><b>Différentes phases de mise en place des mes dossiers</b></h4>
 			</div>
 			<div class="panel-body" style="font-size:11px;">';
 				foreach ($evenements as $ev) {
@@ -1978,7 +2150,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					<form action='index.php?action=deleteEvProduit' method='post' style='display:inline;'>
 						<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
 						<input type='hidden' name='idEv' value='".$ev['E/P-NumID']."'/>
-						<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Suprimmer</button>
+						<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Supprimer</button>
 					</form>
 					</div>";
 				} 
@@ -1999,7 +2171,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 	<div class="col-lg-12">
 		<div class="panel panel-danger">
 			<div class="panel-heading">
-				<h4 class="panel-title">Historique des anomalies éventuelles</h4>
+				<h4 class="panel-title"><b>Historique des anomalies éventuelles</b></h4>
 			</div>
 				<div class="panel-body">
 					<div class="table-responsive">
@@ -2044,14 +2216,13 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 							<td><form action='index.php?action=deleteAnomalieProduit' method='post'>
 									<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
 									<input type='hidden' name='idAnomalie' value='".$ann['A/P-NumID']."'/>
-									<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Suprimmer</button>
+									<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Supprimer</button>
 								</form>
 							</td></tr>
 							";
 						}
 						$code.='
-						<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-						<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				
 						<tr>
 							<form action="index.php?action=addAnomalieProduit" method="post">
 							<input type="hidden" name="idProduit" value="'.$produit['P/C-NumID'].'"/>
@@ -2085,25 +2256,25 @@ function AfficheProcedure(){
 	$code = '
 	<div class="col-lg-6">
 		<h4>Stéphane Scalabrino</h4>
-		<a type="button" onclick="tracfin()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Tracfin</a>
+		<a type="button" onclick="tracfin()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Tracfin</a>
 		<script>
 		function tracfin() {
 		    window.open("pdf/tracfin.php");
 		}
 		</script>
-		<a type="button" onclick="scoring()" target="_blank" class="btn btn-default disabled"><i class="fa fa-print"></i> Scoring</a>
+		<a type="button" onclick="scoring()" target="_blank" class="btn btn-primary disabled"><img src="img/pdf.png" class="pdf"/> Scoring</a>
 		<script>
 		function scoring() {
 		    window.open("pdf/scoring.php");
 		}
 		</script>
-		<a type="button" onclick="tracfin_an()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Tracfin Anomalies</a>
+		<a type="button" onclick="tracfin_an()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Tracfin Anomalies</a>
 		<script>
 		function tracfin_an() {
 		    window.open("pdf/tracfinAnomalie.php");
 		}
 		</script>
-		<a type="button" onclick="scoring_an()" target="_blank" class="btn btn-default disabled"><i class="fa fa-print"></i> Scoring Anomalies</a>
+		<a type="button" onclick="scoring_an()" target="_blank" class="btn btn-primary disabled"><img src="img/pdf.png" class="pdf"/> Scoring Anomalies</a>
 		<script>
 		function scoring_an() {
 		    window.open("pdf/scoringAnomalie.php");
@@ -2112,7 +2283,7 @@ function AfficheProcedure(){
 		<hr/>
 
 		<h4>Sylvain Maillard</h4>
-		<a type="button" onclick="orias()" target="_blank" class="btn btn-default disabled"><i class="fa fa-print"></i> Vérif Orias</a>
+		<a type="button" onclick="orias()" target="_blank" class="btn btn-primary disabled"><img src="img/pdf.png" class="pdf"/> Vérif Orias</a>
 		<script>
 		function orias() {
 		    window.open("pdf/traitement.php");
@@ -2121,13 +2292,13 @@ function AfficheProcedure(){
 		<hr/>
 
 		<h4>Ali Tazi</h4>
-		<a type="button" onclick="sinistre()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Sinistres</a>
+		<a type="button" onclick="sinistre()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Sinistres</a>
 		<script>
 		function sinistre() {
 		    window.open("pdf/sinistre.php");
 		}
 		</script>
-		<a type="button" onclick="rh()" target="_blank" class="btn btn-default disabled"><i class="fa fa-print"></i> Dossier RH</a>
+		<a type="button" onclick="rh()" target="_blank" class="btn btn-primary disabled"><img src="img/pdf.png" class="pdf"/> Dossier RH</a>
 		<script>
 		function rh() {
 		    window.open("pdf/traitement.php");
@@ -2138,19 +2309,19 @@ function AfficheProcedure(){
 
 	<div class="col-lg-6">
 		<h4>Delphine Taton et Carine Scalabrino</h4>
-		<a type="button" onclick="traitement()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Traitement Dossier</a>
+		<a type="button" onclick="traitement()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Traitement Dossier</a>
 		<script>
 		function traitement() {
 		    window.open("pdf/traitement.php");
 		}
 		</script>
-		<a type="button" onclick="incident()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Incident de Gestion</a>
+		<a type="button" onclick="incident()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Incident de Gestion</a>
 		<script>
 		function incident() {
 		    window.open("pdf/incident.php");
 		}
 		</script>
-			<a type="button" onclick="incident2()" target="_blank" class="btn btn-default disabled"><i class="fa fa-print"></i> Incident de Mise en Place</a>
+			<a type="button" onclick="incident2()" target="_blank" class="btn btn-primary disabled"><img src="img/pdf.png" class="pdf"/> Incident de Mise en Place</a>
 		<script>
 		function incident2() {
 		    window.open("pdf/incident2.php");
@@ -2159,13 +2330,13 @@ function AfficheProcedure(){
 		<hr/>
 
 		<h4>Stéphane Saulnier</h4>
-		<a type="button" onclick="confident()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Confidentalité et Secret Professionel</a>
+		<a type="button" onclick="confident()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Confidentalité et Secret Professionel</a>
 		<script>
 		function confident() {
 		    window.open("pdf/confident.php");
 		}
 		</script>
-		<a type="button" onclick="respect()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Respect du Secret Médical</a>
+		<a type="button" onclick="respect()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Respect du Secret Médical</a>
 		<script>
 		function respect() {
 		    window.open("pdf/respect.php");
@@ -2174,13 +2345,13 @@ function AfficheProcedure(){
 		<hr/>
 
 		<h4>Alain Gazoni</h4>
-		<a type="button" onclick="reclamation()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Réclamations</a>
+		<a type="button" onclick="reclamation()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Réclamations</a>
 		<script>
 		function reclamation() {
 		    window.open("pdf/reclamation.php");
 		}
 		</script>
-		<a type="button" onclick="cnil()" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> CNIL</a>
+		<a type="button" onclick="cnil()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> CNIL</a>
 		<script>
 		function cnil() {
 		    window.open("pdf/cnil.php");
@@ -2193,7 +2364,7 @@ function AfficheProcedure(){
 
 //Affichage des compagnies
 function AfficheCompagnie($compagnies){
-	$code="
+	$code="<span style='font-size:20px;'><b><u>Liste Compagnies</u></b></span><br/><br/>
 	<form style='display:inline;' action='index.php?action=compagnie' method='post'>
 	<input type='text' class='form-control' style='display:inline;width:200px;' name='recherche'/>
 	<span class='input-group-btn' style='display:inline;'>
@@ -2203,21 +2374,21 @@ function AfficheCompagnie($compagnies){
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<button class='btn btn-default' style='display:inline;' onclick=\"window.location.reload()\"><i class='fa fa-refresh'></i> Actualiser</button>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a type='button' onclick='anom()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Anomalies Codes</a>
+	<a type='button' onclick='anom()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Anomalies Codes</a>
 	<script>
 	function anom() {
 	    window.open(\"pdf/anomalieCode.php\");
 	}
 	</script>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a type='button' onclick='code1()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Mes Codes</a>
+	<a type='button' onclick='code1()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Mes Codes</a>
 	<script>
 	function code1() {
 	    window.open(\"pdf/codes.php?idUser=".$_SESSION['Auth']['id']."\");
 	}
 	</script>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a type='button' onclick='code2()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Tous les Codes</a>
+	<a type='button' onclick='code2()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Tous les Codes</a>
 	<script>
 	function code2() {
 		alert('Veuillez patienter durant la génération du document...');
@@ -2237,7 +2408,7 @@ function AfficheCompagnie($compagnies){
 	<th>Accueil Tel</th>
 	<th>Fax</th>
 	<th>Site Internet</th>
-	<th>Tarid Internet</th>
+	<th>Tarif Internet</th>
 	</tr>
 	</thead>
 	<tbody>";
@@ -2318,7 +2489,7 @@ function AfficheFicheCompagnie($compagnie,$contacts,$departements,$contactsLoc,$
 
 //Affichage de la fiche compagnie - onglet Général
 function AfficheFicheCompagnieGeneral($compagnie){
-	$code='
+	$code='<span style="font-size:20px;"><b><u>Informations Générales</u></b></span><br/><br/>
 	<form action="index.php?action=modifCompagnieGeneral" method="post">
 	<input type="hidden" name="idComp" value="'.$compagnie[0]['CIE-NumID'].'"/> 
 		<div class="col-lg-4">
@@ -2387,13 +2558,15 @@ function AfficheFicheCompagnieGeneral($compagnie){
 //Affichage de la fiche compagnie - onglet Contacts
 function AfficheFicheCompagnieContact($contacts,$idComp){
 	$code="
-	<a type='button' onclick='impr()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Imprimer</a>
+	<button class='btn btn-success' id='ajoutContact' style='float:right;'><i class='fa fa-plus fa-lg'></i> Ajouter un Contact</button>
+	<span style='font-size:20px;'><b><u>Annuaire National</u></b></span><br/><br/>
+	<a type='button' onclick='impr()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Imprimer</a>
 	<script>
 	function impr() {
 	    window.open(\"pdf/contactCompagnie.php?idComp=".$idComp."\");
 	}
 	</script>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a type='button' onclick='site()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Liste sites</a>
+	<a type='button' onclick='site()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Liste sites</a>
 	<script>
 	function site() {
 	    window.open(\"pdf/site.php\");
@@ -2440,16 +2613,14 @@ function AfficheFicheCompagnieContact($contacts,$idComp){
 					<input type='hidden' name='idComp' value='".$cont['C/C-Num']."'/>
 					<input type='hidden' name='idNom' value='".$cont['C/C-Nom']."'/>
 					<input type='hidden' name='idPrenom' value='".$cont['C/C-Prénom']."'/>
-					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Suprimmer</button>
+					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Supprimer</button>
 				</form>
 			</td>						
 		";
 		$code.="</form></tr>";
 	}
 	$code.="
-	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-	<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+	<tr id='formContact'>
 	<td><form action='index.php?action=addCompagnieContact' method='post'><input style='width:200px;' type='text' name='nom' required/></td>
 	<td><input type='text' name='prenom' required/></td>
 	<td><input style='width:100px;' type='text' name='tel'/></td>
@@ -2461,6 +2632,7 @@ function AfficheFicheCompagnieContact($contacts,$idComp){
 	<td><input style='width:150;' type='text' name='com'/></td>
 	<td><input type='hidden' name='idComp' value='".$idComp."'/><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
 	<td></td>
+	</tr>
 	";
 	$code .= "</tbody></table></div>";
 	return($code);
@@ -2469,6 +2641,8 @@ function AfficheFicheCompagnieContact($contacts,$idComp){
 //Affichage de la fiche compagnie - onglet Contacts Locaux
 function AfficheFicheCompagnieContactLocaux($idComp,$departements,$contactsLoc){
 	$code="
+	<button class='btn btn-success' id='ajoutContactLoc' style='float:right;'><i class='fa fa-plus fa-lg'></i> Ajouter un Contact</button>
+	<span style='font-size:20px;'><b><u>Contacts Locaux</u></b></span><br/><br/>
 	<form method='post' action='index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=contactLoc'>
 		<b>Choisir un Département : </b><select name='dep' required><option></option>";
 		foreach ($departements as $dep){
@@ -2520,8 +2694,8 @@ function AfficheFicheCompagnieContactLocaux($idComp,$departements,$contactsLoc){
 				<td><input type='text' name='fax' value='".$cont['INS-Fax']."'/></td>
 				<td><input type='text' name='fonction' value='".$cont['INS-Fonction']."'/></td>
 				<td><input type='text' name='com' value='".$cont['INS-Commentaire']."'/></td>
-				<td><center><button type='button' onClick=\"window.open('depRatach.php?idIns=".$cont['INS-NumID']."','Départements rattachés','toolbar=no,status=no,width=500,height=500,scrollbars=yes,location=no,resize=yes,menubar=no')\" class='btn btn-info btn-xs'><i class='fa fa-external-link'></i></button></center></td>
-				<td><center><button type='button' onClick=\"window.open('delegRegional.php?idIns=".$cont['INS-NumID']."','Délégation Régionale','toolbar=no,status=no,width=1800,height=500,scrollbars=yes,location=no,resize=no,menubar=no')\" class='btn btn-info btn-xs'><i class='fa fa-external-link'></i></button></center></td>
+				<td><center><button type='button' onClick=\"window.open('depRatach.php?idIns=".$cont['INS-NumID']."','Départements rattachés','toolbar=no,status=no,width=500,height=500,scrollbars=yes,location=no,resize=yes,menubar=no')\" class='btn btn-default btn-xs'><i class='fa fa-external-link'></i></button></center></td>
+				<td><center><button type='button' onClick=\"window.open('delegRegional.php?idIns=".$cont['INS-NumID']."','Délégation Régionale','toolbar=no,status=no,width=1800,height=500,scrollbars=yes,location=no,resize=no,menubar=no')\" class='btn btn-default btn-xs'><i class='fa fa-external-link'></i></button></center></td>
 				<td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button></form></td>				
 			";
 			$code.="</form></tr>";
@@ -2529,9 +2703,7 @@ function AfficheFicheCompagnieContactLocaux($idComp,$departements,$contactsLoc){
 	}
 	if(!empty($_POST['dep'])){
 		$code.="
-		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr id='formContactLoc'>
 		<td><form action='index.php?action=addCompagnieContactLoc' method='post'><input type='text' name='nom' required/></td>
 		<td><input type='text' name='prenom' required/></td>
 		<td><input type='text' name='tel'/></td>
@@ -2546,6 +2718,7 @@ function AfficheFicheCompagnieContactLocaux($idComp,$departements,$contactsLoc){
 		</td>
 		<td></td>
 		<td></td>
+		</tr>
 		";
 	}
 	$code .= "</tbody></table></div>";
@@ -2555,14 +2728,16 @@ function AfficheFicheCompagnieContactLocaux($idComp,$departements,$contactsLoc){
 //Affichage de la fiche compagnie - onglet Contacts Locaux
 function AfficheFicheCompagnieCode($idComp,$codes,$courtiers,$compagnies,$codeMaitre){
 	$code="
-	<a type='button' onclick='liste()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Liste des codes</a>
+	<button class='btn btn-success' id='ajoutCode' style='float:right;'><i class='fa fa-plus fa-lg'></i> Ajouter un Code</button>
+	<span style='font-size:20px;'><b><u>Codes</u></b></span><br/><br/>
+	<a type='button' onclick='liste()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Liste des codes</a>
 	<script>
 	function liste() {
 	    window.open(\"pdf/codes.php?idComp=".$idComp."\");
 	}
 	</script>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a type='button' onclick='anom()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Anomalies Codes (".Auth::getInfo('page').")</a>
+	<a type='button' onclick='anom()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Anomalies Codes (".Auth::getInfo('page').")</a>
 	<script>
 	function anom() {
 	    window.open(\"pdf/anomalieCode.php?idComp=".$idComp."\");
@@ -2602,7 +2777,7 @@ function AfficheFicheCompagnieCode($idComp,$codes,$courtiers,$compagnies,$codeMa
 	';
 	$code.="
 		<td><b><button type='button' class='btn btn-primary btn-xs' style='background-color:".$couleur.";border-color:black;width:20px;height:15px;'></button></td>";
-		$code.="<td><select style='width:100px;' name='courtier'>";
+		$code.="<td><select style='width:100px;' name='courtier' required>";
 		foreach ($courtiers as $courtier) {
 			if($courtier['CON-NumID'] == $c['CON-NumID']){
 				$code.="<option value='".$courtier['CON-NumID']."' selected>".$courtier['CON-Nom']." ".$courtier['CON-Prénom']."</b></option>";
@@ -2610,7 +2785,7 @@ function AfficheFicheCompagnieCode($idComp,$codes,$courtiers,$compagnies,$codeMa
 				$code.="<option value='".$courtier['CON-NumID']."'>".$courtier['CON-Nom']." ".$courtier['CON-Prénom']."</b></option>";
 			}
 		}
-		$code.="</select></td><td><select name='compagnie'/>";
+		$code.="</select></td><td><select name='compagnie'/ required>";
 		foreach ($compagnies as $comp) {
 			if($comp['CIE-NumID'] == $c['CIE-NumID']){
 				$code.="<option value='".$comp['CIE-NumID']."' selected>".$comp['CIE-Nom']."</b></option>";
@@ -2619,7 +2794,7 @@ function AfficheFicheCompagnieCode($idComp,$codes,$courtiers,$compagnies,$codeMa
 			}
 		}
 		$code.="</td>
-		<td><input style='width:50px;' type='text' name='code' value='".$c['COD-Code']."'/></td>
+		<td><input style='width:50px;' type='text' name='code' value='".$c['COD-Code']."' required/></td>
 		<td><select name='typeCode'>";
 		if($c['COD-TypeCode'] == "Code"){
 			$code.="<option selected>Code</option>";
@@ -2633,7 +2808,7 @@ function AfficheFicheCompagnieCode($idComp,$codes,$courtiers,$compagnies,$codeMa
 		}
 		$code.="</select>";
 		$code.="
-		<select name='nomCodeMere'>";
+		<select name='nomCodeMere' required>";
 		$tab = array("SPA","AGAPS","SOFRACO","Direct","Services","Inutilisé","Direct mutualisé");
 		foreach ($tab as $t) {
 			$code.=$c['COD-NomCodeMere']." == ".$t;
@@ -2652,8 +2827,8 @@ function AfficheFicheCompagnieCode($idComp,$codes,$courtiers,$compagnies,$codeMa
 			}
 		}
 		$code.="</select></td>
-		<td style='color:red;'><input style='width:100px;' type='text' name='identifiant' value='".$c['COD-Identifiant']."'/></td>
-		<td style='color:red;'><input style='width:100px;'type='text' name='mdp' value='".$c['COD-MP']."'/></td>
+		<td style='color:red;'><input style='width:100px;' type='text' name='identifiant' value='".$c['COD-Identifiant']."' required/></td>
+		<td style='color:red;'><input style='width:100px;'type='text' name='mdp' value='".$c['COD-MP']."' required/></td>
 		<td><input type='text' name='mdpDir' style='width:100px;' value='".$c['COD-MPDir']."'/></td>
 		<td><input type='text' name='detail' value='".$c['COD-Détail']."'/></td><td>";
 		if($c['COD-Transféré'] == 1){
@@ -2667,29 +2842,26 @@ function AfficheFicheCompagnieCode($idComp,$codes,$courtiers,$compagnies,$codeMa
 		<td><form action='index.php?action=deleteCompagnieCode' method='post'>
 				<input type='hidden' name='idCode' value='".$c['COD-NumID']."'/>
 				<input type='hidden' name='idComp' value='".$idComp."'/>
-				<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Suprimmer</button>
+				<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o fa-lg'></i> Supprimer</button>
 			</form>
 		</td>				
 	";
 	$code.="</form></tr>";
 	}
 	$code.="
-		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		<tr><td><form action='index.php?action=addCompagnieCode' method='post'><input type='hidden' name='idComp' value='".$idComp."'/></td>";
-		$code.="<td><select style='width:100px;' name='courtier'><option></option>";
+		<tr id='formCode'><td><form action='index.php?action=addCompagnieCode' method='post'><input type='hidden' name='idComp' value='".$idComp."'/></td>";
+		$code.="<td><select style='width:100px;' name='courtier' required><option></option>";
 		foreach ($courtiers as $courtier) {
 				$code.="<option value='".$courtier['CON-NumID']."'>".$courtier['CON-Nom']." ".$courtier['CON-Prénom']."</b></option>";
 		}
-		$code.="</select></td><td><select name='compagnie'/><option></option>";
+		$code.="</select></td><td><select name='compagnie' required/><option></option>";
 		foreach ($compagnies as $comp) {
 			$code.="<option value='".$comp['CIE-NumID']."'>".$comp['CIE-Nom']."</b></option>";
 		}
 		$code.="</td>
-		<td><input style='width:50px;' type='text' name='code'/></td>
+		<td><input style='width:50px;' type='text' name='code' required/></td>
 		<td><select name='typeCode'><option></option><option>Code</option><option>Sous Code</option></select>
-		<select name='nomCodeMere'>";
+		<select name='nomCodeMere' required>";
 		$tab = array("SPA","AGAPS","SOFRACO","Direct","Services","Inutilisé","Direct mutualisé");
 		$code.="<option></option>";
 		foreach ($tab as $t) {
@@ -2700,8 +2872,8 @@ function AfficheFicheCompagnieCode($idComp,$codes,$courtiers,$compagnies,$codeMa
 			$code.="<option value='".$cm['COD-Code']."'>".$cm['COD-Code']." | ".$cm['COD-TypeCode']." | ".$cm['COD-NomCodeMere']." | ".$cm['CIE-Nom']."</option>";
 		}
 		$code.="</select></td>
-		<td style='color:red;'><input style='width:100px;' type='text' name='identifiant'/></td>
-		<td style='color:red;'><input style='width:100px;' type='text' name='mdp'/></td>
+		<td style='color:red;'><input style='width:100px;' type='text' name='identifiant' required/></td>
+		<td style='color:red;'><input style='width:100px;' type='text' name='mdp' required/></td>
 		<td><input type='text' name='mdpDir' style='width:100px;'/></td>
 		<td><input type='text' name='detail'/></td><td>
 		<input type='checkbox' name='transfert'/>
@@ -2766,9 +2938,11 @@ function AffichePartenaire($accords,$partenaires,$types,$conseillers,$partenaire
 
 //Affichage des accords partenaires
 function AffichePartenaireAccord($accords,$partenaires,$types,$conseillers){
-	$code="<h3 style='display:inline;'>Affectations Accords Partenaires</h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	$code="
+	<button class='btn btn-success' id='ajoutAccord' style='float:right;'><i class='fa fa-plus fa-lg'></i> Ajouter un Accord</button>
+	<span style='font-size:20px;'><b><u>Affectations Accords Partenaires</u></b></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a type='button' onclick='accord()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Imprimer</a>
+	<a type='button' onclick='accord()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Imprimer</a>
 	<script>
 	function accord() {
 	    window.open(\"pdf/accord.php\");
@@ -2826,15 +3000,13 @@ function AffichePartenaireAccord($accords,$partenaires,$types,$conseillers){
 		</td>
 		<td><form action='index.php?action=deleteAccord' method='post'>
 				<input type='hidden' value='".$acc['ACC-NumID']."' name='idAcc'/>
-				<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-save'></i> Suprimmer</button>
+				<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-save'></i> Supprimer</button>
 			</form>
 		</td>
 		</tr>";
 	}
 	$code.="
-	<tr><td></td><td></td><td></td><td></td><td></td></tr>
-	<tr><td></td><td></td><td></td><td></td><td></td></tr>
-	<tr><td></td><td></td><td></td><td></td><td></td></tr>
+	<tr id='formAccord'>
 	<form action='index.php?action=addAccord' method='post'>
 	<td style='width:300px;'><select name='partenaire' required><option></option>";
 		foreach ($partenaires as $part) {
@@ -2855,15 +3027,14 @@ function AffichePartenaireAccord($accords,$partenaires,$types,$conseillers){
 		$code.="</select>
 		<td><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
 		</td><td></td>
-	</form>";
-
+	</form></tr>";
 	$code .= "</tbody></table></div>";
 	return($code);
 }
 
 //Affichage des fiches partenaires
 function AffichePartenaireFiche($partenaires){
-	$code="
+	$code="<span style='font-size:20px;'><b><u>Liste Partenaires</u></b></span><br/><br/>
 	<form style='display:inline;' action='index.php?action=partenaire&onglet=fiche' method='post'>
 	<input type='text' class='form-control' style='display:inline;width:200px;' name='recherche'/>
 	<span class='input-group-btn' style='display:inline;'>
@@ -2874,7 +3045,7 @@ function AffichePartenaireFiche($partenaires){
 	<button class='btn btn-default' style='display:inline;' onclick=\"window.location.reload()\"><i class='fa fa-refresh'></i> Actualiser</button>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a type='button' onclick='promo()' target='_blank' class='btn btn-default'><i class='fa fa-print'></i> Promotions</a>
+	<a type='button' onclick='promo()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Promotions</a>
 	<script>
 	function promo() {
 	    window.open(\"pdf/promo.php\");
@@ -2920,13 +3091,48 @@ function AffichePartenaireFiche($partenaires){
 
 //Affichage des activité partenaires
 function AffichePartenaireActivite(){
-	$code="";
+	$code="<span style='font-size:20px;'><b><u>Activités Partenaires</u></b></span><br/><br/>
+	<form action='pdf/activite.php' method='post' target='_blanck'>
+		<div class='form-group'>
+			<label for='date1'>Date de début : </label><br/>
+			<input type='date' class='form-control' name='date1' style='width:275px;' required/>
+		</div>
+		<div class='form-group'>
+			<label for='date2'>Date de fin : </label><br/>
+			<input type='date' class='form-control' name='date2' style='width:275px;' required/>
+		</div>
+		<input type='submit' value='Analyse'/>
+	</form>
+	";
 	return($code);
 }
 
 //Affichage des pdf
 function AffichePartenaireListe(){
-	$code="";
+	$code="<span style='font-size:20px;'><b><u>Documents PDF</u></b></span><br/><br/>
+	<a type='button' onclick='liste1()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Liste des clients par Groupe/Cabinet</a>
+	<script>
+	function liste1() {
+	    window.open(\"pdf/liste1.php\");
+	}
+	</script>
+
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a type='button' onclick='liste2()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Liste des Clients sans Expert Comptable</a>
+	<script>
+	function liste2() {
+	    window.open(\"pdf/liste2.php\");
+	}
+	</script>
+
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a type='button' onclick='liste3()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Liste des Clients Experts</a>
+	<script>
+	function liste3() {
+	    window.open(\"pdf/liste3.php\");
+	}
+	</script>
+	";
 	return($code);
 }
 

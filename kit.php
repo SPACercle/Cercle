@@ -44,6 +44,9 @@ if(!(Auth::isLogged())){
   <div id="wrapper">
 
     <!-- Barre portefeuille -->
+    <?php
+      if(Auth::getInfo('page') == "Accueil"){
+    ?>
     <div class="col-lg-12" style="margin-top:20px;">
       <?php
       if(Auth::getInfo('modeAgence') == 1){
@@ -78,7 +81,15 @@ if(!(Auth::isLogged())){
         echo '<form style="display:inline;" action="index.php?action=backAgence" method="post"><button type="submit" class="btn btn-warning btn-xs" style="position:absolute;">Retour en mode agence</button></form>';
       }
       ?>
-    </div>
+    </div><hr/>
+    <?php
+    } else {
+      if(Auth::getInfo('page') != "Partenaires" && $_GET['action'] != "ficheCompagnie"){
+        echo "<br/>";
+      }
+    }
+    ?>
+
 
     <!-- Barre du haut -->
     <nav class="navbar navbar-inverse navbar-fixed-top" style="height:60px;" role="navigation">
@@ -92,7 +103,7 @@ if(!(Auth::isLogged())){
           <?php 
             if(isset($_SESSION['menu'])){ echo $_SESSION['menu']; unset($_SESSION['menu']); };
             if(isset($_GET['action']) && $_GET['action'] == "ficheCompagnie"){
-              echo '<center><img src="img/logos_comp/'.$_GET['idComp'].'.png" width="150px" height:"150px" style="background-color:white;border:2px solid black"/></center>';
+              echo '<center><img src="img/logos_comp/'.$_GET['idComp'].'.png" width="150px" height:"150px" style="background-color:white;border:2px solid black;margin-top:20px;"/></center>';
            }
           ?>
         </ul>
@@ -121,7 +132,7 @@ if(!(Auth::isLogged())){
     <!-- Contenu de la page -->
     <div id="page-wrapper">
       <div class="row">
-        <div class="col-lg-12"><hr/>
+        <div class="col-lg-12">
 
         <!-- Modal -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -131,6 +142,7 @@ if(!(Auth::isLogged())){
                 <h4 class="modal-title" id="myModalLabel">Chargement des clients</h4>
               </div>
               <div class="modal-body">
+                Veuillez patentier...
                 <center><img src="img/load_new.gif"/></center>
               </div>
 

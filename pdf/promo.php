@@ -13,7 +13,7 @@
         }
         $query.="
         )
-        ORDER BY `PRO-Nom`;
+        ORDER BY `PRO-Nom`,`CLT-Promotion`, `CLT-Nom`;
     ";
 
     $pdo = BDD::getConnection();
@@ -52,12 +52,12 @@
                 ";
                 $i = $i + 28;
             } else {
-                $i = $i + 28;
+                $i = $i + 18;
             }
             $content.="
-            <div style='position:absolute;top:".$i.";left:53'>".$pro['CIV-Nom']." ".$pro['CLT-Nom']." ".$pro['CLT-Prénom']."</div>";
+            <div style='position:absolute;top:".$i.";left:53'><b>".$pro['CIV-Nom']." ".$pro['CLT-Nom']." ".$pro['CLT-Prénom']."</b></div>";
             if($pro['CON-NumID'] != 5){
-                $content.="<div style='position:absolute;top:".$i.";left:404'>".$pro['TYP-Nom']." de ".$pro['CON-Nom']." ".$pro['CON-Prénom']."</div>";
+                $content.="<div style='position:absolute;top:".$i.";left:404;font-size:10px;color:#856D4D;'><i>".$pro['TYP-Nom']." de ".$pro['CON-Nom']." ".$pro['CON-Prénom']."</i></div>";
             }
             $content.="
              ";

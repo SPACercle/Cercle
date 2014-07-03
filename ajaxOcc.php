@@ -6,7 +6,6 @@ include_once "BDD.php";
 
 //Besoin retraite
 if(isset($_POST["idBesoin"])){
-echo '<select id="occurences" name="idOcc">';
 	extract($_POST);
 	$query = "SELECT bc.`OCC-Nom`, bt.`B/T-NumBesoin`, bt.`B/T-NumType`, bc.`OCC-NumID`, be.`BES-NumID`
 			  FROM `besoins par type produits` bt, `besoins occurences` bc ,`besoins existants` be
@@ -15,15 +14,21 @@ echo '<select id="occurences" name="idOcc">';
 			  AND bc.`OCC-Nom` IS NOT NULL
 			  AND bt.`B/T-NumType` = $idType
 			  AND be.`BES-NumID` = $idBesoin
+			  ORDER BY `OCC-Tri`
 			 ;";
 	$pdo = BDD::getConnection();
 	$pdo->exec("SET NAMES UTF8");
 	$res = $pdo->query($query);
 	$trow = $res->fetchALL(PDO::FETCH_ASSOC);
-	foreach ($trow as $row) {
-		echo "<option value='".$row["OCC-NumID"]."'>".$row["OCC-Nom"]."</option>";
+	if($res->rowCount() == 0){
+		echo "<option></option>";
+	} else {
+		echo '<select id="occurences" name="idOcc"><option>Choisir...</option>';
+		foreach ($trow as $row) {
+			echo "<option value='".$row["OCC-NumID"]."'>".$row["OCC-Nom"]."</option>";
+		}
+		echo "</select>";
 	}
-	echo "</select>";
 }
 
 //Besoin prévoyance
@@ -37,6 +42,7 @@ echo '<select id="occurences2" name="idOcc2">';
 			  AND bc.`OCC-Nom` IS NOT NULL
 			  AND bt.`B/T-NumType` = $idType
 			  AND be.`BES-NumID` = $idBesoin
+			  ORDER BY `OCC-Tri`
 			 ;";
 	$pdo = BDD::getConnection();
 	$pdo->exec("SET NAMES UTF8");
@@ -59,6 +65,7 @@ echo '<select id="occurences3" name="idOcc3">';
 			  AND bc.`OCC-Nom` IS NOT NULL
 			  AND bt.`B/T-NumType` = $idType
 			  AND be.`BES-NumID` = $idBesoin
+			  ORDER BY `OCC-Tri`
 			 ;";
 	$pdo = BDD::getConnection();
 	$pdo->exec("SET NAMES UTF8");
@@ -81,6 +88,7 @@ echo '<select id="occurences4" name="idOcc4">';
 			  AND bc.`OCC-Nom` IS NOT NULL
 			  AND bt.`B/T-NumType` = $idType
 			  AND be.`BES-NumID` = $idBesoin
+			  ORDER BY `OCC-Tri`
 			 ;";
 	$pdo = BDD::getConnection();
 	$pdo->exec("SET NAMES UTF8");
@@ -103,6 +111,7 @@ echo '<select id="occurences5" name="idOcc5">';
 			  AND bc.`OCC-Nom` IS NOT NULL
 			  AND bt.`B/T-NumType` = $idType
 			  AND be.`BES-NumID` = $idBesoin
+			  ORDER BY `OCC-Tri`
 			 ;";
 	$pdo = BDD::getConnection();
 	$pdo->exec("SET NAMES UTF8");
@@ -125,6 +134,7 @@ echo '<select id="occurences6" name="idOcc6">';
 			  AND bc.`OCC-Nom` IS NOT NULL
 			  AND bt.`B/T-NumType` = $idType
 			  AND be.`BES-NumID` = $idBesoin
+			  ORDER BY `OCC-Tri`
 			 ;";
 	$pdo = BDD::getConnection();
 	$pdo->exec("SET NAMES UTF8");
@@ -147,6 +157,7 @@ echo '<select id="occurences7" name="idOcc7">';
 			  AND bc.`OCC-Nom` IS NOT NULL
 			  AND bt.`B/T-NumType` = $idType
 			  AND be.`BES-NumID` = $idBesoin
+			  ORDER BY `OCC-Tri`
 			 ;";
 	$pdo = BDD::getConnection();
 	$pdo->exec("SET NAMES UTF8");

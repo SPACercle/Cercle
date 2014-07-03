@@ -278,6 +278,34 @@ class Controller{
 		if(!empty($_GET["idClient"])){
 			extract($_GET);
 
+			switch($_GET['onglet']){
+				case "general" :
+					Auth::setInfo("ongletTitre","Informations Générales");
+					break;
+				case "personel" :
+					Auth::setInfo("ongletTitre","Informations Personelles");
+					break;
+				case "pro" :
+					Auth::setInfo("ongletTitre","Informations Professionnel");
+					break;
+				case "revenus" :
+					Auth::setInfo("ongletTitre","Revenus");
+					break;
+				case "historique" :
+					Auth::setInfo("ongletTitre","Historique");
+					break;	
+				case "relationel" :
+					Auth::setInfo("ongletTitre","Relationel");
+					break;
+				case "besoin" :
+					Auth::setInfo("ongletTitre","Besoins");
+					break;
+				case "solution" :
+					Auth::setInfo("ongletTitre","Solutions retenues");
+					break;
+			}
+			
+
 			//Requete du client
 			$query = "SELECT * FROM `clients et prospects` WHERE `CLT-NumID` = $idClient;";
 			$pdo = BDD::getConnection();
@@ -374,13 +402,13 @@ class Controller{
 			$personnes = $res_pers->fetchALL(PDO::FETCH_ASSOC);
 
 			//Requete Besoins
-			$query_bes = "SELECT distinct(be.`BES-NOM`), bt.`B/T-NumType`, be.`BES-NumID` FROM `besoins par type produits` bt, `besoins existants` be WHERE bt.`B/T-NumBesoin` = be.`BES-NumID`";
+			$query_bes = "SELECT distinct(be.`BES-NOM`), bt.`B/T-NumType`, be.`BES-NumID` FROM `besoins par type produits` bt, `besoins existants` be WHERE bt.`B/T-NumBesoin` = be.`BES-NumID` ORDER BY `BES-Tri`";
 			$pdo->exec("SET NAMES UTF8");
 			$res_bes = $pdo->query($query_bes);
 			$besoins = $res_bes->fetchALL(PDO::FETCH_ASSOC);
 
 			//Requete Occurences
-			$query_occ = "SELECT bc.`OCC-Nom`, bt.`B/T-NumBesoin`, bt.`B/T-NumType` FROM `besoins par type produits` bt, `besoins occurences` bc WHERE bt.`B/T-NumOcc` = bc.`OCC-NumID`;";
+			$query_occ = "SELECT bc.`OCC-Nom`, bt.`B/T-NumBesoin`, bt.`B/T-NumType` FROM `besoins par type produits` bt, `besoins occurences` bc WHERE bt.`B/T-NumOcc` = bc.`OCC-NumID` ORDER BY `OCC-Tri`;";
 			$pdo->exec("SET NAMES UTF8");
 			$res_occ = $pdo->query($query_occ);
 			$occurences = $res_occ->fetchALL(PDO::FETCH_ASSOC);
@@ -731,7 +759,6 @@ class Controller{
 	//Ajout d'un besoin d'un client
 	public function AddClientBesoinAction(){
 		extract($_POST);
-		print_r($_POST);
 		$tab = array_values($_POST);
 		$idBesoin = explode("/",$tab[0])[0];
 		//Si moins de 4 variables, il n'y a pas d'occurences => defaut = 1
@@ -740,12 +767,16 @@ class Controller{
 		} else {
 			$idOcc = $tab[1];
 		}
-		$query = "INSERT INTO `besoins par client` VALUES ($idClient,$idType,$idBesoin,$idOcc)";
+		if($idOcc == null){
+			$query = "INSERT INTO `besoins par client` VALUES ($idClient,$idType,$idBesoin,1)";
+		} else {
+			$query = "INSERT INTO `besoins par client` VALUES ($idClient,$idType,$idBesoin,$idOcc)";
+		}
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
-		echo $query;
 		$res = $pdo->exec($query);
-		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=besoin");
+
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=besoin&idType=".$idType."");
 	}
 
 	//Modification d'un besoin d'un client
@@ -756,7 +787,7 @@ class Controller{
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
-		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=besoin");
+		header("Location: index.php?action=ficheClient&idClient=".$idClient."&onglet=besoin&idType=".$idType."");
 	}
 
 	//Fiche produits d'un produit client
