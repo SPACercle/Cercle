@@ -1,20 +1,13 @@
 A FAIRE AVANT LA FIN
 ---------------------------------------------------------------------------------------------------------
 
-- Afficher Etat portefeuille ?
 - Taille des champs partout
-- Champ raison sociale pas bon -> Liste déroulante sur toutes les personnes morales
-- Fiche Produit : Anomalie produit tout en haut et mise en valeur en rouge + afficher que si anomalies existantes
-- Fiche produit : - Voir tableau
-			      - 1ère ligne : Affaire nouvelle ; apporteur ; réalisateur
-			      - 2ème ligne : toutes les dates ; envoyé ; médical (après date envoie CIE)
-			      - 3ème ligne : 2 primes
-			      - 4éme ligne : tout les reste
 
-Compagnies : Logos compagnies
+- Placeholder Date parout
 
-Base client : Smiley vérification sur contrats
+- Compagnies : Logos compagnies
 
+- Base client : Smiley vérification sur contrats
 
 
 A LA FIN
@@ -23,7 +16,6 @@ A LA FIN
 Documentation : Liste de tous les outils (mettre à jour à la fin et recupérer)
 
 Récuperer tous les fichiers
-
 
 
 BDD

@@ -283,7 +283,7 @@ function AfficheClientAjout($formes){
 }
 
 //Affichage de la fiche client
-function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques,$types_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli,$type_produits,$compagnies,$produits){
+function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$raisons,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques,$types_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli,$type_produits,$compagnies,$produits){
 	$code='
 	<h4 style="display:inline;">'.$client["CLT-Nom"].' '.$client["CLT-Prénom"].'</h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h5 style="display:inline;"><i>'.Auth::getInfo('ongletTitre').'</i></h5><br/><br/>
 	<form style="display:inline;" action="index.php?action=courrierClient" method="post"/><button type="submit" class="btn btn-primary disabled"><img src="img/pdf.png" class="pdf"/> Courrier</button></form>
@@ -360,7 +360,7 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	}
 	//Onglet Professionel
 	if($_GET['onglet'] == "pro"){
-		$code.=AfficheFicheClientProfessionnel($client,$categories,$professions,$status);
+		$code.=AfficheFicheClientProfessionnel($client,$categories,$professions,$status,$raisons);
 	}
 	//Onglet Revenus
 	if($_GET['onglet'] == "revenus"){
@@ -762,7 +762,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 }
 
 //Affichage de l'onglet Professionnel
-function AfficheFicheClientProfessionnel($client,$categories,$professions,$status){
+function AfficheFicheClientProfessionnel($client,$categories,$professions,$status,$raisons){
 	$code='<div class="tab-pane fade in';
 	if(isset($_GET['onglet']) && $_GET['onglet'] == "pro"){
 		$code.=' active';
@@ -778,7 +778,17 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
             </div>
             <div class="panel-body">
             	<label>Raison Sociale : </label>
-            	<input type="text" name="raisonPro" style="width:250px;" value="'.$client['CLT-RaisonSocialePro'].'"/><br/><br/>
+            	<select name="raisonPro"><option></option>
+            	';
+            	foreach ($raisons as $rais) {
+            		if($client['CLT-RaisonSocialePro'] == $rais['CLT-NumID'] || $client['CLT-RaisonSocialePro'] == $rais['CLT-Nom']){
+            			$code.='<option value='.$rais['CLT-NumID'].' selected>'.$rais['CLT-Nom'].'</option>';
+            		} else {
+            			$code.='<option value='.$rais['CLT-NumID'].'>'.$rais['CLT-Nom'].'</option>';
+            		}
+            	}
+            	$code.='</select>
+            	<br/><br/>
 				<label>Adresse : </label>
 				<input type="text" name="adressePro" style="width:400px;" value="'.$client['CLT-AdressePro'].'"/><br/><br/>
 				<label>Code Postal : </label>
@@ -1813,47 +1823,110 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 }
 
 function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situations,$codes,$maitre,$fractionnements,$types_prescripteur,$evenements,$type_evenements,$realisateurs,$apporteurs,$commissions,$anomalies,$type_anomalies){
-	$code='
-	<div class="col-lg-12">
-		<div class="panel panel-info">
+	$code="";
+	$code.='
+		<div id="anom1" class="col-lg-12" ';
+			if(sizeof($anomalies) == 0){
+				$code.="style='display:none;'";
+			}
+		$code.='>
+		<div class="panel panel-danger">
 			<div class="panel-heading">
-				<h4 class="panel-title"><b>Infos produit</b></h4>
+				<h4 class="panel-title"><b><img src="img/warning.png" width="18" height="18"/>&nbsp;&nbsp; Historique des anomalies éventuelles</b></h4>
 			</div>
-			<div class="panel-body">
-				<form action="index.php?action=modifClientProduit1" method="post">
-				<input type="hidden" name="idProduit" value="'.$_GET['idProduit'].'"/>
-				<b>Type Prescripteur : </b>
-				<select name="typePrescripteur">';
-				foreach ($types_prescripteur as $typ) {
-					if($typ['PRE-Nom'] == $produit['P/C-Type Prescripteur']){
-						$code.='<option value="'.$typ['PRE-Nom'].'" selected>'.$typ['PRE-Nom'].'</option>';
-					} else {
-						$code.='<option value="'.$typ['PRE-Nom'].'">'.$typ['PRE-Nom'].'</option>';
-					}
-				}
-				$code.='
-				</select>
-				<br/><br/>
-				<b>Concurrent : </b>';
-				if($produit['P/C-DossierConcurrent'] == 1){
-					$code.='<input name="concur" type="checkbox" checked/><br/>';
-				} else {
-					$code.='<input name="concur" type="checkbox"/><br/>';
-				}
-				$code.='
-				<br/><b>Souscripteur : </b><select name="souscripteur">';
-				foreach ($personnes as $pers) {
-					if($pers['CLT-NumID'] == $produit['P/C-NumSouscripteur']){
-						$code.='<option value="'.$pers['CLT-NumID'].'" selected>'.$pers['CLT-Nom'].' '.$pers['CLT-Prénom'].'</option>';
-					} else {
-						$code.='<option value="'.$pers['CLT-NumID'].'">'.$pers['CLT-Nom'].' '.$pers['CLT-Prénom'].'</option>';
-					}
-				}
-				$code.='
-				</select>
-				<br/><br/>
-				<h4 style="display:inline;">Produit : </h4>
-				<select name="produit">';
+				<div class="panel-body">
+					<div class="table-responsive">
+				      	<table class="table">
+				        <thead>
+				          <tr>
+				            <th>Type anomalie</th>
+				            <th>Date</th>
+				            <th>Cloture</th>
+				            <th>Date Cloture</th>
+				            <th>Commentaire</th>
+				            <th></th>
+				            <th></th>
+				          </tr>
+				        </thead>
+						<tbody>';
+						foreach ($anomalies as $ann) {
+							$code.='<tr style="color:red;"><td><form action="index.php?action=modifAnomalieProduit" method="post">
+									<input type="hidden" name="idProduit" value="'.$produit['P/C-NumID'].'"/>
+									<input type="hidden" name="idAnomalie" value="'.$ann['A/P-NumID'].'"/><select name="type">';
+							foreach ($type_anomalies as $typ) {
+								if($typ['HIA-NumID'] == $ann['A/P-NumAnomalie']){
+									$code.="<option value='".$typ['HIA-NumID']."' selected>".$typ['HIA-Nom']."</option>";
+								} else {
+									$code.="<option value='".$typ['HIA-NumID']."'>".$typ['HIA-Nom']."</option>";
+								}
+							}
+							$code.="</select></td>
+							<td><input type='text' name='date' style='width:70px;' placeholder='JJ/MM/YYYY'  value='";
+							if($ann['A/P-Date']!=null){$code.=date('d/m/Y',strtotime($ann['A/P-Date']));}
+							$code.="'/></td><td>";
+							if($ann['A/P-Cloture'] == 1){
+								$code.='<input name="cloture" type="checkbox" checked/>';
+							} else {
+								$code.='<input name="cloture" type="checkbox"/>';
+							}
+							$code.="</td><td><input type='text' style='width:70px;' name='dateCloture' placeholder='JJ/MM/YYYY'  value='";
+							if($ann['A/P-DateCloture']!=null){$code.=date('d/m/Y',strtotime($ann['A/P-DateCloture']));}
+							$code.="'/></td>
+							<td><textarea style='width:450px;height:60px'name='commentaire'/>".$ann['A/P-Commentaire']."</textarea></td>
+							<td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Modifer</button></form></td>
+							<td><form action='index.php?action=deleteAnomalieProduit' method='post'>
+									<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
+									<input type='hidden' name='idAnomalie' value='".$ann['A/P-NumID']."'/>
+									<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Supprimer</button>
+								</form>
+							</td></tr>
+							";
+						}
+						$code.='
+				
+						<tr>
+							<form action="index.php?action=addAnomalieProduit" method="post">
+							<input type="hidden" name="idProduit" value="'.$produit['P/C-NumID'].'"/>
+							<td><select name="type" required><option></option>';
+							foreach ($type_anomalies as $typ) {
+								$code.="<option value='".$typ['HIA-NumID']."'>".$typ['HIA-Nom']."</option>";
+							}
+							$code.="</select></td>
+							<td><input type='text' style='width:70px;' name='date' placeholder='JJ/MM/YYYY'/></td><td>
+							<input name='cloture' type='checkbox'/>
+							</td><td><input type='text' style='width:70px;' name='dateCloture' placeholder='JJ/MM/YYYY'/></td>
+							<td><textarea style='width:450px;height:60px;' name='commentaire'></textarea></td>
+							<td><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus'></i> Ajouter</button></td>
+							<td></td></tr>
+							</form>
+						</tr>
+						</table></tbody>
+					</div>
+				</div>
+		</div>
+	</div>";
+
+	if(sizeof($anomalies) == 0){
+		$code.="<div class='col-lg-12' id='anom2'>
+			<div class='panel panel-danger'>
+				<div class='panel-heading'>
+					<h4 class='panel-title'><b><img src='img/warning.png' width='18' height='18'/>&nbsp;&nbsp; Historique des anomalies éventuelles</b></h4>
+				</div>
+				<div class='panel-body'>
+				<i>Pas d'anomalies</i> <button type='button' id='anomAjout' class='btn btn-success btn-xs' style='float:right;'><i class='fa fa-plus'></i> Ajouter anomalie</button>
+				</div>
+			</div></div>
+			";
+	}
+
+	$code.='
+	<form action="index.php?action=modifClientProduit1" method="post">
+
+	<div class="col-lg-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+
+				<h5 class="panel-title" style="display:inline;color:black;"><b><select name="produit">';
 				foreach ($produits_liste as $prod_liste) {
 					if($prod_liste['PDT-NumID'] == $produit['P/C-NumProduit']){
 						$code.='<option value="'.$prod_liste['PDT-NumID'].'" selected>'.$prod_liste['PDT-Nom'].' - '.$prod_liste['CIE-Nom'].'</option>';
@@ -1862,21 +1935,18 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					}
 				}
 				$code.='
-				</select><br/><br/>
-				<h4 style="display:inline;">Compagnie : </h4>'.$produit['CIE-Nom'].'<br/><br/>
-				<input type="hidden" name="compagnie" value="'.$produit['CIE-NumID'].'" />
-				<b>Situation : </b>
-				<select name="situation">';
-				foreach ($situations as $sit) {
-					if($sit['TSC-NumID'] == $produit['P/C-SituationContrat']){
-						$code.='<option value="'.$sit['TSC-NumID'].'" selected>'.$sit['TSC-Nom'].'</option>';
-					} else {
-						$code.='<option value="'.$sit['TSC-NumID'].'" >'.$sit['TSC-Nom'].'</option>';
-					}
-				}
-				$code.='
-				</select><br/><br/>
-				<b>Code Courtier : </b>
+				</select></b></h5> &nbsp;&nbsp;&nbsp;
+
+				<i>N° Contrat : </i><b><input type="text" style="width:100px;color:black;" name="numContrat" value="'.$produit['P/C-NumContrat'].'"></input></b>
+
+			</div>
+			<div class="panel-body">
+				<div class="well well-sm">
+				<i>Option : </i><b><input type="text"  name="option" value="'.$produit['P/C-Option'].'"></input></b> &nbsp;&nbsp;&nbsp;
+
+				<i>Compagnie : </i><h4 style="display:inline;">'.$produit['CIE-Nom'].'</h4> &nbsp;&nbsp;&nbsp;
+
+				<i>Code Courtier : </i><b>
 				<select name="codeCourtier">';
 				foreach ($codes as $cod) {
 					if($cod['COD-Code'] == $produit['P/C-NumCodeSofraco']){
@@ -1886,21 +1956,21 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					}
 				}
 				$code.='
-				</select><br/><br/>
-				<b>N° Contrat : </b><input type="text" name="numContrat" value="'.$produit['P/C-NumContrat'].'"></input><br/><br/>
-				<b>Contrat Maître : </b>
-				<select name="maitre">';
-				foreach ($maitre as $mai) {
-					if($mai['P/C-NumContratMaitre'] == $produit['P/C-NumContratMaitre']){
-						$code.='<option value="'.$mai['P/C-NumContratMaitre'].'" selected>'.$mai['P/C-NumContratMaitre'].'</option>';
+				</select></b> <br/><br/>
+
+				<i>Situation : </i><b>
+				<select name="situation">';
+				foreach ($situations as $sit) {
+					if($sit['TSC-NumID'] == $produit['P/C-SituationContrat']){
+						$code.='<option value="'.$sit['TSC-NumID'].'" selected>'.$sit['TSC-Nom'].'</option>';
 					} else {
-						$code.='<option value="'.$mai['P/C-NumContratMaitre'].'">'.$mai['P/C-NumContratMaitre'].'</option>';
+						$code.='<option value="'.$sit['TSC-NumID'].'" >'.$sit['TSC-Nom'].'</option>';
 					}
 				}
 				$code.='
-				</select><br/><br/>
-				<b>Option : </b><input type="text"  name="option" value="'.$produit['P/C-Option'].'"></input><br/><br/>
-				<b>Fractionnement : </b>
+				</select></b> &nbsp;&nbsp;&nbsp;
+
+				<i>Fractionnement : </i><b>
 				<select name="frac">';
 				foreach ($fractionnements as $frac) {
 					if($frac['FRA-NumID'] == $produit['P/C-Fractionnement']){
@@ -1910,8 +1980,56 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					}
 				}
 				$code.='
-				</select><br/><br/>
-				<b>Age Terme : </b><input type="text" name="ageTerme" value="'.$produit['P/C-AgeTermeRetraite'].'"></input><br/><br/>
+				</select></b>
+
+				<input type="hidden" name="idProduit" value="'.$_GET['idProduit'].'"/>
+				<i>Type Prescripteur : </i><b>
+				<select name="typePrescripteur">';
+				foreach ($types_prescripteur as $typ) {
+					if($typ['PRE-Nom'] == $produit['P/C-Type Prescripteur']){
+						$code.='<option value="'.$typ['PRE-Nom'].'" selected>'.$typ['PRE-Nom'].'</option>';
+					} else {
+						$code.='<option value="'.$typ['PRE-Nom'].'">'.$typ['PRE-Nom'].'</option>';
+					}
+				}
+				$code.='
+				</select></b>
+
+				<br/><br/><i>Concurrent : </i>';
+				if($produit['P/C-DossierConcurrent'] == 1){
+					$code.='<input name="concur" type="checkbox" checked/>';
+				} else {
+					$code.='<input name="concur" type="checkbox"/>';
+				}
+				$code.='&nbsp;&nbsp;&nbsp;
+				
+				<i>Souscripteur : </i><b><select name="souscripteur">';
+				foreach ($personnes as $pers) {
+					if($pers['CLT-NumID'] == $produit['P/C-NumSouscripteur']){
+						$code.='<option value="'.$pers['CLT-NumID'].'" selected>'.$pers['CLT-Nom'].' '.$pers['CLT-Prénom'].'</option>';
+					} else {
+						$code.='<option value="'.$pers['CLT-NumID'].'">'.$pers['CLT-Nom'].' '.$pers['CLT-Prénom'].'</option>';
+					}
+				}
+				$code.='
+				</select></b>&nbsp;&nbsp;&nbsp;
+				
+				<input type="hidden" name="compagnie" value="'.$produit['CIE-NumID'].'" />
+				
+				<i>Contrat Maître : </i><b>
+				<select name="maitre">';
+				foreach ($maitre as $mai) {
+					if($mai['P/C-NumContratMaitre'] == $produit['P/C-NumContratMaitre']){
+						$code.='<option value="'.$mai['P/C-NumContratMaitre'].'" selected>'.$mai['P/C-NumContratMaitre'].'</option>';
+					} else {
+						$code.='<option value="'.$mai['P/C-NumContratMaitre'].'">'.$mai['P/C-NumContratMaitre'].'</option>';
+					}
+				}
+				$code.='
+				</select></b>&nbsp;&nbsp;&nbsp;
+				
+				<i>Age Terme : </i><b><input type="text" style="width:20px;" name="ageTerme" value="'.$produit['P/C-AgeTermeRetraite'].'"></input></b>
+				</div>
 
 				<div class="well well-sm">';
 					if($produit['P/C-AVie'] == 1){
@@ -2016,23 +2134,56 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 				<h4 class="panel-title"><b>Différentes phases de mise en place des mes dossiers</b></h4>
 			</div>
 			<div class="panel-body" style="font-size:11px;">';
+				$n = array("One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten");
+				$i = 0;
 				foreach ($evenements as $ev) {
-					$code.="<div style='background-color:#FDE9E0;margin:5px;padding:5px;border:1px solid #685E43;-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;'>";
-					$code.="<form action='index.php?action=modifEvProduit' method='post' style='display:inline;'><select name='typeEv'>";
-					foreach($type_evenements as $typ){
-						if($typ['EVE-NumID'] == $ev['E/P-NumEvenement']){
-							$code.="<option value='".$typ['EVE-NumID']."' selected>".$typ['EVE-Nom']."</option>";
-						} else {
-							$code.="<option value='".$typ['EVE-NumID']."'>".$typ['EVE-Nom']."</option>";
-						}
-					}
-					$code.="</select>";
+					$code.='
+					<div class="panel-group" id="accordion">
+					  <div class="panel panel-default">
+					    <div class="panel-heading">
+					      <h4 class="panel-title">';
+					          	//Nom
+								$code.="<form action='index.php?action=modifEvProduit' method='post' style='display:inline;'><select name='typeEv'><b>";
+								foreach($type_evenements as $typ){
+									if($typ['EVE-NumID'] == $ev['E/P-NumEvenement']){
+										$code.="<option value='".$typ['EVE-NumID']."' selected>".$typ['EVE-Nom']."</option>";
+									} else {
+										$code.="<option value='".$typ['EVE-NumID']."'>".$typ['EVE-Nom']."</option>";
+									}
+								}
+								$code.="</select>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date signature <input style='width:80px;' type='text' name='dateSignature' value='";
-							if($ev['E/P-DateSignature']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateSignature']));}
-							$code.="'/>";
+								//Date Signature
+								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Date signature : </i><b><input style='width:95px;' type='text' name='dateSignature' placeholder='JJ/MM/YYYY' value='";
+										if($ev['E/P-DateSignature']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateSignature']));}
+										$code.="'/></b>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apporteur <select name='apporteur'><option></option>";
+								//Date Effet
+								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Date Effet : </i><b><input style='width:95px;' type='text' name='dateEffet' placeholder='JJ/MM/YYYY' value='";
+										if($ev['E/P-DateEffet']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateEffet']));}
+										$code.="'/></b>";
+
+								//Scoring
+								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Scoring </i>";
+								if($ev['E/P-Scoring'] == 1){
+									$code.='<input name="scoring" type="checkbox" checked/>';
+								} else {
+									$code.='<input name="scoring" type="checkbox"/>';
+								}
+								$code.='
+					        	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					        	<button type="submit" class="btn btn-warning btn-xs"><i class="fa fa-save"></i> Enregistrer</button>
+					        	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					        	<a data-toggle="collapse" data-parent="#accordion" href="#collapse'.$n[$i].'"><i class="fa fa-chevron-circle-down"></i> Afficher</a>
+					      </h4>';
+							$code.='
+						</div>
+					    <div id="collapse'.$n[$i].'" class="panel-collapse collapse">
+					      <div class="panel-body">
+					      ';
+					
+					$i++;
+					$code.="<b>Apporteur : </b><select name='apporteur'><option></option>";
 					foreach($apporteurs as $app){
 						if($app['APP-NumID'] == $ev['E/P-Apporteur']){
 							$code.="<option value='".$app['APP-NumID']."' selected>".$app['APP-Nom']." ".$app['APP-Prénom']."</option>";
@@ -2042,7 +2193,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					}
 					$code.="</select>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Realisateur <select name='realisateur'><option></option>";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Realisateur : </b> <select name='realisateur'><option></option>";
 					foreach($realisateurs as $res){
 						if($res['CON-NumID'] == $ev['E/P-Réalisateur']){
 							$code.="<option value='".$res['CON-NumID']."' selected>".$res['CON-Nom']." ".$res['CON-Prénom']."</option>";
@@ -2052,69 +2203,58 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					}
 					$code.="</select>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Envoyé ";
+					$code.="<br/><br/><b>Envoyé </b>";
 					if($ev['E/P-DossierEnvoyéClt'] == 1){
 						$code.='<input name="env" type="checkbox" checked/>';
 					} else {
 						$code.='<input name="env" type="checkbox"/>';
 					}
 
-					$code.="<br/>Prime Pério <input style='width:80px;' type='text' name='primePério' value='".$ev['E/P-MontantPP']."'/>";
-
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prime Unique <input style='width:80px;' type='text' name='primeUnique' value='".$ev['E/P-MontantPU']."'/>";
-
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Effet <input style='width:80px;' type='text' name='dateEffet' value='";
-							if($ev['E/P-DateEffet']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateEffet']));}
-							$code.="'/>";
-
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date Envoi Cie <input style='width:80px;' type='text' name='dateEnvoi' value='";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Date Envoi Cie : </b><input style='width:80px;' type='text' name='dateEnvoi' placeholder='JJ/MM/YYYY' value='";
 							if($ev['E/P-DateEnvoi']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateEnvoi']));}
 							$code.="'/>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Médical ? ";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Médical ?</b> ";
 					if($ev['E/P-AcceptMedicale'] == 1){
 						$code.='<input name="medicale" type="checkbox" checked/>';
 					} else {
 						$code.='<input name="medicale" type="checkbox"/>';
 					}
 
-					$code.="<br/>Date Retour <input style='width:80px;' type='text' name='dateRetour' value='";
+					$code.="<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Retour : </b> <input style='width:80px;' type='text' name='dateRetour' placeholder='JJ/MM/YYYY' value='";
 							if($ev['E/P-DateRetour']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateRetour']));}
 							$code.="'/>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Remise<input style='width:80px;' type='text' name='dateRemise' value='";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Date Remise : </b><input style='width:80px;' type='text' name='dateRemise' placeholder='JJ/MM/YYYY' value='";
 							if($ev['E/P-DateRemise']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateRemise']));}
 							$code.="'/>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Formalisé ";
+					$code.="<br/><br/><b>Prime Pério : </b><input style='width:80px;' type='text' name='primePério' value='".$ev['E/P-MontantPP']."'/>";
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Prime Unique : </b><input style='width:80px;' type='text' name='primeUnique' value='".$ev['E/P-MontantPU']."'/>";
+
+					$code.="<br/><br/><b>Formalisé </b>";
 					if($ev['E/P-ObligationConseils'] == 1){
 						$code.='<input name="formalise" type="checkbox" checked/>';
 					} else {
 						$code.='<input name="formalise" type="checkbox"/>';
 					}
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scoring ";
-					if($ev['E/P-Scoring'] == 1){
-						$code.='<input name="scoring" type="checkbox" checked/>';
-					} else {
-						$code.='<input name="scoring" type="checkbox"/>';
-					}
-
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tracfin ";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Tracfin </b>";
 					if($ev['E/P-Tracfin'] == 1){
 						$code.='<input name="tracfin" type="checkbox" checked/>';
 					} else {
 						$code.='<input name="tracfin" type="checkbox"/>';
 					}
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Complet ";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Complet </b>";
 					if($ev['E/P-DossierComplet'] == 1){
 						$code.='<input name="complet" type="checkbox" checked/>';
 					} else {
 						$code.='<input name="complet" type="checkbox"/>';
 					}
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Classé Jamais Formalisé ";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Classé Jamais Formalisé </b>";
 					if($ev['E/P-ClasséJamaisFormalisé'] == 1){
 						$code.='<input name="pdc" type="checkbox" checked/>';
 					} else {
@@ -2144,15 +2284,17 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					<br/><br/>
 						<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
 						<input type='hidden' name='idEv' value='".$ev['E/P-NumID']."'/>
-						<button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Modifer</button>
 					</form>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<form action='index.php?action=deleteEvProduit' method='post' style='display:inline;'>
 						<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
 						<input type='hidden' name='idEv' value='".$ev['E/P-NumID']."'/>
+					    <button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button>
+					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Supprimer</button>
 					</form>
-					</div>";
+					</div></div></div></div>
+					";
 				} 
 
 				$code.="
@@ -2164,88 +2306,11 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 				";
 
 				$code.='
-			</div>
-		</div>
-	</div>
 
-	<div class="col-lg-12">
-		<div class="panel panel-danger">
-			<div class="panel-heading">
-				<h4 class="panel-title"><b>Historique des anomalies éventuelles</b></h4>
-			</div>
-				<div class="panel-body">
-					<div class="table-responsive">
-				      	<table class="table">
-				        <thead>
-				          <tr>
-				            <th>Type anomalie</th>
-				            <th>Date</th>
-				            <th>Cloture</th>
-				            <th>Date Cloture</th>
-				            <th>Commentaire</th>
-				            <th></th>
-				            <th></th>
-				          </tr>
-				        </thead>
-						<tbody>';
-						foreach ($anomalies as $ann) {
-							$code.='<tr><td><form action="index.php?action=modifAnomalieProduit" method="post">
-									<input type="hidden" name="idProduit" value="'.$produit['P/C-NumID'].'"/>
-									<input type="hidden" name="idAnomalie" value="'.$ann['A/P-NumID'].'"/><select name="type">';
-							foreach ($type_anomalies as $typ) {
-								if($typ['HIA-NumID'] == $ann['A/P-NumAnomalie']){
-									$code.="<option value='".$typ['HIA-NumID']."' selected>".$typ['HIA-Nom']."</option>";
-								} else {
-									$code.="<option value='".$typ['HIA-NumID']."'>".$typ['HIA-Nom']."</option>";
-								}
-							}
-							$code.="</select></td>
-							<td><input type='text' name='date' style='width:70px;' value='";
-							if($ann['A/P-Date']!=null){$code.=date('d/m/Y',strtotime($ann['A/P-Date']));}
-							$code.="'/></td><td>";
-							if($ann['A/P-Cloture'] == 1){
-								$code.='<input name="cloture" type="checkbox" checked/>';
-							} else {
-								$code.='<input name="cloture" type="checkbox"/>';
-							}
-							$code.="</td><td><input type='text' style='width:70px;' name='dateCloture' value='";
-							if($ann['A/P-DateCloture']!=null){$code.=date('d/m/Y',strtotime($ann['A/P-DateCloture']));}
-							$code.="'/></td>
-							<td><input style='width:300px;' type='text' name='commentaire' value='".$ann['A/P-Commentaire']."'/></td>
-							<td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Modifer</button></form></td>
-							<td><form action='index.php?action=deleteAnomalieProduit' method='post'>
-									<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
-									<input type='hidden' name='idAnomalie' value='".$ann['A/P-NumID']."'/>
-									<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Supprimer</button>
-								</form>
-							</td></tr>
-							";
-						}
-						$code.='
-				
-						<tr>
-							<form action="index.php?action=addAnomalieProduit" method="post">
-							<input type="hidden" name="idProduit" value="'.$produit['P/C-NumID'].'"/>
-							<td><select name="type" required><option></option>';
-							foreach ($type_anomalies as $typ) {
-								$code.="<option value='".$typ['HIA-NumID']."'>".$typ['HIA-Nom']."</option>";
-							}
-							$code.="</select></td>
-							<td><input type='text' style='width:70px;' name='date' /></td><td>
-							<input name='cloture' type='checkbox'/>
-							</td><td><input type='text' style='width:70px;' name='dateCloture' /></td>
-							<td><input style='width:300px;' type='text' name='commentaire'/></td>
-							<td><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus'></i> Ajouter</button></td>
-							<td></td></tr>
-							</form>
-						</tr>
-						</table></tbody>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>
-	";
+	';
 	$menu = '<li><a href="index.php?action=ficheClient&idClient='.$produit['P/C-NumClient'].'&onglet=solution"><i class="fa fa-backward fa-lg"></i><b> Retour Fiche Client</b></a></li>';
 	$_SESSION['menu'] = $menu; 
 	return($code);

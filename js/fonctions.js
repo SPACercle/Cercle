@@ -511,4 +511,13 @@ $(document).ready(function() {
 
 	//FIN PARTENAIRES
 
+	//DEBUT FICHE PRODUIT
+
+	$('#anomAjout').click(function(){
+		$('#anom2').hide();
+		$('#anom1').show();
+	});
+
+	//FIN FICHE PRODUIT
+
 });

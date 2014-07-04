@@ -47,7 +47,6 @@ if(isset($_POST) && !empty($_POST['identifiant']) && !empty($_POST['mdp'])){
             'portSelect' => null,
             'nomPortSelect' => null,
             'portsRestreint' => array(),
-            'dejaReload' => false
             );
         
         header("Location:index.php");

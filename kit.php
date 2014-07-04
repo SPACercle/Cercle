@@ -114,6 +114,14 @@ if(!(Auth::isLogged())){
           <li <?php if(isset($_GET['action']) && preg_match("#partenaire#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=partenaire&onglet=accord"><b><img src="img/partenaire.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Partenaires</b></a></li>
           <li <?php if(isset($_GET['action']) && preg_match("#compagnie#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=compagnie"><b><img src="img/produit.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Compagnies</b></a></li>
           <li <?php if(isset($_GET['action']) && preg_match("#procedure#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=procedure"><b><img src="img/procedure.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Procédures</b></a></li>
+          <li style="font-size:11px;margin-left:5px;margin-top:4px;"><a>
+          <?php 
+            if(Auth::getInfo('modeAgence') == 0){
+              echo "<b><i class='fa fa-folder-open'></i> Portefeuille :</b> ".str_replace('-',' ',Auth::getInfo('nomPortSelect')); 
+            } else {
+              echo "<b><i class='fa fa-folder-open'></i> Mode Agence</b>"; 
+            }
+          ?></a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right navbar-user">

@@ -349,6 +349,16 @@ class Controller{
 			$res_cat = $pdo->query($query_cat);
 			$categories = $res_cat->fetchALL(PDO::FETCH_ASSOC);
 
+			//Requete Raison Sociale
+			$query_rais = "
+			SELECT `Clients et Prospects`.`CLT-NumID`, `Clients et Prospects`.`CLT-Nom`, `Clients et Prospects`.`CLT-AdressePro` AS Adresse, `Clients et Prospects`.`CLT-CodePostalPro` AS CP, `Clients et Prospects`.`CLT-VillePro` AS Ville, `Clients et Prospects`.`CLT-TelPro` AS Tel, `Clients et Prospects`.`CLT-FaxPro` AS Fax, `Statut Professionnel`.`SPR-PersonneMorale`
+			FROM `Statut Professionnel` INNER JOIN `Clients et Prospects` ON `Statut Professionnel`.`SPR-NumID` = `Clients et Prospects`.`CLT-Statut`
+			WHERE (((`Statut Professionnel`.`SPR-PersonneMorale`)=True))
+			ORDER BY `Clients et Prospects`.`CLT-Nom`;";
+			$pdo->exec("SET NAMES UTF8");
+			$res_rais = $pdo->query($query_rais);
+			$raisons = $res_rais->fetchALL(PDO::FETCH_ASSOC);
+
 			//Requete Professions
 			$query_pro = "SELECT * FROM `professions`";
 			$pdo->exec("SET NAMES UTF8");
@@ -445,7 +455,7 @@ class Controller{
 			$produits = $res_prod->fetchALL(PDO::FETCH_ASSOC);
 
 			Auth::setInfo('page',$client[0]['CLT-Nom']);
-			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques,$type_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli,$type_produits,$compagnies,$produits));
+			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$raisons,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques,$type_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli,$type_produits,$compagnies,$produits));
 		} else {
 			AffichePage(AffichePageMessage("Erreur !"));
 		}
@@ -874,7 +884,7 @@ class Controller{
 		$types_prescripteur = $res_typ_pre->fetchALL(PDO::FETCH_ASSOC);
 
 		//Requete Evenement par produits
-		$query_ev = "SELECT * FROM `evenements par produits` WHERE `E/P-NumProduitClient` = ".$_GET['idProduit'].";";
+		$query_ev = "SELECT * FROM `evenements par produits` WHERE `E/P-NumProduitClient` = ".$_GET['idProduit']." ORDER BY `E/P-DateSignature`;";
 		$pdo->exec("SET NAMES UTF8");
 		$res_ev = $pdo->query($query_ev);
 		$evenements = $res_ev->fetchALL(PDO::FETCH_ASSOC);
