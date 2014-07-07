@@ -103,7 +103,7 @@ if(!(Auth::isLogged())){
           <?php 
             if(isset($_SESSION['menu'])){ echo $_SESSION['menu']; unset($_SESSION['menu']); };
             if(isset($_GET['action']) && $_GET['action'] == "ficheCompagnie"){
-              echo '<center><img src="img/logos_comp/'.$_GET['idComp'].'.png" width="150px" height:"150px" style="background-color:white;border:2px solid black;margin-top:20px;"/></center>';
+              echo '<center><img src="img/logos_comp/'.$_GET['idComp'].'.jpg" width="150px" height:"150px" style="background-color:white;border:2px solid black;margin-top:20px;padding:5px;"/></center>';
            }
           ?>
         </ul>
@@ -183,6 +183,7 @@ if(!(Auth::isLogged())){
   <!-- Autres Plugins -->
   <script src="js/tablesorter/jquery.tablesorter.js"></script>
   <script src="js/tablesorter/tables.js"></script>
+  <script src="js/jquery.maskedinput.min.js" type="text/javascript"></script>
 
   <!-- Perso -->
   <script src="js/fonctions.js"></script>

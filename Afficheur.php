@@ -127,15 +127,34 @@ function AfficheClient($clients,$types,$filtre){
 	</tr>
 	</thead>
 	<tbody>";
-	$code.='
-	<script>
-	setTimeout("tri()",1000);
-	setTimeout("tri()",3000);
-	setTimeout("tri()",7000); 
-	function tri() {
-    	$("#smileySort").click().click();
+	//Tri auto sur smiley (on doit attendre plus ou moins longtemps le chargement de la page selon le nombre de clients)
+	if(sizeof($clients) < 500){
+		$code.='
+		<script>
+			setTimeout("tri()",1000);
+			function tri() {
+	    		$("#smileySort").click().click();
+			}
+		</script>';
+	} else {
+		if(sizeof($clients) < 1800){
+			$code.='
+			<script>
+			setTimeout("tri()",3000);
+			function tri() {
+	    		$("#smileySort").click().click();
+			}
+			</script>';
+		} else {
+			$code.='
+			<script>
+			setTimeout("tri()",7000);
+			function tri() {
+	    		$("#smileySort").click().click();
+			}
+			</script>';
+		}
 	}
-	</script>';
 	foreach($clients as $cli){
 		$ok = false;
 		foreach(Auth::getInfo('port') as $port){
@@ -614,9 +633,9 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 		             </div>
 		            <div class="panel-body">
 					<label>Téléphone Portable : </label>
-					<input type="text" name="telPort" style="width:110px;" value="'.$client['CLT-TelPort'].'"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="text" name="telPort" style="width:110px;" class="phone" value="'.$client['CLT-TelPort'].'"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<label>Téléphone Domicile : </label>
-					<input type="text" name="telDom" style="width:110px;" value="'.$client['CLT-TelDom'].'"/><br/><br/>
+					<input type="text" name="telDom" style="width:110px;" class="phone" value="'.$client['CLT-TelDom'].'"/><br/><br/>
 					<label>Adresse Mail Perso : </label>
 					<input type="text" name="mailPerso" style="width:250px;" value="'.$client['CLT-MailPerso'].'"/><br/><br/>
 					<label>Adresse Skype : </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -649,7 +668,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 		             </div>
 		            <div class="panel-body">
 					<label>Date Naissance : </label>
-					<input type="text" name="dateNaissance" style="width:110px;" value="';
+					<input type="text" name="dateNaissance" style="width:110px;" class="date" value="';
 					if($client['CLT-DateNaissance']!=null){
 						$code.=date('d/m/Y',strtotime($client['CLT-DateNaissance']));
 					} else {
@@ -671,9 +690,9 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 					}
 					$code.='</select><br/><br/>
 					<label>Nb Enfants : </label>
-					<input type="text" name="nbEnfants" style="width:110px;" value="'.$client['CLT-NbEnfants'].'"/><br/><br/>
+					<input type="text" name="nbEnfants" style="width:25px;" value="'.$client['CLT-NbEnfants'].'"/><br/><br/>
 					<label>Nationalité : </label>
-					<input type="text" name="nationalite" style="width:110px;" value="'.$client['CLT-Nationalité'].'"/><br/><br/>
+					<input type="text" name="nationalite" style="width:180px;" value="'.$client['CLT-Nationalité'].'"/><br/><br/>
 					<button type="button" onClick="window.open(\'elements.php?idClient='.$client['CLT-NumID'].'\',\'Eléments Préparatoires\',\'toolbar=no,status=no,width=800,height=800,scrollbars=yes,location=no,resize=yes,menubar=non\')" class="btn btn-default"><i class="fa fa-check-square-o"></i> Eléments préparatoires</button>&nbsp;&nbsp;&nbsp;&nbsp;<br/><br/>
 					<a type="button" onclick="date()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Mandat Administratif</a>&nbsp;
 					<script>
@@ -796,15 +815,15 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 				<label>Ville : </label>
 				<input type="text" name="villePro" style="width:200px;" value="'.$client['CLT-VillePro'].'"/><br/><br/>
 				<label>Tel Pro : </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="text" name="telPro" style="width:100px;" value="'.$client['CLT-TelPro'].'"/><br/><br/>
+				<input type="text" name="telPro" style="width:100px;" class="phone" value="'.$client['CLT-TelPro'].'"/><br/><br/>
 				<label>Fax Pro : </label>
-				<input type="text" name="faxPro" style="width:100px;" value="'.$client['CLT-FaxPro'].'"/><br/><br/>
+				<input type="text" name="faxPro" style="width:100px;" class="phone" value="'.$client['CLT-FaxPro'].'"/><br/><br/>
 				<label>Adresse Mail Pro : </label>
 				<input type="text" name="mailPro" style="width:300px;" value="'.$client['CLT-MailPro'].'"/><br/><br/>
 				<label>Service : </label>
 				<input type="text" name="servicePro" style="width:150px;" value="'.$client['CLT-ServicePro'].'"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<label>TelPort : </label>
-				<input type="text" name="telPortPro" style="width:150px;" value="'.$client['CLT-TelPortPro'].'"/><br/><br/>
+				<input type="text" name="telPortPro" style="width:150px;" class="phone" value="'.$client['CLT-TelPortPro'].'"/><br/><br/>
 			</div>
 		</div>
 	</div>
@@ -1020,14 +1039,14 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 				}
 			}
 			$code.='</select></td>
-			<td><input type="text" name="date" style="width:100px;" value="';
+			<td><input type="text" name="date" class="date" style="width:100px;" value="';
 			if($historique['H/C-Date']!=null){
 				$code.=date('d/m/Y',strtotime($historique['H/C-Date']));
 			} else {
 				$code.="";
 			}
 			$code.='"/></td>
-			<td><input type="text" name="echMax" style="width:100px;" value="';
+			<td><input type="text" name="echMax" style="width:100px;" class="date" value="';
 			if($historique['H/C-DateMax']!=null){
 				$code.=date('d/m/Y',strtotime($historique['H/C-DateMax']));
 			} else {
@@ -1054,7 +1073,7 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 				$code.='<input type="checkbox" name="cloture">'; 
 			}
 			$code.='</td>
-			<td><input type="text" name="dateCloture" style="width:100px;" value="';
+			<td><input type="text" name="dateCloture" class="date" style="width:100px;" value="';
 			if($historique['H/C-DateCloture']!=null){
 				$code.=date('d/m/Y',strtotime($historique['H/C-DateCloture']));
 			} else {
@@ -1080,13 +1099,13 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 				$code.="<option value='".$type['HIS-NumID']."'>".$type['HIS-Nom']."</option>";
 			}
 			$code.='</select></td>
-			<td><input type="text" name="date" style="width:100px;"/></td>
-			<td><input type="text" name="echMax" style="width:100px;"/></td>
+			<td><input type="text" name="date" class="date" style="width:100px;"/></td>
+			<td><input type="text" name="echMax" class="date" style="width:100px;"/></td>
 			<td style="min-width: 100px;"><input type="checkbox" name="tutoriel"><span style="color:#FF8000"> Tutoriel</span><br/>
 			<input type="checkbox" name="elements"><span style="color:#FF8000"> Eléments</span></td> 
 			<td><textarea name="commentaire" rows="2" cols="75"></textarea></td>
 			<td><input type="checkbox" name="cloture"></td>
-			<td><input type="text" name="dateCloture" style="width:100px;"/></td>
+			<td><input type="text" class="date" name="dateCloture" style="width:100px;"/></td>
 			<td><button type="submit" class="btn btn-success btn-xs"><i class="fa fa-plus fa-lg"></i> Ajouter</button></td>
 			<td></td>
 		</form>
@@ -1861,7 +1880,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 								}
 							}
 							$code.="</select></td>
-							<td><input type='text' name='date' style='width:70px;' placeholder='JJ/MM/YYYY'  value='";
+							<td><input type='text' name='date' style='width:70px;' class='date'  value='";
 							if($ann['A/P-Date']!=null){$code.=date('d/m/Y',strtotime($ann['A/P-Date']));}
 							$code.="'/></td><td>";
 							if($ann['A/P-Cloture'] == 1){
@@ -1869,7 +1888,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 							} else {
 								$code.='<input name="cloture" type="checkbox"/>';
 							}
-							$code.="</td><td><input type='text' style='width:70px;' name='dateCloture' placeholder='JJ/MM/YYYY'  value='";
+							$code.="</td><td><input type='text' style='width:70px;' class='date' name='dateCloture'  value='";
 							if($ann['A/P-DateCloture']!=null){$code.=date('d/m/Y',strtotime($ann['A/P-DateCloture']));}
 							$code.="'/></td>
 							<td><textarea style='width:450px;height:60px'name='commentaire'/>".$ann['A/P-Commentaire']."</textarea></td>
@@ -1892,9 +1911,9 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 								$code.="<option value='".$typ['HIA-NumID']."'>".$typ['HIA-Nom']."</option>";
 							}
 							$code.="</select></td>
-							<td><input type='text' style='width:70px;' name='date' placeholder='JJ/MM/YYYY'/></td><td>
+							<td><input type='text' style='width:70px;' class='date' name='date'/></td><td>
 							<input name='cloture' type='checkbox'/>
-							</td><td><input type='text' style='width:70px;' name='dateCloture' placeholder='JJ/MM/YYYY'/></td>
+							</td><td><input type='text' style='width:70px;' class='date' name='dateCloture'/></td>
 							<td><textarea style='width:450px;height:60px;' name='commentaire'></textarea></td>
 							<td><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus'></i> Ajouter</button></td>
 							<td></td></tr>
@@ -2134,7 +2153,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 				<h4 class="panel-title"><b>Différentes phases de mise en place des mes dossiers</b></h4>
 			</div>
 			<div class="panel-body" style="font-size:11px;">';
-				$n = array("One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten");
+				$n = array("One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen");
 				$i = 0;
 				foreach ($evenements as $ev) {
 					$code.='
@@ -2154,12 +2173,12 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 								$code.="</select>";
 
 								//Date Signature
-								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Date signature : </i><b><input style='width:95px;' type='text' name='dateSignature' placeholder='JJ/MM/YYYY' value='";
+								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Date signature : </i><b><input style='width:95px;' type='text' name='dateSignature' class='date' value='";
 										if($ev['E/P-DateSignature']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateSignature']));}
 										$code.="'/></b>";
 
 								//Date Effet
-								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Date Effet : </i><b><input style='width:95px;' type='text' name='dateEffet' placeholder='JJ/MM/YYYY' value='";
+								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Date Effet : </i><b><input style='width:95px;' type='text' name='dateEffet' class='date' value='";
 										if($ev['E/P-DateEffet']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateEffet']));}
 										$code.="'/></b>";
 
@@ -2210,7 +2229,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 						$code.='<input name="env" type="checkbox"/>';
 					}
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Date Envoi Cie : </b><input style='width:80px;' type='text' name='dateEnvoi' placeholder='JJ/MM/YYYY' value='";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Date Envoi Cie : </b><input style='width:80px;' type='text' name='dateEnvoi' class='date' value='";
 							if($ev['E/P-DateEnvoi']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateEnvoi']));}
 							$code.="'/>";
 
@@ -2221,11 +2240,11 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 						$code.='<input name="medicale" type="checkbox"/>';
 					}
 
-					$code.="<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Retour : </b> <input style='width:80px;' type='text' name='dateRetour' placeholder='JJ/MM/YYYY' value='";
+					$code.="<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Retour : </b> <input style='width:80px;' type='text' name='dateRetour' class='date' value='";
 							if($ev['E/P-DateRetour']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateRetour']));}
 							$code.="'/>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Date Remise : </b><input style='width:80px;' type='text' name='dateRemise' placeholder='JJ/MM/YYYY' value='";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Date Remise : </b><input style='width:80px;' type='text' name='dateRemise' class='date' value='";
 							if($ev['E/P-DateRemise']!=null){$code.=date('d/m/Y',strtotime($ev['E/P-DateRemise']));}
 							$code.="'/>";
 
@@ -2470,8 +2489,8 @@ function AfficheCompagnie($compagnies){
 	<th>Adresse <i class='fa fa-sort'></i></th>
 	<th>CP <i class='fa fa-sort'></i></th>
 	<th>Ville <i class='fa fa-sort'></i></th>
-	<th>Accueil Tel</th>
-	<th>Fax</th>
+	<th style='min-width:100px;'>Accueil Tel</th>
+	<th style='min-width:100px;'>Fax</th>
 	<th>Site Internet</th>
 	<th>Tarif Internet</th>
 	</tr>
@@ -2624,6 +2643,7 @@ function AfficheFicheCompagnieGeneral($compagnie){
 function AfficheFicheCompagnieContact($contacts,$idComp){
 	$code="
 	<button class='btn btn-success' id='ajoutContact' style='float:right;'><i class='fa fa-plus fa-lg'></i> Ajouter un Contact</button>
+	<input type='hidden' id='enAjout' value='non'/>
 	<span style='font-size:20px;'><b><u>Annuaire National</u></b></span><br/><br/>
 	<a type='button' onclick='impr()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Imprimer</a>
 	<script>
@@ -2658,20 +2678,23 @@ function AfficheFicheCompagnieContact($contacts,$idComp){
 	<tbody>";
 	foreach($contacts as $cont){
 		$code.='<tr><form action="index.php?action=modifCompagnieContact" method="post">
-			    <input type="hidden" name="idComp" value="'.$cont['C/C-Num'].'"/> 
-			    <input type="hidden" name="idNom" value="'.$cont['C/C-Nom'].'"/>
-			    <input type="hidden" name="idPrenom" value="'.$cont['C/C-Prénom'].'"/>
+	    <input type="hidden" name="idComp" value="'.$cont['C/C-Num'].'"/> 
+	    <input type="hidden" name="idNom" value="'.$cont['C/C-Nom'].'"/>
+	    <input type="hidden" name="idPrenom" value="'.$cont['C/C-Prénom'].'"/>
 		';
 		$code.="
 			<td><input style='width:200px;' type='text' name='nom' value='".$cont['C/C-Nom']."' required/></td>
-			<td><input type='text' name='prenom' value='".$cont['C/C-Prénom']."' required/></td>
-			<td><input style='width:100px;' type='text' name='tel' value='".$cont['C/C-TelBureau']."'/></td>
+			<td><input type='text' name='prenom' value='".$cont['C/C-Prénom']."'/></td>
+			<td><input style='width:100px;' type='text' name='tel' class='phone' class='phone' value='".$cont['C/C-TelBureau']."'/></td>
 			<td><input style='width:210px;' type='text' name='mail' value='".$cont['C/C-Mail']."'/></td>
-			<td><input style='width:100px;' type='text' name='port' value='".$cont['C/C-TelPortable']."'/></td>
-			<td><input style='width:100px;' type='text' name='fax' value='".$cont['C/C-Fax']."'/></td>
+			<td><input style='width:100px;' type='text' name='port' class='phone' value='".$cont['C/C-TelPortable']."'/></td>
+			<td><input style='width:100px;' type='text' name='fax' class='phone' class='phone' value='".$cont['C/C-Fax']."'/></td>
 			<td><input type='text' name='fonction' value='".$cont['C/C-Fonction']."'/></td>
-			<td><input style='width:100px;' type='text' name='horaire' value='".$cont['C/C-HorairesOuverture']."'/></td>
-			<td><input style='width:150px;' type='text' name='com' value='".$cont['C/C-Commentaire']."'/></td>
+			<td><input style='width:100px;' type='text' name='horaire' value='".$cont['C/C-HorairesOuverture']."'/></td>";
+
+			$code.='<td><input style="width:150px;" type="text" name="com" value="'.$cont['C/C-Commentaire'].'"/></td>';
+
+			$code.="
 			<td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button></form></td>
 			<td>
 				<form action='index.php?action=deleteCompagnieContact' method='post'>
@@ -2686,12 +2709,17 @@ function AfficheFicheCompagnieContact($contacts,$idComp){
 	}
 	$code.="
 	<tr id='formContact'>
-	<td><form action='index.php?action=addCompagnieContact' method='post'><input style='width:200px;' type='text' name='nom' required/></td>
-	<td><input type='text' name='prenom' required/></td>
-	<td><input style='width:100px;' type='text' name='tel'/></td>
+	<td><form action='index.php?action=addCompagnieContact' method='post' onsubmit='verif()'><input style='width:200px;' type='text' name='nom' required/></td>
+	<script>
+		function verif(){
+			
+		}
+	</script>
+	<td><input type='text' name='prenom'/></td>
+	<td><input style='width:100px;' type='text' name='tel' class='phone'/></td>
 	<td><input style='width:210px;' type='text' name='mail'/></td>
-	<td><input style='width:100px; 'type='text' name='port'/></td>
-	<td><input style='width:100px; 'type='text' name='fax'/></td>
+	<td><input style='width:100px; 'type='text' class='phone' name='port'/></td>
+	<td><input style='width:100px; 'type='text' class='phone' name='fax'/></td>
 	<td><input type='text' name='fonction'/></td>
 	<td><input style='width:100px;' type='text' name='horaire'/></td>
 	<td><input style='width:150;' type='text' name='com'/></td>
@@ -2753,12 +2781,12 @@ function AfficheFicheCompagnieContactLocaux($idComp,$departements,$contactsLoc){
 			$code.="
 				<td><b><input type='text' name='nom' value='".$cont['INS-Nom']."' required/></b></td>
 				<td><input type='text' name='prenom' value='".$cont['INS-Prénom']."' required/></td>
-				<td><input type='text' name='tel' value='".$cont['INS-TelBureau']."'/></td>
+				<td><input type='text' name='tel' class='phone' value='".$cont['INS-TelBureau']."'/></td>
 				<td><input type='text' name='mail' value='".$cont['INS-Mail']."'/></td>
-				<td><input type='text' name='port' value='".$cont['INS-TelPortable']."'/></td>
-				<td><input type='text' name='fax' value='".$cont['INS-Fax']."'/></td>
+				<td><input type='text' name='port' class='phone' value='".$cont['INS-TelPortable']."'/></td>
+				<td><input type='text' name='fax' class='phone' value='".$cont['INS-Fax']."'/></td>
 				<td><input type='text' name='fonction' value='".$cont['INS-Fonction']."'/></td>
-				<td><input type='text' name='com' value='".$cont['INS-Commentaire']."'/></td>
+				<td><textarea name='com'>".$cont['INS-Commentaire']."</textarea></td>
 				<td><center><button type='button' onClick=\"window.open('depRatach.php?idIns=".$cont['INS-NumID']."','Départements rattachés','toolbar=no,status=no,width=500,height=500,scrollbars=yes,location=no,resize=yes,menubar=no')\" class='btn btn-default btn-xs'><i class='fa fa-external-link'></i></button></center></td>
 				<td><center><button type='button' onClick=\"window.open('delegRegional.php?idIns=".$cont['INS-NumID']."','Délégation Régionale','toolbar=no,status=no,width=1800,height=500,scrollbars=yes,location=no,resize=no,menubar=no')\" class='btn btn-default btn-xs'><i class='fa fa-external-link'></i></button></center></td>
 				<td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button></form></td>				
@@ -2771,12 +2799,12 @@ function AfficheFicheCompagnieContactLocaux($idComp,$departements,$contactsLoc){
 		<tr id='formContactLoc'>
 		<td><form action='index.php?action=addCompagnieContactLoc' method='post'><input type='text' name='nom' required/></td>
 		<td><input type='text' name='prenom' required/></td>
-		<td><input type='text' name='tel'/></td>
+		<td><input type='text' class='phone' name='tel'/></td>
 		<td><input type='text' name='mail'/></td>
-		<td><input type='text' name='port'/></td>
-		<td><input type='text' name='fax'/></td>
+		<td><input type='text' class='phone' name='port'/></td>
+		<td><input type='text' class='phone' name='fax'/></td>
 		<td><input type='text' name='fonction'/></td>
-		<td><input type='text' name='com'/></td>
+		<td><textarea name='com'></textarea></td>
 		<td><input type='hidden' name='idComp' value='".$idComp."'/>
 			<input type='hidden' name='idDep' value='".$_POST['dep']."'/>
 			<button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form>
@@ -3160,11 +3188,11 @@ function AffichePartenaireActivite(){
 	<form action='pdf/activite.php' method='post' target='_blanck'>
 		<div class='form-group'>
 			<label for='date1'>Date de début : </label><br/>
-			<input type='date' class='form-control' name='date1' style='width:275px;' required/>
+			<input type='date' class='form-control' name='date1' class='date' style='width:275px;' required/>
 		</div>
 		<div class='form-group'>
 			<label for='date2'>Date de fin : </label><br/>
-			<input type='date' class='form-control' name='date2' style='width:275px;' required/>
+			<input type='date' class='form-control' name='date2' class='date' style='width:275px;' required/>
 		</div>
 		<input type='submit' value='Analyse'/>
 	</form>
@@ -3194,6 +3222,7 @@ function AffichePartenaireListe(){
 	<a type='button' onclick='liste3()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Liste des Clients Experts</a>
 	<script>
 	function liste3() {
+		alert('Veuillez patienter durant la génération du document...');
 	    window.open(\"pdf/liste3.php\");
 	}
 	</script>

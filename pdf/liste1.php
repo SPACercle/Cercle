@@ -5,8 +5,11 @@
     $query ="
     SELECT DISTINCT Relations.`REL-Nom` AS LienCabinetExpert, `Clients et Prospects`.`CLT-NumID` AS ExpertNumID, `Clients et Prospects`.`CLT-Nom` AS ExpertNom, `Clients et Prospects`.`CLT-Prénom` AS ExpertPrénom, Relations_1.`REL-Nom` AS LienExpertClient, `Clients et Prospects_1`.`CLT-Nom` AS ClientNom, `Clients et Prospects_1`.`CLT-Prénom` AS ClientPrénom, Professions.`PRO-Nom` AS ClientProfession, `Clients et Prospects_1`.`CLT-Ville` AS ClientVille, `Type Client`.`TYP-Nom`, Conseillers.`CON-Nom`, Conseillers.`CON-Prénom`, Conseillers.`CON-NumORIAS`, `Clients et Prospects_2`.`CLT-NumID` AS GroupeNumID, `Clients et Prospects_2`.`CLT-Nom` AS GroupeNom, professions_1.`PRO-Nom`, Relations_2.`REL-Nom`, `Clients et Prospects_3`.`CLT-NumID` AS CabinetNumID, `Clients et Prospects_3`.`CLT-Nom`, professions_1.`PRO-Conseil`, `Clients et Prospects_2`.`CLT-PrsMorale`, `Clients et Prospects_3`.`CLT-PrsMorale`
     FROM ((((`clients et prospects` AS `Clients et Prospects_2` INNER JOIN professions AS professions_1 ON `Clients et Prospects_2`.`CLT-Profession` = professions_1.`PRO-NumID`) INNER JOIN `relations par personne` AS `Relations par personne_2` ON `Clients et Prospects_2`.`CLT-NumID` = `Relations par personne_2`.`R/P-NumApporteur`) INNER JOIN relations AS Relations_2 ON `Relations par personne_2`.`R/P-Type` = Relations_2.`REL-Num`) INNER JOIN `clients et prospects` AS `Clients et Prospects_3` ON `Relations par personne_2`.`R/P-NumReco` = `Clients et Prospects_3`.`CLT-NumID`) INNER JOIN (Conseillers INNER JOIN (`Type Client` INNER JOIN (Professions INNER JOIN ((`Clients et Prospects` INNER JOIN (Relations INNER JOIN `Relations par personne` ON Relations.`REL-Num` = `Relations par personne`.`R/P-Type`) ON `Clients et Prospects`.`CLT-NumID` = `Relations par personne`.`R/P-NumReco`) INNER JOIN (Relations AS Relations_1 INNER JOIN (`Clients et Prospects` AS `Clients et Prospects_1` INNER JOIN `Relations par personne` AS `Relations par personne_1` ON `Clients et Prospects_1`.`CLT-NumID` = `Relations par personne_1`.`R/P-NumReco`) ON Relations_1.`REL-Num` = `Relations par personne_1`.`R/P-Type`) ON `Clients et Prospects`.`CLT-NumID` = `Relations par personne_1`.`R/P-NumApporteur`) ON Professions.`PRO-NumID` = `Clients et Prospects_1`.`CLT-Profession`) ON `Type Client`.`TYP-NumID` = `Clients et Prospects_1`.`CLT-Type`) ON Conseillers.`CON-NumID` = `Clients et Prospects_1`.`CLT-Conseiller`) ON `Clients et Prospects_3`.`CLT-NumID` = `Relations par personne`.`R/P-NumApporteur`
-    WHERE (((Relations.`REL-Nom`)='a pour associé(e)') AND ((Relations_1.`REL-Nom`)='est expert comptable de') AND ((Conseillers.`CON-NumORIAS`) Like ".$_SESSION['Auth']['orias'].") AND ((Relations_2.`REL-Nom`)='a pour membre') AND ((professions_1.`PRO-Conseil`)=1) AND ((`Clients et Prospects_2`.`CLT-PrsMorale`)=1) AND ((`Clients et Prospects_3`.`CLT-PrsMorale`)=1));
-
+    WHERE (((Relations.`REL-Nom`)='a pour associé(e)') AND ((Relations_1.`REL-Nom`)='est expert comptable de') ";
+    if($_SESSION['Auth']['modeAgence'] == 0){
+        $query.="AND ((Conseillers.`CON-NumORIAS`) Like ".$_SESSION['Auth']['orias'].") ";
+    }
+    $query.="AND ((Relations_2.`REL-Nom`)='a pour membre') AND ((professions_1.`PRO-Conseil`)=1) AND ((`Clients et Prospects_2`.`CLT-PrsMorale`)=1) AND ((`Clients et Prospects_3`.`CLT-PrsMorale`)=1));
     ";
 
     $pdo = BDD::getConnection();
@@ -23,7 +26,7 @@
     $tab_cab = array();
     $tab_exp = array();
     foreach ($liste as $l) {
-        if($i > 1000){
+        if($i > 950){
             $content.=" </span></page><page backright='10mm'><span style='font-size:12px'>";
             $i = 19;
         }
@@ -60,18 +63,22 @@
             $titSup = $res->fetchALL(PDO::FETCH_ASSOC);
 
             if($res->rowCount() > 0){
-                $cotent.="
-                <div style="position:absolute;top:772;left:53">Titulaire</span></div>
-                <div style="position:absolute;top:772;left:297">SAULNIER</span></div>
-                <div style="position:absolute;top:772;left:175">Stéphane</span></div>
-                <div style="position:absolute;top:788;left:53">Suppléant</span></div>
-                <div style="position:absolute;top:788;left:297">MAILLARD</span></div>
-                <div style="position:absolute;top:788;left:175">Sylvain</span></div>
-                ";
+                $i = $i + 40;
+                $content.='
+                <span style="color:#685E43;"><i><u><b><div style="position:absolute;top:'.$i.';left:53">Titulaire</div></b></u>
+                <div style="position:absolute;top:'.$i.';left:297">'.$titSup[0]['CON-Nom'].'</div>
+                <div style="position:absolute;top:'.$i.';left:175">'.$titSup[0]['CON-Prénom'].'</div>';
+                $i = $i + 16;       
+                $content.='
+                <u><b><div style="position:absolute;top:'.$i.';left:53">Suppléant</div></b></u>
+                <div style="position:absolute;top:'.$i.';left:297">'.$titSup[1]['CON-Nom'].'</div>
+                <div style="position:absolute;top:'.$i.';left:175">'.$titSup[1]['CON-Prénom'].'</div></i></span>
+                ';
+            } else {
+                $i = $i + 20;
             }
 
-
-            $i = $i + 58;
+            $i = $i + 18;
         }
        
         $content.="

@@ -1370,6 +1370,7 @@ class Controller{
 	//Modification de l'onglet contact d'une fiche compagnie
 	public function ModifCompagnieContactAction(){
 		extract($_POST);
+		$com = addslashes($com);
 		$query = "UPDATE `compagnies contacts` 
 				  SET `C/C-Nom`= '$nom',
 				  	  `C/C-Prénom`= '$prenom',
@@ -1382,7 +1383,6 @@ class Controller{
 				  	  `C/C-Commentaire`= '$com'
 				  WHERE `C/C-Num` = $idComp AND `C/C-Nom` = '$idNom' AND `C/C-Prénom` = '$idPrenom';
 		";
-		echo $query;
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);

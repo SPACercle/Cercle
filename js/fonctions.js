@@ -484,6 +484,7 @@ $(document).ready(function() {
 	$('#formContact').hide();
 
 	$('#ajoutContact').click(function(){
+		document.getElementById("enAjout").value = "oui";
 		$('#formContact').show();
 	});
 
@@ -519,5 +520,9 @@ $(document).ready(function() {
 	});
 
 	//FIN FICHE PRODUIT
+
+	//Masques de saisie
+	$(".phone").mask("99 99 99 99 99");
+	$(".date").mask("99/99/9999");
 
 });

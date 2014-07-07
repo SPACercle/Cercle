@@ -120,7 +120,7 @@ $contacts = $res->fetchALL(PDO::FETCH_ASSOC);
             <td><input type='text' name='fax' value='".$cont['C/I-Fax']."'/></td>
             <td><input type='text' name='fonction' value='".$cont['C/I-Fonction']."'/></td>
             <td><input type='text' name='horaire' value='".$cont['C/I-HorairesOuverture']."'/></td>
-            <td><input type='text' name='com' value='".$cont['C/I-Commentaire']."'/></td>
+            <td><textarea name='com'>".$cont['INS-Commentaire']."</textarea></td>
             <td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button></form></td>
             <td>
               <form action='delegRegional.php?idIns=".$_GET['idIns']."' method='post'>
@@ -143,7 +143,7 @@ $contacts = $res->fetchALL(PDO::FETCH_ASSOC);
         <td><input type='text' name='fax'/></td>
         <td><input type='text' name='fonction'/></td>
         <td><input type='text' name='horaire'/></td>
-        <td><input type='text' name='com'/></td>
+        <td><textarea name='com'></textarea></td>
         <td><input type='hidden' name='idAdd' value='".$_GET['idIns']."'/><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
         ";
         echo "</tbody></table></div>";
