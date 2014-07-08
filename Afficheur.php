@@ -1199,13 +1199,13 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 					$code.='
 		            </div>
 		        </div>
-	            	<div id="lien">
-		            	<form method="post" action="index.php?action=addClientRelationel" id="formLien">
-			            	<div id="destinationFields">
-			            	</div>
-				            <input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
-				        </form>
-		            </div>
+            	<div id="lien">
+	            	<form method="post" action="index.php?action=addClientRelationel" id="formLien">
+		            	<div id="destinationFields">
+		            	</div>
+			            <input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
+			        </form>
+	            </div>
         	</div>
 
         </div>
@@ -2303,13 +2303,13 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					<br/><br/>
 						<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
 						<input type='hidden' name='idEv' value='".$ev['E/P-NumID']."'/>
+						<button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button>
+					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					</form>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<form action='index.php?action=deleteEvProduit' method='post' style='display:inline;'>
 						<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
 						<input type='hidden' name='idEv' value='".$ev['E/P-NumID']."'/>
-					    <button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button>
-					    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Supprimer</button>
 					</form>
 					</div></div></div></div>
@@ -2677,42 +2677,50 @@ function AfficheFicheCompagnieContact($contacts,$idComp){
 	</thead>
 	<tbody>";
 	foreach($contacts as $cont){
-		$code.='<tr><form action="index.php?action=modifCompagnieContact" method="post">
+		$code.='<tr><form action="index.php?action=modifCompagnieContact" method="post" onsubmit="return verif();">
 	    <input type="hidden" name="idComp" value="'.$cont['C/C-Num'].'"/> 
 	    <input type="hidden" name="idNom" value="'.$cont['C/C-Nom'].'"/>
 	    <input type="hidden" name="idPrenom" value="'.$cont['C/C-Prénom'].'"/>
 		';
-		$code.="
-			<td><input style='width:200px;' type='text' name='nom' value='".$cont['C/C-Nom']."' required/></td>
-			<td><input type='text' name='prenom' value='".$cont['C/C-Prénom']."'/></td>
-			<td><input style='width:100px;' type='text' name='tel' class='phone' class='phone' value='".$cont['C/C-TelBureau']."'/></td>
-			<td><input style='width:210px;' type='text' name='mail' value='".$cont['C/C-Mail']."'/></td>
-			<td><input style='width:100px;' type='text' name='port' class='phone' value='".$cont['C/C-TelPortable']."'/></td>
-			<td><input style='width:100px;' type='text' name='fax' class='phone' class='phone' value='".$cont['C/C-Fax']."'/></td>
-			<td><input type='text' name='fonction' value='".$cont['C/C-Fonction']."'/></td>
-			<td><input style='width:100px;' type='text' name='horaire' value='".$cont['C/C-HorairesOuverture']."'/></td>";
+		$code.='
+			<td><input style="width:200px;" type="text" name="nom" value="'.$cont["C/C-Nom"].'" required/></td>
+			<td><input type="text" name="prenom" value="'.$cont["C/C-Prénom"].'"/></td>
+			<td><input style="width:100px;" type="text" name="tel" class="phone" class="phone" value="'.$cont["C/C-TelBureau"].'"/></td>
+			<td><input style="width:210px;" type="text" name="mail" value="'.$cont["C/C-Mail"].'"/></td>
+			<td><input style="width:100px;" type="text" name="port" class="phone" value="'.$cont["C/C-TelPortable"].'"/></td>
+			<td><input style="width:100px;" type="text" name="fax" class="phone" class="phone" value="'.$cont["C/C-Fax"].'"/></td>
+			<td><input type="text" name="fonction" value="'.$cont["C/C-Fonction"].'"/></td>
+			<td><input style="width:100px;" type="text" name="horaire" value="'.$cont["C/C-HorairesOuverture"].'"/></td>';
 
 			$code.='<td><input style="width:150px;" type="text" name="com" value="'.$cont['C/C-Commentaire'].'"/></td>';
 
-			$code.="
-			<td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button></form></td>
+			$code.='
+			<td><button type="submit" class="btn btn-warning btn-xs"><i class="fa fa-save"></i> Enregistrer</button></form></td>
 			<td>
-				<form action='index.php?action=deleteCompagnieContact' method='post'>
-					<input type='hidden' name='idComp' value='".$cont['C/C-Num']."'/>
-					<input type='hidden' name='idNom' value='".$cont['C/C-Nom']."'/>
-					<input type='hidden' name='idPrenom' value='".$cont['C/C-Prénom']."'/>
-					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Supprimer</button>
+				<form action="index.php?action=deleteCompagnieContact" method="post">
+					<input type="hidden" name="idComp" value="'.$cont["C/C-Num"].'"/>
+					<input type="hidden" name="idNom" value="'.$cont["C/C-Nom"].'"/>
+					<input type="hidden" name="idPrenom" value="'.$cont["C/C-Prénom"].'"/>
+					<button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Supprimer</button>
 				</form>
 			</td>						
-		";
+		';
 		$code.="</form></tr>";
 	}
 	$code.="
 	<tr id='formContact'>
-	<td><form action='index.php?action=addCompagnieContact' method='post' onsubmit='verif()'><input style='width:200px;' type='text' name='nom' required/></td>
+	<td><form action='index.php?action=addCompagnieContact' name='formulaire' method='post'>
+	<input style='width:200px;' type='text' name='nom' required/></td>
 	<script>
 		function verif(){
-			
+			if(document.getElementById('enAjout').value == 'oui'){
+				choix = confirm('Attention ! Vous voulez ajouter une ligne de donnée et en modifier une autre. Cliquez sur \"Ok\" pour enregistrer la ligne modifiée ou sur \"Annuler\" pour valider la nouvelle ligne.');
+			    if(choix == true){
+			      document.formulaire.submit();
+			    } else {
+			      return false;
+			    }
+			}
 		}
 	</script>
 	<td><input type='text' name='prenom'/></td>
@@ -2778,15 +2786,16 @@ function AfficheFicheCompagnieContactLocaux($idComp,$departements,$contactsLoc){
 				    <input type="hidden" name="idComp" value="'.$idComp.'"/>
 				    <input type="hidden" name="idDep" value="'.$_POST['dep'].'"/>
 			';
+			$code.='
+				<td><b><input type="text" name="nom" value="'.$cont["INS-Nom"].'" required/></b></td>
+				<td><input type="text" name="prenom" value="'.$cont["INS-Prénom"].'"/></td>
+				<td><input type="text" name="tel" style="width:95px;" class="phone" value="'.$cont["INS-TelBureau"].'"/></td>
+				<td><input type="text" name="mail" value="'.$cont["INS-Mail"].'"/></td>
+				<td><input type="text" name="port" style="width:95px;" class="phone" value="'.$cont["INS-TelPortable"].'"/></td>
+				<td><input type="text" name="fax" style="width:95px;" class="phone" value="'.$cont["INS-Fax"].'"/></td>
+				<td><input type="text" name="fonction" style="width:200px;" value="'.$cont["INS-Fonction"].'"/></td>
+				<td><textarea name="com">'.$cont["INS-Commentaire"].'</textarea></td>';
 			$code.="
-				<td><b><input type='text' name='nom' value='".$cont['INS-Nom']."' required/></b></td>
-				<td><input type='text' name='prenom' value='".$cont['INS-Prénom']."' required/></td>
-				<td><input type='text' name='tel' class='phone' value='".$cont['INS-TelBureau']."'/></td>
-				<td><input type='text' name='mail' value='".$cont['INS-Mail']."'/></td>
-				<td><input type='text' name='port' class='phone' value='".$cont['INS-TelPortable']."'/></td>
-				<td><input type='text' name='fax' class='phone' value='".$cont['INS-Fax']."'/></td>
-				<td><input type='text' name='fonction' value='".$cont['INS-Fonction']."'/></td>
-				<td><textarea name='com'>".$cont['INS-Commentaire']."</textarea></td>
 				<td><center><button type='button' onClick=\"window.open('depRatach.php?idIns=".$cont['INS-NumID']."','Départements rattachés','toolbar=no,status=no,width=500,height=500,scrollbars=yes,location=no,resize=yes,menubar=no')\" class='btn btn-default btn-xs'><i class='fa fa-external-link'></i></button></center></td>
 				<td><center><button type='button' onClick=\"window.open('delegRegional.php?idIns=".$cont['INS-NumID']."','Délégation Régionale','toolbar=no,status=no,width=1800,height=500,scrollbars=yes,location=no,resize=no,menubar=no')\" class='btn btn-default btn-xs'><i class='fa fa-external-link'></i></button></center></td>
 				<td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button></form></td>				
@@ -2798,12 +2807,12 @@ function AfficheFicheCompagnieContactLocaux($idComp,$departements,$contactsLoc){
 		$code.="
 		<tr id='formContactLoc'>
 		<td><form action='index.php?action=addCompagnieContactLoc' method='post'><input type='text' name='nom' required/></td>
-		<td><input type='text' name='prenom' required/></td>
-		<td><input type='text' class='phone' name='tel'/></td>
+		<td><input type='text' name='prenom'/></td>
+		<td><input type='text' style='width:95px;' class='phone' name='tel'/></td>
 		<td><input type='text' name='mail'/></td>
-		<td><input type='text' class='phone' name='port'/></td>
-		<td><input type='text' class='phone' name='fax'/></td>
-		<td><input type='text' name='fonction'/></td>
+		<td><input type='text' style='width:95px;' class='phone' name='port'/></td>
+		<td><input type='text' style='width:95px;' class='phone' name='fax'/></td>
+		<td><input type='text' style='width:200px;' name='fonction'/></td>
 		<td><textarea name='com'></textarea></td>
 		<td><input type='hidden' name='idComp' value='".$idComp."'/>
 			<input type='hidden' name='idDep' value='".$_POST['dep']."'/>

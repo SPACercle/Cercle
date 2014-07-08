@@ -26,7 +26,7 @@ if(!empty($_POST)){
 
 //Les rattachements de l'inspecteur
 extract($_GET);
-$query = "SELECT `Regions par Inspecteurs`.`R/I-NumID`, `Regions par Inspecteurs`.`R/I-NumInspecteur`, `Regions par Inspecteurs`.`R/I-NumDptRattachement`, `Departements et Regions`.`DPT-Région`, `Departements et Regions`.`DPT-Nom`
+$query = "SELECT `Regions par Inspecteurs`.`R/I-NumID`, `Regions par Inspecteurs`.`R/I-NumInspecteur`, `Regions par Inspecteurs`.`R/I-NumDptRattachement`, `Departements et Regions`.`DPT-Région`, `Departements et Regions`.`DPT-Nom`, `Departements et Regions`.`DPT-Num`
 FROM `Departements et Regions` INNER JOIN `Regions par Inspecteurs` ON `Departements et Regions`.`DPT-Num` = `Regions par Inspecteurs`.`R/I-NumDptRattachement`
 WHERE (((`Regions par Inspecteurs`.`R/I-NumInspecteur`)=".$_GET['idIns']."));
 ";
@@ -36,8 +36,7 @@ $res = $pdo->query($query);
 $res = $res->fetchALL(PDO::FETCH_ASSOC);
 
 //Liste déroulante des départements pour ajouter
-$query = "SELECT * FROM `Departements et Regions`;
-";
+$query = "SELECT * FROM `Departements et Regions` ORDER BY CAST(`DPT-Num` AS SIGNED)";
 $pdo = BDD::getConnection();
 $pdo->exec("SET NAMES UTF8");
 $res_dep = $pdo->query($query);
@@ -77,7 +76,11 @@ $departements = $res_dep->fetchALL(PDO::FETCH_ASSOC);
     <h2 style="display:inline;float:left;">Départements rattachés</h2><br/><br/><br/><br/><br/>
       <?php
         foreach ($res as $dep) {
-          echo "<b>".$dep['DPT-Nom']."</b>&nbsp;&nbsp;<i>(".$dep['DPT-Région'].")</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          $num = $dep['DPT-Num'];
+          if($num < 10){
+            $num = "0".$num;
+          }
+          echo "<b>".$dep['DPT-Nom']."</b>&nbsp;&nbsp;<i>(".$num.", ".$dep['DPT-Région'].")</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <form action='depRatach.php?idIns=".$_GET['idIns']."' method='post' style='display:inline;'>
           <input type='hidden' name='idSup' value='".$dep['R/I-NumID']."'/>
           <button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-trash-o'></i> Suprimmer</button>
@@ -87,7 +90,11 @@ $departements = $res_dep->fetchALL(PDO::FETCH_ASSOC);
           <form action='depRatach.php?idIns=".$_GET['idIns']."' method='post' style='display:inline;'>
           <select name='idAdd'>";
           foreach ($departements as $departement) {
-            echo "<option value='".$departement['DPT-Num']."'>".$departement['DPT-Nom']."</option>";
+            $num = $departement['DPT-Num'];
+            if($num < 10){
+              $num = "0".$num;
+            }
+            echo "<option value='".$departement['DPT-Num']."'>".$departement['DPT-Nom']." (".$num.") - ".$departement['DPT-Région']."</option>";
           }
         echo "
           </select>

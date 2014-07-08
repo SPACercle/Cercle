@@ -1,27 +1,33 @@
 A FAIRE AVANT LA FIN
 ---------------------------------------------------------------------------------------------------------
 
-- Verif si ligne ajout perdu
-
-- AJout département : plus de detail (voir feuille) 
-
-- Pour les input avec ' possible => addshlasses dans controleur + code.='.....'; dans afficheur
-
 - Préparer PC pour Sylvain
 
 
 A LA FIN
 ---------------------------------------------------------------------------------------------------------
 
-Tuto "mettre en ligne site"
-
 Documentation : Liste de tous les outils (mettre à jour à la fin et recupérer)
 
-Récuperer tous les fichiers
+Récuperer tous les fichiers + BDD
 
-BDD
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---------------------------------------------------------------------------------------------------------
-
 
 Base de données : Synchro schéma (// = fait) : 
 

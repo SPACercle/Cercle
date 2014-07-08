@@ -113,12 +113,12 @@ $contacts = $res->fetchALL(PDO::FETCH_ASSOC);
           ';
           echo"
             <td><input type='text' name='nom' value='".$cont['C/I-Nom']."' required/></td>
-            <td><input type='text' name='prenom' value='".$cont['C/I-Prénom']."' required/></td>
-            <td><input type='text' name='tel' value='".$cont['C/I-TelBureau']."'/></td>
+            <td><input type='text' name='prenom' value='".$cont['C/I-Prénom']."' /></td>
+            <td><input type='text' name='tel' style='width:95px;' class='phone' value='".$cont['C/I-TelBureau']."'/></td>
             <td><input type='text' name='mail' value='".$cont['C/I-Mail']."'/></td>
-            <td><input type='text' name='port' value='".$cont['C/I-TelPortable']."'/></td>
-            <td><input type='text' name='fax' value='".$cont['C/I-Fax']."'/></td>
-            <td><input type='text' name='fonction' value='".$cont['C/I-Fonction']."'/></td>
+            <td><input type='text' name='port' style='width:95px;' class='phone' value='".$cont['C/I-TelPortable']."'/></td>
+            <td><input type='text' name='fax' style='width:95px;' class='phone' value='".$cont['C/I-Fax']."'/></td>
+            <td><input type='text' style='width:200px;' name='fonction' value='".$cont['C/I-Fonction']."'/></td>
             <td><input type='text' name='horaire' value='".$cont['C/I-HorairesOuverture']."'/></td>
             <td><textarea name='com'>".$cont['INS-Commentaire']."</textarea></td>
             <td><button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button></form></td>
@@ -136,12 +136,12 @@ $contacts = $res->fetchALL(PDO::FETCH_ASSOC);
         <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
         <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
         <td><form action='delegRegional.php?idIns=".$_GET['idIns']."' method='post'><input type='text' name='nom' required/></td>
-        <td><input type='text' name='prenom' required/></td>
-        <td><input type='text' name='tel'/></td>
+        <td><input type='text' name='prenom' /></td>
+        <td><input type='text' style='width:95px;' class='phone' name='tel'/></td>
         <td><input type='text' name='mail'/></td>
-        <td><input type='text' name='port'/></td>
-        <td><input type='text' name='fax'/></td>
-        <td><input type='text' name='fonction'/></td>
+        <td><input type='text' style='width:95px;' class='phone' name='port'/></td>
+        <td><input type='text' style='width:95px;' class='phone' name='fax'/></td>
+        <td><input type='text' style='width:200px;' name='fonction'/></td>
         <td><input type='text' name='horaire'/></td>
         <td><textarea name='com'></textarea></td>
         <td><input type='hidden' name='idAdd' value='".$_GET['idIns']."'/><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
@@ -158,6 +158,7 @@ $contacts = $res->fetchALL(PDO::FETCH_ASSOC);
   <!-- Autres Plugins -->
   <script src="js/tablesorter/jquery.tablesorter.js"></script>
   <script src="js/tablesorter/tables.js"></script>
+  <script src="js/jquery.maskedinput.min.js" type="text/javascript"></script>
 
   <!-- Perso -->
   <script src="js/fonctions.js"></script>

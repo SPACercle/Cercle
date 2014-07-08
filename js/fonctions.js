@@ -521,7 +521,7 @@ $(document).ready(function() {
 
 	//FIN FICHE PRODUIT
 
-	//Masques de saisie
+	//Masques de saisie pour les formulaires
 	$(".phone").mask("99 99 99 99 99");
 	$(".date").mask("99/99/9999");
 

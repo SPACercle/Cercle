@@ -66,6 +66,13 @@ class Controller{
 			);
 	}
 
+	//Pour accepter le caractère ' et ne pas faire bugger la requete SQL
+	public static function nettoyagePOST(){
+		foreach ($_POST as $i => $p) {
+			$_POST[$i] = addslashes($p);
+		}	
+	}
+
 	//Analyse l'action demandée
 	public function analyse(){
 		if(isset($_GET["action"])){
@@ -134,6 +141,7 @@ class Controller{
 
 	//Base client (liste des clients)
 	public function ClientAction(){
+		Controller::nettoyagePOST();
 		Auth::setInfo('page','Base Clients');
 		$id = Auth::getInfo('portSelect');
 		$modeAgence = Auth::getInfo('modeAgence');
@@ -214,6 +222,7 @@ class Controller{
 
 	//Ajout d'un client physique
 	public function AddClientPhysiqueAction(){
+		Controller::nettoyagePOST();
 		if(!empty($_POST["nom"]) && !empty($_POST["date"])){
 			extract($_POST);
 			if($_POST['prenom'] == null){
@@ -245,6 +254,7 @@ class Controller{
 
 	//Ajout d'un client moral
 	public function AddClientMoraleAction(){
+		Controller::nettoyagePOST();
 		if(!empty($_POST["forme"]) && !empty($_POST["raison"])){
 			extract($_POST);
 			$query = "SELECT *
@@ -286,7 +296,7 @@ class Controller{
 					Auth::setInfo("ongletTitre","Informations Personelles");
 					break;
 				case "pro" :
-					Auth::setInfo("ongletTitre","Informations Professionnel");
+					Auth::setInfo("ongletTitre","Informations Professionnelles");
 					break;
 				case "revenus" :
 					Auth::setInfo("ongletTitre","Revenus");
@@ -463,6 +473,7 @@ class Controller{
 
 	//Modification de l'onglet général d'une fiche client
 	public function ModifClientGeneralAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		if(!isset($morale)){
 			$morale = 0;
@@ -481,6 +492,7 @@ class Controller{
 	//Suppression d'un client
 	public function SupressionClientAction(){
 		if(!empty($_POST["idClient"])){
+			Controller::nettoyagePOST();
 			extract($_POST);
 			$query = "DELETE FROM `clients et prospects` WHERE `CLT-NumID` = $idClient;";
 			$pdo = BDD::getConnection();
@@ -498,6 +510,7 @@ class Controller{
 
 	//Modification de l'onglet Personel d'une fiche client
 	public function ModifClientPersonnelAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		if(empty($mandatGestion)){
 			$mandatGestion = 0;
@@ -541,6 +554,7 @@ class Controller{
 
 	//Modification de l'onglet professionel d'une fiche client
 	public function ModifClientProAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		if(empty($optionIS)){
 			$optionIS = 0;
@@ -577,6 +591,7 @@ class Controller{
 
 	//Ajout d'un revenu d'un client
 	public function AddClientRevenuAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "INSERT INTO `revenus par client` VALUES (null,'$idClient','$type','$montant','$annee')";
 		$pdo = BDD::getConnection();
@@ -587,6 +602,7 @@ class Controller{
 
 	//Modification d'un revenu d'un client
 	public function ModifClientRevenuAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "UPDATE `revenus par client` SET `R/C-TypeRevenus`=$type,`R/C-Montant`=$montant,`R/C-Année`='$annee' WHERE `R/C-NumID`=$idRevenu";
 		$pdo = BDD::getConnection();
@@ -597,6 +613,7 @@ class Controller{
 
 	//Supression d'un revenu d'un client
 	public function DeleteClientRevenuAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "DELETE FROM `revenus par client` WHERE `R/C-NumID`=$idRevenu";
 		$pdo = BDD::getConnection();
@@ -607,6 +624,7 @@ class Controller{
 
 	//Ajout d'un historique d'un client
 	public function AddClientHistoriqueAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		if(empty($demAssistante)){
 			$demAssistante = 0;
@@ -644,6 +662,7 @@ class Controller{
 
 	//Suppression d'un historique d'un client
 	public function DeleteClientHistoriqueAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "DELETE FROM `historique par client` WHERE `H/C-NumID`=$idHistorique";
 		$pdo = BDD::getConnection();
@@ -654,6 +673,7 @@ class Controller{
 
 	//Modification d'un historique d'un client
 	public function ModifClientHistoriqueAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		if(empty($demAssistante)){
 			$demAssistante = 0;
@@ -700,6 +720,7 @@ class Controller{
 
 	//Ajout d'un historique d'un client
 	public function AddClientRelationelAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		//Insertion de la relation
 		$query = "INSERT INTO `relations par personne` VALUES ($idClient,$pers,$type,null)";
@@ -722,6 +743,7 @@ class Controller{
 
 	//Suppression d'une relation d'un client
 	public function DeleteClientRelationelAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		//Suppression de la relation
 		$query = "DELETE FROM `relations par personne` WHERE `R/P-NumApporteur`= $idApp AND `R/P-NumReco` = $idReco AND `R/P-Type` = $idType";
@@ -744,6 +766,7 @@ class Controller{
 
 	//Modification d'une relation d'un client
 	public function ModifClientRelationelAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		//Modification du lien
 		$query = "UPDATE`relations par personne` SET `R/P-NumApporteur`= $idApp, `R/P-NumReco` = $pers, `R/P-Type` = $type, `R/P-Commentaire` = '$commentaire'
@@ -768,6 +791,7 @@ class Controller{
 
 	//Ajout d'un besoin d'un client
 	public function AddClientBesoinAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$tab = array_values($_POST);
 		$idBesoin = explode("/",$tab[0])[0];
@@ -791,6 +815,7 @@ class Controller{
 
 	//Modification d'un besoin d'un client
 	public function DeleteClientBesoinAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		//Suppression de la relation
 		$query = "DELETE FROM `besoins par client` WHERE `B/C-NumClient`= $idClient AND `B/C-NumType` = $idType AND `B/C-NumBesoin` = $idBesoin AND `B/C-NumOcc` = $idOcc;";
@@ -930,6 +955,7 @@ class Controller{
 
 	//Ajout d'un produit à un client
 	public function AddClientProduitAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "INSERT INTO `produits par clients` (`P/C-NumClient`,`P/C-NumProduit`,`P/C-SituationContrat`,`P/C-NumSouscripteur`,`P/C-Type Prescripteur`) VALUES ($idClient,$idProduit,16,$idClient,'Non défini')";
 		$pdo = BDD::getConnection();
@@ -941,6 +967,7 @@ class Controller{
 
 	//Supression d'un produit d'un client
 	public function DeleteClientProduitAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "DELETE FROM `produits par clients` WHERE `P/C-NumID`=$idProduit";
 		$pdo = BDD::getConnection();
@@ -951,6 +978,7 @@ class Controller{
 
 	//Modification d'une produit d'un client
 	public function ModifClientProduit1Action(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		if(empty($concur)){
 			$concur = 0;
@@ -1054,6 +1082,7 @@ class Controller{
 
 	//Supression d'un evenement d'un produit d'un client
 	public function DeleteEvProduitAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "DELETE FROM `evenements par produits` WHERE `E/P-NumID`=$idEv";
 		$pdo = BDD::getConnection();
@@ -1064,6 +1093,7 @@ class Controller{
 
 	//Modification d'un évenement d'un produit d'un client
 	public function ModifEvProduitAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		if(empty($env)){
 			$env = 0;
@@ -1176,12 +1206,14 @@ class Controller{
 				  ";
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
+		echo $query;
 		$res = $pdo->exec($query);
 		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit);
 	}
 
 	//Ajout d'un evenement d'un produit d'un client
 	public function AddEvProduitClientAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "INSERT INTO `evenements par produits` (`E/P-NumProduitClient`,`E/P-Réalisateur`) VALUES ($idProduit,$idRealisateur)";
 		$pdo = BDD::getConnection();
@@ -1192,6 +1224,7 @@ class Controller{
 
 	//Ajout d'une anomalie d'un produit d'un client
 	public function AddAnomalieProduitAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		if(empty($cloture)){
 			$cloture = 0;
@@ -1207,6 +1240,7 @@ class Controller{
 
 	//Supression d'une anomalie d'un produit d'un client
 	public function DeleteAnomalieProduitAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "DELETE FROM `anomalies par produits` WHERE `A/P-NumID`=$idAnomalie";
 		$pdo = BDD::getConnection();
@@ -1217,6 +1251,7 @@ class Controller{
 
 	//Modification d'une anomalie d'un produit d'un client
 	public function ModifAnomalieProduitAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		if(empty($cloture)){
 			$cloture = 0;
@@ -1245,6 +1280,7 @@ class Controller{
 
 	//Affichage des compagnies
 	public function CompagnieAction(){
+		Controller::nettoyagePOST();
 		Auth::setInfo('page','Compagnies');
 
 		//Requete Compagnies
@@ -1299,11 +1335,11 @@ class Controller{
 			$query = "
 			SELECT `Codes Compagnies`.`COD-NumID`, `Codes Compagnies`.`COD-NumConseiller`, Compagnies.`CIE-NumID`, `Codes Compagnies`.`COD-NomCodeMere`, Compagnies.`CIE-Nom`, `Codes Compagnies`.`COD-Détail`, `Codes Compagnies`.`COD-NumCie`, `Codes Compagnies`.`COD-Identifiant`, `Codes Compagnies`.`COD-Code`, `Codes Compagnies`.`COD-TypeCode`, `Codes Compagnies`.`COD-CodeMere`, `Codes Compagnies`.`COD-MP`, `Codes Compagnies`.`COD-MPDir`, `Codes Compagnies`.`COD-Transféré`, `visualisation portefeuilles`.`VIS-NumUtilisateur`, `departements et regions`.`DPT-Nom`, `departements et regions`.`DPT-Région`, `visualisation portefeuilles`.`VIS-NumORIAS`, `visualisation portefeuilles`.`VIS-NumID`, Conseillers.`CON-NumID`, Conseillers.`CON-Couleur`, Conseillers.`CON-Nom`, Conseillers.`CON-Prénom`, Conseillers.`CON-Société`, Conseillers.`CON-NumRCS`, Conseillers.`CON-RCSVille`, Conseillers.`CON-Logo`, Conseillers.`CON-Tel`, Conseillers.`CON-Fax`, Conseillers.`CON-Internet`, Conseillers.`CON-Adresse`, Conseillers.`CON-Adresse2`, Conseillers.`CON-CP`, Conseillers.`CON-VIlle`, Conseillers.`CON-APE`, Conseillers.`CON-CapitalSocial`, Compagnies.`CIE-NumID`
 			FROM `visualisation portefeuilles` INNER JOIN ((Conseillers INNER JOIN (Compagnies INNER JOIN `Codes Compagnies` ON Compagnies.`CIE-NumID` = `Codes Compagnies`.`COD-NumCie`) ON Conseillers.`CON-NumID` = `Codes Compagnies`.`COD-NumConseiller`) LEFT JOIN `departements et regions` ON Conseillers.`CON-DptRattachement` = `departements et regions`.`DPT-Num`) ON `visualisation portefeuilles`.`VIS-NumORIAS` = Conseillers.`CON-NumORIAS`
-			WHERE (((`visualisation portefeuilles`.`VIS-NumUtilisateur`)=".$_SESSION['Auth']['id'].") AND ((Compagnies.`CIE-NumID`) Like ".$idComp." And (Compagnies.`CIE-NumID`) Like ".$idComp." ";
+			WHERE `visualisation portefeuilles`.`VIS-NumUtilisateur`=".$_SESSION['Auth']['id']." AND Compagnies.`CIE-NumID` Like ".$idComp."";
 			if(Auth::getInfo('modeAgence') != 1){
-				$query.="AND `visualisation portefeuilles`.`VIS-NumORIAS`=".$_SESSION['Auth']['orias']."";
+				$query.=" AND `visualisation portefeuilles`.`VIS-NumORIAS`=".$_SESSION['Auth']['orias']."";
 			}
-			$query.="))
+			$query.="
 			ORDER BY `CON-Nom`, Compagnies.`CIE-Nom`;
 			";
 			$pdo->exec("SET NAMES UTF8");
@@ -1322,7 +1358,7 @@ class Controller{
 			$res = $pdo->query($query);
 			$compagnies = $res->fetchALL(PDO::FETCH_ASSOC);
 
-			//Requetecode maitre
+			//Requete code maitre
 			$query = "
 			SELECT `Codes Compagnies`.`COD-Code`, `Codes Compagnies`.`COD-TypeCode`, `Codes Compagnies`.`COD-NomCodeMere`, Compagnies.`CIE-Nom`,`Codes Compagnies`.`COD-CodeMere`
 			FROM Compagnies INNER JOIN `Codes Compagnies` ON Compagnies.`CIE-NumID` = `Codes Compagnies`.`COD-NumCie`
@@ -1343,6 +1379,7 @@ class Controller{
 
 	//Modification de l'onglet général d'une fiche compagnie
 	public function ModifCompagnieGeneralAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		if(!isset($acp)){
 			$acp = 0;
@@ -1369,8 +1406,8 @@ class Controller{
 
 	//Modification de l'onglet contact d'une fiche compagnie
 	public function ModifCompagnieContactAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
-		$com = addslashes($com);
 		$query = "UPDATE `compagnies contacts` 
 				  SET `C/C-Nom`= '$nom',
 				  	  `C/C-Prénom`= '$prenom',
@@ -1383,16 +1420,20 @@ class Controller{
 				  	  `C/C-Commentaire`= '$com'
 				  WHERE `C/C-Num` = $idComp AND `C/C-Nom` = '$idNom' AND `C/C-Prénom` = '$idPrenom';
 		";
+		//echo $query;
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
+		//echo $query;
 		$res = $pdo->exec($query);
 		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=contact");
 	}
 
 	//Ajout d'un contact de l'onglet contact d'une fiche compagnie
 	public function AddCompagnieContactAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "INSERT INTO `compagnies contacts` VALUES ($idComp,'$nom','$prenom','$tel','$mail','$port','$fax','$fonction','$horaire','$com');";
+		echo $query;
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
@@ -1401,16 +1442,18 @@ class Controller{
 
 	//Supression d'un contact de l'onglet contact d'une fiche compagnie
 	public function DeleteCompagnieContactAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "DELETE FROM `compagnies contacts` WHERE `C/C-Num` = $idComp AND `C/C-Nom` = '$idNom' AND `C/C-Prénom` = '$idPrenom'";
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
-		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=contact&dep=".$idDep."");
+		header("Location: index.php?action=ficheCompagnie&idComp=".$idComp."&onglet=contact");
 	}
 
 	//Modification de l'onglet contact locaux d'une fiche compagnie
 	public function ModifCompagnieContactLocAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "UPDATE `compagnies inspecteurs` 
 				  SET `INS-Nom`= '$nom',
@@ -1431,6 +1474,7 @@ class Controller{
 
 	//Ajout d'un contact de l'onglet contact locaux d'une fiche compagnie
 	public function AddCompagnieContactLocAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		//Création de l'inspecteur
 		$query = "INSERT INTO `compagnies inspecteurs` VALUES (null,$idComp,'$nom','$prenom','$tel','$mail','$port','$fax','$fonction','$com');";
@@ -1449,6 +1493,7 @@ class Controller{
 
 	//Ajout d'un code de l'onglet codes d'une fiche compagnie
 	public function AddCompagnieCodeAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		if(!isset($transfert)){
 			$transfert = 0;
@@ -1464,6 +1509,7 @@ class Controller{
 
 	//Supression d'un code de l'onglet codes d'une fiche compagnie
 	public function DeleteCompagnieCodeAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "DELETE FROM `codes compagnies` WHERE `COD-NumID` = $idCode";
 		$pdo = BDD::getConnection();
@@ -1474,6 +1520,7 @@ class Controller{
 
 	//Modification de l'onglet codes d'une fiche compagnie
 	public function ModifCompagnieCodeAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		if(!isset($transfert)){
 			$transfert = 0;
@@ -1511,7 +1558,7 @@ class Controller{
 		$res = $pdo->query($query);
 		$accords = $res->fetchALL(PDO::FETCH_ASSOC);
 
-		//Requete accords partenaires
+		//Requete partenaires
 		$query = "SELECT `CLT-NumID`,`CLT-Nom`,`CLT-NomJeuneFille`,`CLT-Prénom` FROM `clients et prospects` cli, `professions` pro WHERE pro.`PRO-NumID` = cli.`CLT-Profession` AND pro.`PRO-Conseil` = 1 ORDER BY `CLT-Nom`";
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
@@ -1532,16 +1579,36 @@ class Controller{
 		$res = $pdo->query($query);
 		$conseillers = $res->fetchALL(PDO::FETCH_ASSOC);
 
+		Controller::nettoyagePOST();
 		//Requete fiches partenaires
 		$query = "
 		SELECT Professions.`PRO-Conseil`, Professions.`PRO-Nom`, Professions.`PRO-Catégorie`, `Type Client`.`TYP-Nom`, Civilites.`CIV-Nom`, Professions.`PRO-Nom`, `Clients et Prospects`.`CLT-NumID`, `Clients et Prospects`.`CLT-Statut`, `Clients et Prospects`.`CLT-Type`, `Clients et Prospects`.`CLT-Promotion`, `Clients et Prospects`.`CLT-Réseau`, `Clients et Prospects`.`CLT-Syndicat`, `Clients et Prospects`.`CLT-Conseiller`, `Clients et Prospects`.`CLT-PrsMorale`, `Clients et Prospects`.`CLT-Civilité`, `Clients et Prospects`.`CLT-Nom`, `SPR-Nom`, `Statut Professionnel`.`SPR-Nom`, `Clients et Prospects`.`CLT-FJ-RS`, `Clients et Prospects`.`CLT-NomJeuneFille`, `Clients et Prospects`.`CLT-Prénom`,conseillers.`CON-NumORIAS`,conseillers.`CON-Nom`,conseillers.`CON-Prénom`,`SPR-PersonneMorale`,`CON-Couleur`
 		FROM conseillers INNER JOIN (Civilites RIGHT JOIN (Professions RIGHT JOIN (`Statut Professionnel` RIGHT JOIN (`Type Client` INNER JOIN `Clients et Prospects` ON `Type Client`.`TYP-NumID` = `Clients et Prospects`.`CLT-Type`) ON `Statut Professionnel`.`SPR-NumID` = `Clients et Prospects`.`CLT-Statut`) ON Professions.`PRO-NumID` = `Clients et Prospects`.`CLT-Profession`) ON Civilites.`CIV-NumID` = `Clients et Prospects`.`CLT-Civilité`) ON conseillers.`CON-NumID` = `Clients et Prospects`.`CLT-Conseiller`
 		WHERE (((Professions.`PRO-Conseil`)=1)";
+		//Si on est en mode portefeuille selectionné on affiche les partenaire de ce portefeuille
 		if($_SESSION['Auth']['modeAgence'] == 0){
-			$query.="AND ((conseillers.`CON-NumORIAS`) Like ".$_SESSION['Auth']['orias'].")";
+			$query.="AND ((conseillers.`CON-NumID`) Like ".$_SESSION['Auth']['portSelect'].")";
+		//Sinon on affiche ceux qui sont dans les portefeuilles accesibles
+		} else {
+			//Récupération des ORIAS des portefeuilles accesibles dans un tableau
+			$tab = array();
+			foreach ($_SESSION['Auth']['port'] as $p) {
+				array_push($tab,$p['CON-NumORIAS']);
+			}
+			$and = false;
+			//Pour chaque ORIAS on ajoute la condition dans la requete => n° = xxx OU n° = xxx OU n° = xxx ect...
+			foreach ($tab as $t) {
+				if(!$and){
+					$query.=" AND ( conseillers.`CON-NumORIAS` Like ".str_replace("-","1",$t)."";
+					$and = true;
+				} else {
+					$query.=" OR conseillers.`CON-NumORIAS` Like ".str_replace("-","1",$t)."";
+				}
+			}
+			$query.=")";
 		}
 		if(!empty($_POST['recherche'])){
-			$query.="AND `CLT-Nom` LIKE '".$_POST['recherche']."%'";
+			$query.=" AND `CLT-Nom` LIKE '".$_POST['recherche']."%'";
 		}
 		$query.="
 		)
@@ -1557,6 +1624,7 @@ class Controller{
 
 	//Ajout d'un accord partenaire
 	public function AddAccordAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "INSERT INTO `accords partenaires` VALUES (null,$partenaire,$conseiller,$type);";
 		$pdo = BDD::getConnection();
@@ -1567,6 +1635,7 @@ class Controller{
 
 	//Supression d'un accord partenaire
 	public function DeleteAccordAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "DELETE FROM `accords partenaires` WHERE `ACC-NumID` = $idAcc";
 		$pdo = BDD::getConnection();
@@ -1577,6 +1646,7 @@ class Controller{
 
 	//Modification d'un accord partenaire
 	public function ModifAccordAction(){
+		Controller::nettoyagePOST();
 		extract($_POST);
 		$query = "UPDATE `accords partenaires` 
 				  SET `ACC-NumPartenaire`= $partenaire,
