@@ -24,7 +24,7 @@ if(!(Auth::isLogged())){
     ?>
   </title>
 
-  <link rel="icon" href="img/favico.ico" />
+  <link rel="icon" href="img/favico.ico"/>
 
   <!-- Le Bootstrap -->
   <link href="css/bootstrap.css" rel="stylesheet">
@@ -39,7 +39,13 @@ if(!(Auth::isLogged())){
   
 </head>
 
-<body style="background-color:#F6F6F6;">
+<?php
+  if($_SESSION['Auth']['page'] == "Accueil"){
+    echo '<body style="background-color:#362F29;">';
+  } else {
+    echo '<body style="background-color:#F6F6F6;">';
+  }
+?>
 
   <div id="wrapper">
 
@@ -51,7 +57,7 @@ if(!(Auth::isLogged())){
       <?php
       if(Auth::getInfo('modeAgence') == 1){
         ?>
-        <b><i class="fa fa-folder-open"></i> Portefeuille(s) accessible(s) :</b>
+        <span style="color:white;"><b><i class="fa fa-folder-open"></i> Portefeuille(s) accessible(s) :</b></span>
         <form style="display:inline;" method="post" action="index.php?action=selectPort">
           <select style="display:inline;" name="portSelect">
             <option></option>
@@ -70,7 +76,7 @@ if(!(Auth::isLogged())){
         </form>
         <?php
       } else {
-        echo "<b><i class='fa fa-folder-open'></i> Portefeuille selectionné :</b> ".str_replace('-',' ',Auth::getInfo('nomPortSelect'));
+        echo "<span style='color:white;'><b><i class='fa fa-folder-open'></i> Portefeuille selectionné :</b> ".str_replace('-',' ',Auth::getInfo('nomPortSelect'))."</span>";
       }
       ?>
       &nbsp;&nbsp;&nbsp;
@@ -78,9 +84,10 @@ if(!(Auth::isLogged())){
       if(Auth::getInfo('modeAgence') == 1){
         echo '<button type="button" class="btn btn-info btn-xs" style="position:absolute;">Mode agence activé</button>';
       } else {
-        echo '<form style="display:inline;" action="index.php?action=backAgence" method="post"><button type="submit" class="btn btn-warning btn-xs" style="position:absolute;">Retour en mode agence</button></form>';
+        echo '<form style="display:inline;" action="index.php?action=backAgence" method="post"><button type="submit" class="btn btn-warning btn-xs" style="position:absolute;">Retour en Mode Agence</button></form>';
       }
       ?>
+      <div class="alert alert-warning" role="alert" style="display:inline;witdh:500;padding:5px;margin-left:160px;"><i class="fa fa-arrow-left"></i> Selectionnez un "Portefeuille" ou soyez en "Mode Agence"</div>
     </div><hr/>
     <?php
     } else {
@@ -92,14 +99,14 @@ if(!(Auth::isLogged())){
 
 
     <!-- Barre du haut -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" style="height:60px;" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="height:61px;background:#362F29;border:1px solid black;" role="navigation">
       <div class="navbar-header">
-       <a class="navbar-brand" href="index.php" style="margin-right:50px;margin-left:40px;"><img src="img/logo_new2.png" style="width:50px;height:50px;margin-top:-12px;padding:0px"/></a>
+       <a class="navbar-brand" href="index.php" style="margin-right:25px;margin-left:25px;"><img src="img/logo3marron.png" style="width:90px;height:50px;margin-top:-12px;padding:0px"/></a>
       </div>
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <!-- Menu du côté -->
-        <ul class="nav navbar-nav side-nav" style="margin-top:9px;">
-          <hr style="margin:0px;margin-top:1px;"/>
+        <ul class="nav navbar-nav side-nav" style="margin-top:10px;margin-left:-225px;width:172px;background:#362F29;border:1px solid black;">
+          
           <?php 
             if(isset($_SESSION['menu'])){ echo $_SESSION['menu']; unset($_SESSION['menu']); };
             if(isset($_GET['action']) && $_GET['action'] == "ficheCompagnie"){
@@ -170,7 +177,14 @@ if(!(Auth::isLogged())){
     <!-- Bas de page -->
     <div class="col-lg-12">
       <center>
-        2014 © Tous Droits Réservés &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp; Contact : <a href="mailto:savcercle@strategies-avenir.com ">savcercle@strategies-avenir.com </a><img src="img/logo2.png" width="145" height="49"/>
+        
+        <?php
+        if($_SESSION['Auth']['page'] == "Accueil"){
+          echo '<span style="color:white">2014 © Tous Droits Réservés &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp; Contact : <a href="mailto:savcercle@strategies-avenir.com ">savcercle@strategies-avenir.com </a><img src="img/logos/strategie/brun_strategie.jpg" width="145" height="49"/></span>';
+        } else {
+          echo '2014 © Tous Droits Réservés &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp; Contact : <a href="mailto:savcercle@strategies-avenir.com ">savcercle@strategies-avenir.com </a><img src="img/logo2.png" width="145" height="49"/>';
+        }
+        ?>
       </center>
     </div>
 

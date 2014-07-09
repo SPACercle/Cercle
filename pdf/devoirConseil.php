@@ -300,6 +300,7 @@
 		$content.="<div style='position:absolute;top:".$i.";left:45;color:#54644A;'>".$r['PDT-Nom']." géré par la compagnie d'assurance ".$r['CIE-Nom']."</div>";
 		$i = $i + 20;
 		$content.="<div style='position:absolute;top:".$i.";left:53;color:#54644A;'>dont les conditions et les modalités retenues constituent une solution au regard de votre situation en matière de ".$r['TPD-Nom']."</div>";
+		$i = $i + 20;
 	}
 
 	$i = $i + 15;

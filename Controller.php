@@ -288,6 +288,7 @@ class Controller{
 		if(!empty($_GET["idClient"])){
 			extract($_GET);
 
+			//Pour les titres de pages
 			switch($_GET['onglet']){
 				case "general" :
 					Auth::setInfo("ongletTitre","Informations Générales");

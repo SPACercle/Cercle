@@ -279,8 +279,6 @@ $(document).ready(function() {
 		$('#form7').submit();
 	});
 
-
-
 	//FIN ONGLET BESOIN
 
 	//DEBUT ONGLET BESOIN

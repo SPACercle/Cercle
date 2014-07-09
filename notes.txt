@@ -11,6 +11,7 @@ Documentation : Liste de tous les outils (mettre à jour à la fin et recupérer
 
 Récuperer tous les fichiers + BDD
 
+Virer DOF
 
 
 
@@ -30,6 +31,8 @@ Récuperer tous les fichiers + BDD
 ---------------------------------------------------------------------------------------------------------
 
 Base de données : Synchro schéma (// = fait) : 
+
+	//Conseiller => collone CON-AutGestionPartenaire
 
 	//Type Historique => collone sensibilité à prendre en compte (HIS-PECSensibilite)
 

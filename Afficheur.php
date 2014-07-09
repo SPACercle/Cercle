@@ -18,7 +18,7 @@ function AffichePageMessage($message){
 
 //Affichage de l'accueil
 function AfficheHome(){
-	return('<center><br/><br/><br/><br/><img src="img/logo_new.png" style="width:300px;height:300px;"/><br/><br/><h4>Version Beta</h4></center>');
+	return('<center><br/><br/><br/><br/><img src="img/logo3marron.png" style="width:40%;height:40%;"/><br/><br/><h4><span style="color:white">Version Beta</span></h4></center>');
 }
 
 //Affichage des droits
@@ -68,6 +68,12 @@ function AfficheDroits($droits) {
 	}
 	$code.= " <h4 style='display:inline;'>Publipostage ";
 	if($droits[0]['CON-AutCourriers'] == 1){
+		$code.="<img src='img/valid.gif'/></h4><br/><br/>";
+	}else{
+		$code.="<img src='img/invalid.png'/></h4><br/><br/>";
+	}
+	$code.= " <h4 style='display:inline;'>Gestion Partenaires ";
+	if($droits[0]['CON-AutGestionPartenaire'] == 1){
 		$code.="<img src='img/valid.gif'/></h4><br/><br/>";
 	}else{
 		$code.="<img src='img/invalid.png'/></h4><br/><br/>";
@@ -430,7 +436,7 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	</div>
 	</div>
 	';
-	//Menu du côté
+	//Menu du côté (actif ou pas)
 	if($client['CLT-PrsMorale'] == 0){
 		if(isset($_GET['onglet'])  && $_GET['onglet'] == "general"){
 			$menu = '<li class="active"><a href="index.php?action=ficheClient&idClient='.$client['CLT-NumID'].'&onglet=general"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
@@ -536,6 +542,7 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 		}
 	}
 	$_SESSION['menu'] = $menu; 
+	//Animation pendant le chargement
 	$code.='<script type="text/javascript">document.getElementById(\'load\').style.display = \'none\';</script>';
 	return($code);
 }
@@ -1217,10 +1224,7 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 //Affichage de l'onglet Besoin
 function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	$code = "";
-	if(isset($_GET['idType']) && !$_SESSION['Auth']['dejaReload']){
-		$code.="<script>window.location.reload()</script>";
-		Auth::setInfo('dejaReload',true);
-	}
+	//Pour afficher en gras le titre s'il y a des besoins existant dans la catégorie
 	$retraite = false;
 	$prev = false;
 	$prevPost = false;
@@ -2153,6 +2157,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 				<h4 class="panel-title"><b>Différentes phases de mise en place des mes dossiers</b></h4>
 			</div>
 			<div class="panel-body" style="font-size:11px;">';
+				// Pour chaque ligne déroulante
 				$n = array("One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen");
 				$i = 0;
 				foreach ($evenements as $ev) {
@@ -2544,7 +2549,7 @@ function AfficheFicheCompagnie($compagnie,$contacts,$departements,$contactsLoc,$
 
 	$code.='</div></div>';
 
-	//Menu du côté
+	//Menu du côté (actif ou pas)
 	if(isset($_GET['onglet'])  && $_GET['onglet'] == "general"){
 		$menu = '<li class="active"><a href="index.php?action=ficheCompagnie&idComp='.$compagnie[0]['CIE-NumID'].'&onglet=general"><i class="fa fa-pencil-square-o fa-lg"></i><b> Infos Générales</b></a></li>';
 	} else {
@@ -2573,169 +2578,291 @@ function AfficheFicheCompagnie($compagnie,$contacts,$departements,$contactsLoc,$
 
 //Affichage de la fiche compagnie - onglet Général
 function AfficheFicheCompagnieGeneral($compagnie){
-	$code='<span style="font-size:20px;"><b><u>Informations Générales</u></b></span><br/><br/>
-	<form action="index.php?action=modifCompagnieGeneral" method="post">
-	<input type="hidden" name="idComp" value="'.$compagnie[0]['CIE-NumID'].'"/> 
-		<div class="col-lg-4">
-			<div class="form-group">
-				<label>Adresse : </label><br/>
-				<input type="text" class="form-control" style="width:275px;" name="adresse" value="'.$compagnie[0]['CIE-Adresse'].'"/> 
+	$code='<span style="font-size:20px;"><b><u>Informations Générales</u></b></span><br/><br/>';
+	$query = "SELECT `CON-AutGestionCie` FROM `conseillers` c WHERE `CON-NumID`='".$_SESSION['Auth']['id']."'";
+	$pdo = BDD::getConnection();
+	$pdo->exec("SET NAMES UTF8");
+	$res = $pdo->query($query);
+	$droits = $res->fetchALL(PDO::FETCH_ASSOC);
+	if($droits[0]['CON-AutGestionCie'] == 1){
+		$code.='
+		<form action="index.php?action=modifCompagnieGeneral" method="post">
+		<input type="hidden" name="idComp" value="'.$compagnie[0]['CIE-NumID'].'"/> 
+			<div class="col-lg-4">
+				<div class="form-group">
+					<label>Adresse : </label><br/>
+					<input type="text" class="form-control" style="width:275px;" name="adresse" value="'.$compagnie[0]['CIE-Adresse'].'"/> 
+				</div>
+
+				<div class="form-group">
+					<label>Code Postal : </label><br/>
+					<input type="text" class="form-control" style="width:275px;" name="codePostal" value="'.$compagnie[0]['CIE-CodePostal'].'"/> 
+				</div>
+
+				<div class="form-group">
+					<label>Ville : </label><br/>
+					<input type="text" class="form-control" style="width:275px;" name="ville" value="'.$compagnie[0]['CIE-Ville'].'"/> 
+				</div>
+
+				<div class="form-group">
+					<label>Accueil Tel : </label><br/>
+					<input type="text" class="form-control" style="width:275px;" name="tel" value="'.$compagnie[0]['CIE-AccueilTel'].'"/> 
+				</div>
+			</div>
+			<div class="col-lg-4">
+				<div class="form-group">
+					<label>Fax : </label><br/>
+					<input type="text" class="form-control" style="width:275px;" name="fax" value="'.$compagnie[0]['CIE-Fax'].'"/> 
+				</div>
+
+				<div class="form-group">
+					<label>Commentaire : </label><br/>
+					<input type="text" class="form-control" style="width:275px;" name="com" value="'.$compagnie[0]['CIE-Commentaire'].'"/> 
+				</div>
+
+				<div class="form-group">
+					<label>Site Internet : </label><br/>
+					<input type="text" class="form-control" style="width:275px;" name="site" value="'.$compagnie[0]['CIE-SiteInternet'].'"/> 
+				</div>
+
+				<div class="form-group">
+					<label>Tarif Internet : </label><br/>
+					<input type="text" class="form-control" style="width:275px;" name="tarif" value="'.$compagnie[0]['CIE-TarifInternet'].'"/> 
+				</div>
 			</div>
 
-			<div class="form-group">
-				<label>Code Postal : </label><br/>
-				<input type="text" class="form-control" style="width:275px;" name="codePostal" value="'.$compagnie[0]['CIE-CodePostal'].'"/> 
+			<div class="col-lg-4">
+				<div class="form-group">
+					<label>ACP : </label><br/>';
+					if($compagnie[0]['CIE-ACP'] == 1){
+						$code.='<input type="checkbox" name="acp" checked/>';
+					} else {
+						$code.='<input type="checkbox" name="acp"/>';
+					}
+				$code.='
+				</div>
 			</div>
 
-			<div class="form-group">
-				<label>Ville : </label><br/>
-				<input type="text" class="form-control" style="width:275px;" name="ville" value="'.$compagnie[0]['CIE-Ville'].'"/> 
+			<div class="col-lg-12">
+				<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Valider Modifications</button>
+			</div>
+		</form>
+		';
+	} else {
+		$code.='
+			<div class="col-lg-4">
+				<div class="form-group">
+					<label>Adresse : </label><br/>
+					'.$compagnie[0]['CIE-Adresse'].'
+				</div>
+
+				<div class="form-group">
+					<label>Code Postal : </label><br/>
+					'.$compagnie[0]['CIE-CodePostal'].'
+				</div>
+
+				<div class="form-group">
+					<label>Ville : </label><br/>
+					'.$compagnie[0]['CIE-Ville'].'
+				</div>
+
+				<div class="form-group">
+					<label>Accueil Tel : </label><br/>
+					'.$compagnie[0]['CIE-AccueilTel'].'
+				</div>
+			</div>
+			<div class="col-lg-4">
+				<div class="form-group">
+					<label>Fax : </label><br/>
+					'.$compagnie[0]['CIE-Fax'].' 
+				</div>
+
+				<div class="form-group">
+					<label>Commentaire : </label><br/>
+					'.$compagnie[0]['CIE-Commentaire'].'
+				</div>
+
+				<div class="form-group">
+					<label>Site Internet : </label><br/>
+					'.$compagnie[0]['CIE-SiteInternet'].'
+				</div>
+
+				<div class="form-group">
+					<label>Tarif Internet : </label><br/>
+					'.$compagnie[0]['CIE-TarifInternet'].'
+				</div>
 			</div>
 
-			<div class="form-group">
-				<label>Accueil Tel : </label><br/>
-				<input type="text" class="form-control" style="width:275px;" name="tel" value="'.$compagnie[0]['CIE-AccueilTel'].'"/> 
+			<div class="col-lg-4">
+				<div class="form-group">
+					<label>ACP : </label><br/>';
+					if($compagnie[0]['CIE-ACP'] == 1){
+						$code.='<input type="checkbox" name="acp" checked/>';
+					} else {
+						$code.='<input type="checkbox" name="acp"/>';
+					}
+				$code.='
+				</div>
 			</div>
-		</div>
-		<div class="col-lg-4">
-			<div class="form-group">
-				<label>Fax : </label><br/>
-				<input type="text" class="form-control" style="width:275px;" name="fax" value="'.$compagnie[0]['CIE-Fax'].'"/> 
-			</div>
-
-			<div class="form-group">
-				<label>Commentaire : </label><br/>
-				<input type="text" class="form-control" style="width:275px;" name="com" value="'.$compagnie[0]['CIE-Commentaire'].'"/> 
-			</div>
-
-			<div class="form-group">
-				<label>Site Internet : </label><br/>
-				<input type="text" class="form-control" style="width:275px;" name="site" value="'.$compagnie[0]['CIE-SiteInternet'].'"/> 
-			</div>
-
-			<div class="form-group">
-				<label>Tarif Internet : </label><br/>
-				<input type="text" class="form-control" style="width:275px;" name="tarif" value="'.$compagnie[0]['CIE-TarifInternet'].'"/> 
-			</div>
-		</div>
-
-		<div class="col-lg-4">
-			<div class="form-group">
-				<label>ACP : </label><br/>';
-				if($compagnie[0]['CIE-ACP'] == 1){
-					$code.='<input type="checkbox" name="acp" checked/>';
-				} else {
-					$code.='<input type="checkbox" name="acp"/>';
-				}
-			$code.='
-			</div>
-		</div>
-
-		<div class="col-lg-12">
-			<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Valider Modifications</button>
-		</div>
-	</form>
-	';
+		';
+	}
 	return($code);
 }
 
 //Affichage de la fiche compagnie - onglet Contacts
 function AfficheFicheCompagnieContact($contacts,$idComp){
-	$code="
-	<button class='btn btn-success' id='ajoutContact' style='float:right;'><i class='fa fa-plus fa-lg'></i> Ajouter un Contact</button>
-	<input type='hidden' id='enAjout' value='non'/>
-	<span style='font-size:20px;'><b><u>Annuaire National</u></b></span><br/><br/>
-	<a type='button' onclick='impr()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Imprimer</a>
-	<script>
-	function impr() {
-	    window.open(\"pdf/contactCompagnie.php?idComp=".$idComp."\");
-	}
-	</script>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a type='button' onclick='site()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Liste sites</a>
-	<script>
-	function site() {
-	    window.open(\"pdf/site.php\");
-	}
-	</script>
-	<br/><br/>
-	<div class='table-responsive'>
-	<table class='table table-hover tablesorter'>
-	<thead>
-	<tr>
-	<th>Nom/Service</th>
-	<th>Prénom</th>
-	<th>Tel Bureau</i></th>
-	<th>Mail</th>
-	<th>Tel Portable</th>
-	<th>Fax</th>
-	<th>Fonction</th>
-	<th>Horaires Ouverture</th>
-	<th>Commentaire</th>
-	<th></th>
-	<th></th>
-	</tr>
-	</thead>
-	<tbody>";
-	foreach($contacts as $cont){
-		$code.='<tr><form action="index.php?action=modifCompagnieContact" method="post" onsubmit="return verif();">
-	    <input type="hidden" name="idComp" value="'.$cont['C/C-Num'].'"/> 
-	    <input type="hidden" name="idNom" value="'.$cont['C/C-Nom'].'"/>
-	    <input type="hidden" name="idPrenom" value="'.$cont['C/C-Prénom'].'"/>
-		';
-		$code.='
-			<td><input style="width:200px;" type="text" name="nom" value="'.$cont["C/C-Nom"].'" required/></td>
-			<td><input type="text" name="prenom" value="'.$cont["C/C-Prénom"].'"/></td>
-			<td><input style="width:100px;" type="text" name="tel" class="phone" class="phone" value="'.$cont["C/C-TelBureau"].'"/></td>
-			<td><input style="width:210px;" type="text" name="mail" value="'.$cont["C/C-Mail"].'"/></td>
-			<td><input style="width:100px;" type="text" name="port" class="phone" value="'.$cont["C/C-TelPortable"].'"/></td>
-			<td><input style="width:100px;" type="text" name="fax" class="phone" class="phone" value="'.$cont["C/C-Fax"].'"/></td>
-			<td><input type="text" name="fonction" value="'.$cont["C/C-Fonction"].'"/></td>
-			<td><input style="width:100px;" type="text" name="horaire" value="'.$cont["C/C-HorairesOuverture"].'"/></td>';
-
-			$code.='<td><input style="width:150px;" type="text" name="com" value="'.$cont['C/C-Commentaire'].'"/></td>';
-
-			$code.='
-			<td><button type="submit" class="btn btn-warning btn-xs"><i class="fa fa-save"></i> Enregistrer</button></form></td>
-			<td>
-				<form action="index.php?action=deleteCompagnieContact" method="post">
-					<input type="hidden" name="idComp" value="'.$cont["C/C-Num"].'"/>
-					<input type="hidden" name="idNom" value="'.$cont["C/C-Nom"].'"/>
-					<input type="hidden" name="idPrenom" value="'.$cont["C/C-Prénom"].'"/>
-					<button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Supprimer</button>
-				</form>
-			</td>						
-		';
-		$code.="</form></tr>";
-	}
-	$code.="
-	<tr id='formContact'>
-	<td><form action='index.php?action=addCompagnieContact' name='formulaire' method='post'>
-	<input style='width:200px;' type='text' name='nom' required/></td>
-	<script>
-		function verif(){
-			if(document.getElementById('enAjout').value == 'oui'){
-				choix = confirm('Attention ! Vous voulez ajouter une ligne de donnée et en modifier une autre. Cliquez sur \"Ok\" pour enregistrer la ligne modifiée ou sur \"Annuler\" pour valider la nouvelle ligne.');
-			    if(choix == true){
-			      document.formulaire.submit();
-			    } else {
-			      return false;
-			    }
-			}
+	//Recupération du droit de gestion des compagnies du conseiller
+	$query = "SELECT `CON-AutGestionCie` FROM `conseillers` c WHERE `CON-NumID`='".$_SESSION['Auth']['id']."'";
+	$pdo = BDD::getConnection();
+	$pdo->exec("SET NAMES UTF8");
+	$res = $pdo->query($query);
+	$droits = $res->fetchALL(PDO::FETCH_ASSOC);
+	//Droit OK
+	if($droits[0]['CON-AutGestionCie'] == 1){
+		$code="
+		<button class='btn btn-success' id='ajoutContact' style='float:right;'><i class='fa fa-plus fa-lg'></i> Ajouter un Contact</button>
+		<input type='hidden' id='enAjout' value='non'/>
+		<span style='font-size:20px;'><b><u>Annuaire National</u></b></span><br/><br/>
+		<a type='button' onclick='impr()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Imprimer</a>
+		<script>
+		function impr() {
+		    window.open(\"pdf/contactCompagnie.php?idComp=".$idComp."\");
 		}
-	</script>
-	<td><input type='text' name='prenom'/></td>
-	<td><input style='width:100px;' type='text' name='tel' class='phone'/></td>
-	<td><input style='width:210px;' type='text' name='mail'/></td>
-	<td><input style='width:100px; 'type='text' class='phone' name='port'/></td>
-	<td><input style='width:100px; 'type='text' class='phone' name='fax'/></td>
-	<td><input type='text' name='fonction'/></td>
-	<td><input style='width:100px;' type='text' name='horaire'/></td>
-	<td><input style='width:150;' type='text' name='com'/></td>
-	<td><input type='hidden' name='idComp' value='".$idComp."'/><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
-	<td></td>
-	</tr>
-	";
-	$code .= "</tbody></table></div>";
+		</script>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<a type='button' onclick='site()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Liste sites</a>
+		<script>
+		function site() {
+		    window.open(\"pdf/site.php\");
+		}
+		</script>
+		<br/><br/>
+		<div class='table-responsive'>
+		<table class='table table-hover tablesorter'>
+		<thead>
+		<tr>
+		<th>Nom/Service</th>
+		<th>Prénom</th>
+		<th>Tel Bureau</i></th>
+		<th>Mail</th>
+		<th>Tel Portable</th>
+		<th>Fax</th>
+		<th>Fonction</th>
+		<th>Horaires Ouverture</th>
+		<th>Commentaire</th>
+		<th></th>
+		<th></th>
+		</tr>
+		</thead>
+		<tbody>";
+		foreach($contacts as $cont){
+			$code.='<tr><form action="index.php?action=modifCompagnieContact" method="post" onsubmit="return verif();">
+		    <input type="hidden" name="idComp" value="'.$cont['C/C-Num'].'"/> 
+		    <input type="hidden" name="idNom" value="'.$cont['C/C-Nom'].'"/>
+		    <input type="hidden" name="idPrenom" value="'.$cont['C/C-Prénom'].'"/>
+			';
+			$code.='
+				<td><input style="width:200px;" type="text" name="nom" value="'.$cont["C/C-Nom"].'" required/></td>
+				<td><input type="text" name="prenom" value="'.$cont["C/C-Prénom"].'"/></td>
+				<td><input style="width:100px;" type="text" name="tel" class="phone" class="phone" value="'.$cont["C/C-TelBureau"].'"/></td>
+				<td><input style="width:210px;" type="text" name="mail" value="'.$cont["C/C-Mail"].'"/></td>
+				<td><input style="width:100px;" type="text" name="port" class="phone" value="'.$cont["C/C-TelPortable"].'"/></td>
+				<td><input style="width:100px;" type="text" name="fax" class="phone" class="phone" value="'.$cont["C/C-Fax"].'"/></td>
+				<td><input type="text" name="fonction" value="'.$cont["C/C-Fonction"].'"/></td>
+				<td><input style="width:100px;" type="text" name="horaire" value="'.$cont["C/C-HorairesOuverture"].'"/></td>';
+
+				$code.='<td><input style="width:150px;" type="text" name="com" value="'.$cont['C/C-Commentaire'].'"/></td>';
+
+				$code.='
+				<td><button type="submit" class="btn btn-warning btn-xs"><i class="fa fa-save"></i> Enregistrer</button></form></td>
+				<td>
+					<form action="index.php?action=deleteCompagnieContact" method="post">
+						<input type="hidden" name="idComp" value="'.$cont["C/C-Num"].'"/>
+						<input type="hidden" name="idNom" value="'.$cont["C/C-Nom"].'"/>
+						<input type="hidden" name="idPrenom" value="'.$cont["C/C-Prénom"].'"/>
+						<button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Supprimer</button>
+					</form>
+				</td>						
+			';
+			$code.="</form></tr>";
+		}
+		$code.="
+		<tr id='formContact'>
+		<td><form action='index.php?action=addCompagnieContact' name='formulaire' method='post'>
+		<input style='width:200px;' type='text' name='nom' required/></td>
+		<script>
+			function verif(){
+				if(document.getElementById('enAjout').value == 'oui'){
+					choix = confirm('Attention ! Vous voulez ajouter une ligne de donnée et en modifier une autre. Cliquez sur \"Ok\" pour enregistrer la ligne modifiée ou sur \"Annuler\" pour valider la nouvelle ligne.');
+				    if(choix == true){
+				      document.formulaire.submit();
+				    } else {
+				      return false;
+				    }
+				}
+			}
+		</script>
+		<td><input type='text' name='prenom'/></td>
+		<td><input style='width:100px;' type='text' name='tel' class='phone'/></td>
+		<td><input style='width:210px;' type='text' name='mail'/></td>
+		<td><input style='width:100px; 'type='text' class='phone' name='port'/></td>
+		<td><input style='width:100px; 'type='text' class='phone' name='fax'/></td>
+		<td><input type='text' name='fonction'/></td>
+		<td><input style='width:100px;' type='text' name='horaire'/></td>
+		<td><input style='width:150;' type='text' name='com'/></td>
+		<td><input type='hidden' name='idComp' value='".$idComp."'/><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
+		<td></td>
+		</tr>
+		";
+		$code .= "</tbody></table></div>";
+	//Si pas OK
+	} else {
+		$code="
+		<span style='font-size:20px;'><b><u>Annuaire National</u></b></span><br/><br/>
+		<a type='button' onclick='impr()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Imprimer</a>
+		<script>
+		function impr() {
+		    window.open(\"pdf/contactCompagnie.php?idComp=".$idComp."\");
+		}
+		</script>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<a type='button' onclick='site()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Liste sites</a>
+		<script>
+		function site() {
+		    window.open(\"pdf/site.php\");
+		}
+		</script>
+		<br/><br/>
+		<div class='table-responsive'>
+		<table class='table table-hover tablesorter'>
+		<thead>
+		<tr>
+		<th>Nom/Service</th>
+		<th>Prénom</th>
+		<th>Tel Bureau</i></th>
+		<th>Mail</th>
+		<th>Tel Portable</th>
+		<th>Fax</th>
+		<th>Fonction</th>
+		<th>Horaires Ouverture</th>
+		<th>Commentaire</th>
+		<th></th>
+		<th></th>
+		</tr>
+		</thead>
+		<tbody>";
+		foreach($contacts as $cont){
+			$code.='<tr>
+				<td>'.$cont["C/C-Nom"].'</td>
+				<td>'.$cont["C/C-Prénom"].'</td>
+				<td style="width:100px;">'.$cont["C/C-TelBureau"].'</td>
+				<td>'.$cont["C/C-Mail"].'</td>
+				<td style="width:100px;">'.$cont["C/C-TelPortable"].'</td>
+				<td style="width:100px;">'.$cont["C/C-Fax"].'</td>
+				<td>'.$cont["C/C-Fonction"].'</td>
+				<td style="width:100px;">'.$cont["C/C-HorairesOuverture"].'</td>';
+				$code.='<td style="width:250px;">'.$cont['C/C-Commentaire'].'</td></tr>';
+		}
+		$code .= "</tbody></table></div>";
+	}
 	return($code);
 }
 
@@ -3009,7 +3136,7 @@ function AffichePartenaire($accords,$partenaires,$types,$conseillers,$partenaire
 		$code.=AffichePartenaireListe();
 	}
 
-	//Menu du côté
+	//Menu du côté (actif ou pas)
 	if(isset($_GET['onglet'])  && $_GET['onglet'] == "accord"){
 		$menu= '<li class="active"><a href="index.php?action=partenaire&onglet=accord"><i class="fa fa-random fa-lg"></i><b> Affectations Accords</b></a></li>';
 	} else {
@@ -3040,97 +3167,152 @@ function AffichePartenaire($accords,$partenaires,$types,$conseillers,$partenaire
 
 //Affichage des accords partenaires
 function AffichePartenaireAccord($accords,$partenaires,$types,$conseillers){
-	$code="
-	<button class='btn btn-success' id='ajoutAccord' style='float:right;'><i class='fa fa-plus fa-lg'></i> Ajouter un Accord</button>
-	<span style='font-size:20px;'><b><u>Affectations Accords Partenaires</u></b></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a type='button' onclick='accord()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Imprimer</a>
-	<script>
-	function accord() {
-	    window.open(\"pdf/accord.php\");
-	}
-	</script><br/></br>
-	<div class='table-responsive' style='width:800px;'>
-	<table class='table table-hover tablesorter'>
-	<thead>
-	<tr>
-	<th>Partenaire</th>
-	<th>Type</i></th>
-	<th>Conseiller</th>
-	<th></th>
-	<th></th>
-	</tr>
-	</thead>
-	<tbody>";
-	foreach ($accords as $acc) {
-		$code.="<tr><form action='index.php?action=modifAccord' method='post'>
-		<td style='width:300px;'><select name='partenaire'>";
-		foreach ($partenaires as $part) {
-			if($acc['ACC-NumPartenaire'] == $part['CLT-NumID']){
-				$code.="<option value='".$part['CLT-NumID']."' selected>".$part['CLT-Nom']." ".$part['CLT-NomJeuneFille']." ".$part['CLT-Prénom']."</option>";
-			} else {
+	//Récupération du droit de gestion des partenaires
+	$query = "SELECT `CON-AutGestionPartenaire` FROM `conseillers` c WHERE `CON-NumID`='".$_SESSION['Auth']['id']."'";
+	$pdo = BDD::getConnection();
+	$pdo->exec("SET NAMES UTF8");
+	$res = $pdo->query($query);
+	$droits = $res->fetchALL(PDO::FETCH_ASSOC);
+	//Si OK
+	if($droits[0]['CON-AutGestionPartenaire'] == 1){
+		$code="
+		<button class='btn btn-success' id='ajoutAccord' style='float:right;'><i class='fa fa-plus fa-lg'></i> Ajouter un Accord</button>
+		<span style='font-size:20px;'><b><u>Affectations Accords Partenaires</u></b></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<a type='button' onclick='accord()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Imprimer</a>
+		<script>
+		function accord() {
+		    window.open(\"pdf/accord.php\");
+		}
+		</script><br/></br>
+		<div class='table-responsive' style='width:800px;'>
+		<table class='table table-hover tablesorter'>
+		<thead>
+		<tr>
+		<th>Partenaire</th>
+		<th>Type</i></th>
+		<th>Conseiller</th>
+		<th></th>
+		<th></th>
+		</tr>
+		</thead>
+		<tbody>";
+		foreach ($accords as $acc) {
+			$code.="<tr><form action='index.php?action=modifAccord' method='post'>
+			<td style='width:300px;'><select name='partenaire'>";
+			foreach ($partenaires as $part) {
+				if($acc['ACC-NumPartenaire'] == $part['CLT-NumID']){
+					$code.="<option value='".$part['CLT-NumID']."' selected>".$part['CLT-Nom']." ".$part['CLT-NomJeuneFille']." ".$part['CLT-Prénom']."</option>";
+				} else {
+					$code.="<option value='".$part['CLT-NumID']."'>".$part['CLT-Nom']." ".$part['CLT-NomJeuneFille']." ".$part['CLT-Prénom']."</option>";					
+				}
+			}
+			$code.="</select></td>
+
+			<td style='width:50px;'><select name='type'>";
+			foreach($types as $typ) {
+				if($acc['ACC-NumType'] == $typ['R/A-NumID']){
+					$code.="<option value='".$typ['R/A-NumID']."' selected>".$typ['R/A-Type']."</option>";
+				} else {
+					$code.="<option value='".$typ['R/A-NumID']."'>".$typ['R/A-Type']."</option>";					
+				}
+			}
+			$code.="</select></td>
+
+			<td style='width:150px;'><select name='conseiller'>";
+			foreach($conseillers as $con) {
+				if($acc['ACC-NumConseiller'] == $con['CON-NumID']){
+					$code.="<option value='".$con['CON-NumID']."' selected>".$con['CON-Nom']." ".$con['CON-Prénom']."</option>";
+				} else {
+					$code.="<option value='".$con['CON-NumID']."'>".$con['CON-Nom']." ".$con['CON-Prénom']."</option>";					
+				}
+			}
+			$code.="</select></td>";
+
+			$code.="
+			<td style='width:100px;'>
+				<input type='hidden' value='".$acc['ACC-NumID']."' name='idAcc'/>
+				<button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button>
+				</form>
+			</td>
+			<td><form action='index.php?action=deleteAccord' method='post'>
+					<input type='hidden' value='".$acc['ACC-NumID']."' name='idAcc'/>
+					<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-save'></i> Supprimer</button>
+				</form>
+			</td>
+			</tr>";
+		}
+		$code.="
+		<tr id='formAccord'>
+		<form action='index.php?action=addAccord' method='post'>
+		<td style='width:300px;'><select name='partenaire' required><option></option>";
+			foreach ($partenaires as $part) {
 				$code.="<option value='".$part['CLT-NumID']."'>".$part['CLT-Nom']." ".$part['CLT-NomJeuneFille']." ".$part['CLT-Prénom']."</option>";					
 			}
-		}
-		$code.="</select></td>
+			$code.="</select></td>
 
-		<td style='width:50px;'><select name='type'>";
-		foreach($types as $typ) {
-			if($acc['ACC-NumType'] == $typ['R/A-NumID']){
-				$code.="<option value='".$typ['R/A-NumID']."' selected>".$typ['R/A-Type']."</option>";
-			} else {
+			<td style='width:50px;'><select name='type' required><option></option>";
+			foreach($types as $typ) {
 				$code.="<option value='".$typ['R/A-NumID']."'>".$typ['R/A-Type']."</option>";					
 			}
-		}
-		$code.="</select></td>
+			$code.="</select></td>
 
-		<td style='width:150px;'><select name='conseiller'>";
-		foreach($conseillers as $con) {
-			if($acc['ACC-NumConseiller'] == $con['CON-NumID']){
-				$code.="<option value='".$con['CON-NumID']."' selected>".$con['CON-Nom']." ".$con['CON-Prénom']."</option>";
-			} else {
+			<td style='width:150px;'><select name='conseiller' required><option></option>";
+			foreach($conseillers as $con) {
 				$code.="<option value='".$con['CON-NumID']."'>".$con['CON-Nom']." ".$con['CON-Prénom']."</option>";					
 			}
+			$code.="</select>
+			<td><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
+			</td><td></td>
+		</form></tr>";
+		$code .= "</tbody></table></div>";
+	//Si pas OK
+	} else {
+		$code="
+		<span style='font-size:20px;'><b><u>Affectations Accords Partenaires</u></b></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<a type='button' onclick='accord()' target='_blank' class='btn btn-primary'><img src='img/pdf.png' class='pdf'/> Imprimer</a>
+		<script>
+		function accord() {
+		    window.open(\"pdf/accord.php\");
 		}
-		$code.="</select></td>";
-
-		$code.="
-		<td style='width:100px;'>
-			<input type='hidden' value='".$acc['ACC-NumID']."' name='idAcc'/>
-			<button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button>
-			</form>
-		</td>
-		<td><form action='index.php?action=deleteAccord' method='post'>
-				<input type='hidden' value='".$acc['ACC-NumID']."' name='idAcc'/>
-				<button type='submit' class='btn btn-danger btn-xs'><i class='fa fa-save'></i> Supprimer</button>
-			</form>
-		</td>
-		</tr>";
+		</script><br/></br>
+		<div class='table-responsive' style='width:800px;'>
+		<table class='table table-hover tablesorter'>
+		<thead>
+		<tr>
+		<th>Partenaire</th>
+		<th>Type</i></th>
+		<th>Conseiller</th>
+		</tr>
+		</thead>
+		<tbody>";
+		foreach ($accords as $acc) {
+			$code.="<tr>
+			<td style='width:300px;'>";
+			foreach ($partenaires as $part) {
+				if($acc['ACC-NumPartenaire'] == $part['CLT-NumID']){
+					$code.="".$part['CLT-Nom']." ".$part['CLT-NomJeuneFille']." ".$part['CLT-Prénom']."";
+				}
+			}
+			$code.="</td>
+			<td style='width:50px;'>";
+			foreach($types as $typ) {
+				if($acc['ACC-NumType'] == $typ['R/A-NumID']){
+					$code.="".$typ['R/A-Type']."";
+				}
+			}
+			$code.="</td>
+			<td style='width:150px;'>";
+			foreach($conseillers as $con) {
+				if($acc['ACC-NumConseiller'] == $con['CON-NumID']){
+					$code.="".$con['CON-Nom']." ".$con['CON-Prénom']."";
+				} 
+			}
+			$code.="</td></tr>";
+		}
+		$code.="</tbody></table></div>";
 	}
-	$code.="
-	<tr id='formAccord'>
-	<form action='index.php?action=addAccord' method='post'>
-	<td style='width:300px;'><select name='partenaire' required><option></option>";
-		foreach ($partenaires as $part) {
-			$code.="<option value='".$part['CLT-NumID']."'>".$part['CLT-Nom']." ".$part['CLT-NomJeuneFille']." ".$part['CLT-Prénom']."</option>";					
-		}
-		$code.="</select></td>
-
-		<td style='width:50px;'><select name='type' required><option></option>";
-		foreach($types as $typ) {
-			$code.="<option value='".$typ['R/A-NumID']."'>".$typ['R/A-Type']."</option>";					
-		}
-		$code.="</select></td>
-
-		<td style='width:150px;'><select name='conseiller' required><option></option>";
-		foreach($conseillers as $con) {
-			$code.="<option value='".$con['CON-NumID']."'>".$con['CON-Nom']." ".$con['CON-Prénom']."</option>";					
-		}
-		$code.="</select>
-		<td><button type='submit' class='btn btn-success btn-xs'><i class='fa fa-plus fa-lg'></i> Ajouter</button></form></td>
-		</td><td></td>
-	</form></tr>";
-	$code .= "</tbody></table></div>";
 	return($code);
 }
 
