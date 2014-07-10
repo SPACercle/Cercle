@@ -15,10 +15,10 @@
         <div style='position:absolute;top:516;left:26'><h5><u>2) Confirmation de la prise en charge</u></h5></div>
         <div style='position:absolute;top:579;left:26'><h5><u>3) Impression du courrier pour dossier</u></h5></div>
         <i><div style='position:absolute;top:658;left:29'>Dans l’historique avec une alerte ( case anomalie sinistre=.alerte )</div></i>
-        <div style='position:absolute;top:623;left:26'><h5><u>4) Inscription du sinistre dans LGC</u></h5></div>
+        <div style='position:absolute;top:623;left:26'><h5><u>4) Inscription du sinistre dans Cercle</u></h5></div>
         <div style='position:absolute;top:677;left:26'><h5><u>5) Positionnement d’un rendez-vous </u></h5></div>
         <i><div style='position:absolute;top:781;left:30'>Rappel téléphonique ou envoi par courrier pour recueillir  le ressenti  client sur la qualité et la rapidité du traitement du dossier.</div></i>
-        <i><div style='position:absolute;top:796;left:30'>Inscription LGC qualité back office compagnie.</div></i>
+        <i><div style='position:absolute;top:796;left:30'>Inscription Cercle qualité back office compagnie.</div></i>
         <div style='position:absolute;top:746;left:26'><h5><u>6) Questionnaire</u></h5></div>
         <div style='position:absolute;top:823;left:26'><h5><u>7) Classement du dossier</u></h5></div>
         <i><div style='position:absolute;top:469;left:26'>a) compagnie</div>
@@ -28,7 +28,7 @@
         <div style='position:absolute;top:713;left:30'>Positionner un rendez-vous physique ou téléphonique à 15 jours au plus tard pour point situation et avancement du dossier.</div>
         <div style='position:absolute;top:728;left:30'>Inscription sur Agenda courtier  Agenda assistante commerciale.</div>
         <div style='position:absolute;top:855;left:30'>Rappel téléphonique ou envoi par courrier pour recueillir  le ressenti  client sur la qualité et la rapidité du traitement du dossier.</div>
-        <div style='position:absolute;top:870;left:30'>Inscription LGC qualité back office compagnie.</div>
+        <div style='position:absolute;top:870;left:30'>Inscription Cercle qualité back office compagnie.</div>
         <div style='position:absolute;top:146;left:26'><b><u>Préambule</u></b></div>
         <div style='position:absolute;top:173;left:26'>Le contrôle des prestations de service</div>
         <div style='position:absolute;top:188;left:26'>Cela concerne d'une part les entreprises disposant de services clients et/ou de centres d'appels.</div>

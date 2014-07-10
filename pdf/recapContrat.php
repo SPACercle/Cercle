@@ -151,7 +151,7 @@
 
 	<page_header>
 		<div style='position:absolute;top:-;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>  
-		<div style='position:absolute;top:0;left:0'><img style='width:250px;height:48px;' src='../img/logos/".$logo."' ALT=''></div>  
+		<div style='position:absolute;top:0;left:0'><img  src='../img/logos/".$logo."' ALT=''></div>  
 	</page_header>
 
     <span style='font-size:12px'>
@@ -177,6 +177,7 @@
 				$i=$i+15;
 			}
 			if(!in_array($r['P/C-NumContrat'],$tab_produit) && $r['P/C-NumContrat'] != ""){
+				$i=$i+5;
 				array_push($tab_produit,$r['P/C-NumContrat']);
 				$content.="
 				<div style='position:absolute;top:".$i.";left:-10;color:#49628C;'><b><ul><li><u>".$r['CIE-Nom']." - ".$r['PDT-Nom']." N° ".$r['P/C-NumContrat']."</u></li></ul></b></div>";
@@ -209,9 +210,9 @@
 					}
 				}
 				$content.="</div>";
-			}
+			} 
 			if($r['P/C-NumContrat'] != ""){
-				$i=$i+6;
+				//$i=$i+6;
 
 				$content.="
 				<div style='position:absolute;top:".$i.";left:50;color:#49628C;'><ul><li>".$r['EVE-Nom']." en date du ".date('d/m/Y',strtotime($r['E/P-DateEffet']))."</li></ul></div>";
@@ -225,8 +226,8 @@
 				}
 				$content.="
 				</b></div>";
-				$i=$i+6;
-			}											
+				//$i=$i+6;
+			} 								
 		}
 		$i = $i + 50;
 		

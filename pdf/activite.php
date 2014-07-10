@@ -25,9 +25,10 @@
 
     <span style='font-size:12px'>
 
-    <div style='position:absolute;top:16;left:34'><h4>Production Comptable</h4></div>
-    <div style='position:absolute;top:36;left:219'> De ".date("d/m/Y",strtotime($_POST['date1']))."</div>
-    <div style='position:absolute;top:36;left:333'> à ".date("d/m/Y",strtotime($_POST['date2']))."</div>
+    <div style='position:absolute;top:16;left:34'><h3>Production Comptable</h3></div>
+    <div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
+    <div style='position:absolute;top:36;left:300'> De ".date("d/m/Y",strtotime($_POST['date1']))."</div>
+    <div style='position:absolute;top:36;left:400'> à ".date("d/m/Y",strtotime($_POST['date2']))."</div>
     ";
 
     $i = 68;

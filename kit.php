@@ -58,7 +58,7 @@ if(!(Auth::isLogged())){
       if(Auth::getInfo('modeAgence') == 1){
         ?>
         <span style="color:white;"><b><i class="fa fa-folder-open"></i> Portefeuille(s) accessible(s) :</b></span>
-        <form style="display:inline;" method="post" action="index.php?action=selectPort">
+        <form style="display:inline;" method="post" action="index.php?action=selectPort" id="port">
           <select style="display:inline;" name="portSelect">
             <option></option>
             <?php
@@ -72,7 +72,6 @@ if(!(Auth::isLogged())){
             }
             ?>
           </select>
-          <input type="submit" value="OK"/>
         </form>
         <?php
       } else {
@@ -137,7 +136,7 @@ if(!(Auth::isLogged())){
             <ul class="dropdown-menu">
               <li><a href="index.php?action=droits"><i class="fa fa-lock"></i> Mes droits</a></li>
               <li class="divider"></li>
-              <li><a href="index.php?action=logout"><i class="fa fa-power-off"></i> Déconnexion</a></li>
+              <li><a href="logout.php?action=quit"><i class="fa fa-power-off"></i> Déconnexion</a></li>
             </ul>
           </li>
         </ul>

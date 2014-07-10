@@ -115,7 +115,7 @@
 	</span></div></b>
 
 	<div style='position:absolute;top:749;left:20'><span>Fait en 2 exemplaires à ".$res2[0]['CLT-VillePro'].", le ".$date."</span></div>
-	<div style='position:absolute;top:205;left:250;border:1px solid black;padding:5px;'><span><h4>Mandat Administratif de Gestion</h4></span></div>
+	<div style='position:absolute;top:205;left:250'><span><h3>Mandat Administratif de Gestion</h3></span></div>
 	<div style='position:absolute;top:828;left:455'><span>".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</span></div>
 	";
 	if($res2[0]['CLT-PrsMorale'] == 1){

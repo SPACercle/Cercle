@@ -103,7 +103,7 @@
     </page_header>
 
     <span style='font-size:12px'>
-    	<div style='position:absolute;top:205;left:267;border:1px solid black;padding:5px;'><i><h4>Ordre Exclusif de Remplacement</h4></i></div>
+    	<div style='position:absolute;top:205;left:267'><i><h3>Ordre Exclusif de Remplacement</h3></i></div>
 
     	<b><div style='position:absolute;top:292;left:50'>Je Soussigné(e) ".$res2[0]['CIV-Nom']." ".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</div></b>
 

@@ -116,7 +116,7 @@
 	<div style='position:absolute;top:660;left:20'><span>Le présent mandat prend effet à compter de ce jour pour une durée indéterminée. Il peut être révoqué par lettre recommandée avec AR, à tout moment par l'une ou l'autre des parties moyennant un délai de préavis de 1 mois</span></div>
 
 	<div style='position:absolute;top:739;left:20'><span>Fait en 2 exemplaires originaux à ".$res2[0]['CLT-VillePro'].", le ".$date."</span></div>
-	<div style='position:absolute;top:205;left:250;border:1px solid black;padding:5px;'><span><h4><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mandat Administratif<br/>Audit Social, Fiscal ou Patrimonial</i></h4></span></div>
+	<div style='position:absolute;top:205;left:250'><span><h3><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mandat Administratif<br/>Audit Social, Fiscal ou Patrimonial</i></h3></span></div>
 	<div style='position:absolute;top:798;left:450'><span>".$res2[0]['CON-Société']."</span></div>
 	<div style='position:absolute;top:818;left:430'><span>Représentée par ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</span></div>
 

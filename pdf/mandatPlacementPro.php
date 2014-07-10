@@ -103,7 +103,7 @@
     </page_header>
 
     <span style='font-size:12px'>
-		<div style='position:absolute;top:205;left:229;border:1px solid black;padding:5px;'><h4><i>Mandat d'étude et de placement exclusif</i></h4></div>
+		<div style='position:absolute;top:205;left:229'><h3><i>Mandat d'étude et de placement exclusif</i></h3></div>
 
     	<div style='position:absolute;top:292;left:50'>La société ".$res2[0]['CLT-Nom'].", N° SIRET ".$_GET['siret']." représentée par ".$_GET['rep']."</div>
 

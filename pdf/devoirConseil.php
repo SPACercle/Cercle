@@ -128,7 +128,7 @@
 
     <span style='font-size:12px'><i>
     
-    <div style='position:absolute;top:133;left:50;border:1px solid black;padding:5px;padding-left:200px;padding-right:200px;'><i><h4 style='margin-top:0px;'>Formalisation du Devoir de conseil</h4></i></div>
+    <div style='position:absolute;top:133;left:250;'><i><h4 style='margin-top:0px;'>Formalisation du Devoir de conseil</h4></i></div>
 
     <div style='position:absolute;top:159;left:150'>(Loi n°2005-1564 du 15 décembre 2005 complétée par le décret n°2006-1091 du 30 aout 2006)</div>
 

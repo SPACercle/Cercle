@@ -181,7 +181,7 @@
     </page_header>
 
     <span style='font-size:11.5px'>
-  		<div style='position:absolute;top:150;left:309;border:1px solid black;padding:5px;'><span><h4><i>Fiche d'informations</i></h4></span></div>
+  		<div style='position:absolute;top:150;left:290;'><span><h3><i>Fiche d'informations</i></h3></span></div>
 
 		<i><div style='position:absolute;top:230;left:30'>Les informations ci-après sont délivrées à l’attention de ".$res2[0]['CIV-Nom']." ".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']." né(e) le ".date('d/m/Y',strtotime($res2[0]['CLT-DateNaissance'])).", demeurant au ".$res2[0]['CLT-Adresse']." ".$res2[0]['CLT-Code Postal']." ".$res2[0]['CLT-Ville']." conformément aux dispositions des articles L520-1-II 1°, R520-1 et R520-2 du Code des assurances par ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']." pour le compte du Cabinet ".$res2[0]['CON-Société'].".</div></i>
 		
@@ -237,7 +237,7 @@
     </page_header>
 
     <span style='font-size:11px'><i>
-  		<div style='position:absolute;top:125;left:311;border:1px solid black;padding:5px;'><span><h4>Obligation de conseil</h4></span></div>
+  		<div style='position:absolute;top:125;left:290'><span><h3>Obligation de conseil</h3></span></div>
 
   		<div style='position:absolute;top:197;left:30'>Cette fiche est destinée à améliorer votre compréhension des garanties proposées afin de vous permettre de mieux appréhender les propositions d'assurances qui vous seront faites et ainsi choisir librement vos solutions d'assurance comme vous le permet la loi.  </div>
 

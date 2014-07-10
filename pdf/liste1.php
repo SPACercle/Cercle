@@ -19,7 +19,8 @@
 
     $content="<page backright='10mm'>
 
-    <span style='font-size:12px'>";
+    <span style='font-size:12px'>
+    ";
 
     $i = 19;
     $tab_groupe = array();
@@ -27,7 +28,7 @@
     $tab_exp = array();
     foreach ($liste as $l) {
         if($i > 950){
-            $content.=" </span></page><page backright='10mm'><span style='font-size:12px'>";
+            $content.=" </span></page><page><span style='font-size:12px'>";
             $i = 19;
         }
         if(!in_array($l['GroupeNom'],$tab_groupe)){
@@ -43,14 +44,14 @@
             $tab_exp = array();
             array_push($tab_cab,$l['CLT-Nom']);
             $content.="
-            <div style='position:absolute;top:".$i.";left:37'><h3><u>".$l['CLT-Nom']."</u></h3></div>";
+            <div style='position:absolute;top:".$i.";left:0'><h3><u>".$l['CLT-Nom']."</u></h3></div>";
             $i = $i + 44;
         }
         
         if(!in_array($l['ExpertNom'],$tab_exp)){
             array_push($tab_exp,$l['ExpertNom']);
             $content.="
-            <div style='position:absolute;top:".$i.";left:37'><h4>".$l['ExpertNom']." ".$l['ExpertPrénom']."</h4></div>";
+            <div style='position:absolute;top:".$i.";left:0'><h4>".$l['ExpertNom']." ".$l['ExpertPrénom']."</h4></div>";
 
             $query2="
             SELECT DISTINCT `Type Responsable`.`R/A-Type`, Conseillers.`CON-Nom`, Conseillers.`CON-Prénom`, `Accords Partenaires`.`ACC-NumPartenaire` AS ExpertNumID
@@ -81,22 +82,23 @@
             $i = $i + 18;
         }
        
-        $content.="
+        $content.="<span style='font-size:11px'>
         <i>
-        <div style='position:absolute;top:".$i.";left:61'>".$l['LienExpertClient']."</div>
-        <div style='position:absolute;top:".$i.";left:200'>".$l['ClientNom']."</div>
-        <div style='position:absolute;top:".$i.";left:305'>".$l['ClientPrénom']."</div>
-        <div style='position:absolute;top:".$i.";left:427'>".mb_strimwidth($l['ClientProfession'], 0, 30, "...")."</div>
-        <div style='position:absolute;top:".$i.";left:600'>".$l['ClientVille']."</div>";
-        $i = $i + 15;
+        <div style='position:absolute;top:".$i.";left:0'>".$l['LienExpertClient']."</div>
+        <div style='position:absolute;top:".$i.";left:130'>".$l['ClientNom']." ".$l['ClientPrénom']."</div>
+        <div style='position:absolute;top:".$i.";left:315'>".mb_strimwidth($l['ClientProfession'], 0, 26, "...")."</div>";
+        if(ctype_upper(str_replace(' ', '',$l['ClientVille']))){
+            $content.="<div style='position:absolute;top:".$i.";left:460'>".mb_strimwidth($l['ClientVille'], 0, 15, "...")."</div>";
+        } else {
+            $content.="<div style='position:absolute;top:".$i.";left:460'>".mb_strimwidth($l['ClientVille'], 0, 20, "...")."</div>";
+        }
+        //$i = $i + 15;
         
         $content.="
         <span style='color:#856D4D;'>
-        <div style='position:absolute;top:".$i.";left:89'>".$l['TYP-Nom']."</div>
-        <div style='position:absolute;top:".$i.";left:207'>".$l['CON-Nom']."</div>
-        <div style='position:absolute;top:".$i.";left:325'>".$l['CON-Prénom']."</div>
+        <div style='position:absolute;top:".$i.";left:575'>".$l['TYP-Nom']." ".$l['CON-Nom']." ".$l['CON-Prénom']."</div>
         </span>
-        </i>
+        </i></span>
         ";
         $i = $i + 20;
     }

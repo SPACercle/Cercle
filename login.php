@@ -7,6 +7,18 @@ session_start();
 
 include_once "Auth.php";
 
+if(!empty($_GET['action']) && $_GET['action'] == "quit"){
+    echo '<html><head><meta charset="utf-8"></head><body><center><h2 style="margin-top:100px;">Vous êtes déconnecté, vous pouvez fermer le navigateur</h2></center>
+        <script>
+        setTimeout("quit()",4000);
+        function quit(){
+            window.open(\'about:blank\',\'_parent\',\'\');
+            window.close();
+        }
+        </script>
+    ';
+} else {
+
 if(Auth::isLogged()){
    header("Location:index.php");
 }
@@ -99,3 +111,7 @@ if(isset($_POST) && !empty($_POST['identifiant']) && !empty($_POST['mdp'])){
     <script src="js/sb-admin.js"></script>
 </body>
 </html>
+
+<?php
+}
+?>

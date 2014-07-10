@@ -7,7 +7,7 @@
     </page_header>
 
     <span style='font-size:12px'>
-        <div style='position:absolute;top:36;left:33'><b>Procédure de traitement Incident de Gestion</b></div>
+        <div style='position:absolute;top:0;left:33'><h3>Procédure de traitement Incident de Gestion</h3></div>
         <div style='position:absolute;top:64;left:34'><b>Responsable Sylvain MAILLARD</b></div>
         <div style='position:absolute;top:140;left:26'><h5><u>1) texte</u></h5></div>
         <div style='position:absolute;top:174;left:30'>----</div>

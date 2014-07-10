@@ -44,7 +44,7 @@
 
     <span style='font-size:12px'>";
 
-    $i = 22;
+    $i = 0;
     $tab = array();
     $tab_nom_mere = array();
     foreach ($res as $r) {
@@ -67,44 +67,51 @@
                 <span style='font-size:12px'>";
             }
             $content.="
+            <div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
             <div style='position:absolute;top:".$i.";left:20'><h3>Codes Courtage de ".$r['CON-Prénom']." ".$r['CON-Nom']."</h3></div>";
             $content.="
-            <div style='position:absolute;top:".($i+20).";left:600'><i>".date("d/m/Y H:i")."</i></div>";
-            $i = $i + 63;
+            <div style='position:absolute;top:0;left:0'><i>le ".date("d/m/Y à H:i")."</i></div>";
+            $i = $i + 33;
         } else {
             $i = $i + 20;
         }
         array_push($tab,$r['CON-NumID']);
         $content.="
-        <span style='color:red;'><u>";
+        <span style='color:red;'>";
         $i = $i + 7;
         if(!in_array($r['COD-NomCodeMere'],$tab_nom_mere)){
+            $i = $i + 15;
             array_push($tab_nom_mere,$r['COD-NomCodeMere']);
             $content.="
-            <div style='position:absolute;top:".($i-20).";left:30;'><h3>".$r['COD-NomCodeMere']."</h3></div>";
-            $i = $i + 10;
+            <u><div style='position:absolute;top:".($i-15).";left:0;'><h3>".$r['COD-NomCodeMere']."</h3></div>";
+            $i = $i + 15;
+            $content.="<div style='position:absolute;top:".($i-25).";left:0px;width:770px;'><hr/></div></u>";
+            $i = $i + 5;
         }
         $content.="
-       
-        <div style='position:absolute;top:".$i.";left:600'>Code Courtier</div>
-        <div style='position:absolute;top:".$i.";left:400'>Code Maître</div>
-        <div style='position:absolute;top:".$i.";left:500'> Type</div></u>";
+        <b>
+        <div style='position:absolute;top:".($i+14).";left:570'>Code Courtier : </div>
+        <div style='position:absolute;top:".($i+14).";left:270'>Code Maître : </div>
+        <div style='position:absolute;top:".($i+14).";left:470'> Type : </div></b>";
         $i = $i + 2;
         $content.="
-        <div style='position:absolute;top:".($i+28).";left:510'><span style='color:red;'><b>MP Dirigeant : </b></span></div></span>";
+        <div style='position:absolute;top:".($i+28).";left:480'><span style='color:red;'><b>MP Dirigeant : </b></span></div></span>";
         $i = $i + 12;
         $content.="
-        <div style='position:absolute;top:".($i+15).";left:30'><span style='color:red;'><b>Identifiant :</b></span> ".$r['COD-Identifiant']."</div>
-        <div style='position:absolute;top:".$i.";left:600'>".$r['COD-Code']."</div>
-        <div style='position:absolute;top:".($i+15).";left:350'><span style='color:red;'><b>MDP :</b></span> ".$r['COD-MP']."</div>
-        <div style='position:absolute;top:".($i+15).";left:605'> ".$r['COD-MPDir']."</div>
-        <div style='position:absolute;top:".$i.";left:30'><b>".$r['CIE-Nom']."</b></div>
-        <div style='position:absolute;top:".$i.";left:500'> ".$r['COD-TypeCode']."</div>
-        <div style='position:absolute;top:".$i.";left:400'>".$r['COD-CodeMere']."</div>";
-        $i = $i + 20;
-        if($i < 990){
-            $content.="<div style='position:absolute;top:".($i+10).";left:30px;width:100%;'><hr/></div>";
+        <div style='position:absolute;top:".($i+15).";left:0'><span style='color:red;'><b>Identifiant :</b></span> ".$r['COD-Identifiant']."</div>
+        <div style='position:absolute;top:".$i.";left:660'>".$r['COD-Code']."</div>
+        <div style='position:absolute;top:".($i+15).";left:320'><span style='color:red;'><b>MDP :</b></span> ".$r['COD-MP']."</div>
+        <div style='position:absolute;top:".($i+15).";left:585'> ".$r['COD-MPDir']."</div>";
+        if($r['CON-Couleur'] != null){
+            $couleur = $r['CON-Couleur'];
+        } else {
+            $couleur = "white";
         }
+        $content.="
+        <div style='position:absolute;top:".$i.";left:0'><div style='display:inline;background-color:".$couleur.";border:1px solid black;width:10px;height:10px;'></div><b> ".$r['CIE-Nom']."</b></div>
+        <div style='position:absolute;top:".$i.";left:508'> ".$r['COD-TypeCode']."</div>
+        <div style='position:absolute;top:".$i.";left:350'>".$r['COD-CodeMere']."</div>";
+        //$i = $i + 10;
     }
     $content.="
     </span>

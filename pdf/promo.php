@@ -24,7 +24,8 @@
     $content="<page backright='10mm'>
 
     <span style='font-size:12px'>    
-        <div style='position:absolute;top:25;left:200;border:1px solid black;padding:2px;'><h3>Gestion des Promotions Partenaires</h3></div>";
+        <div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
+        <div style='position:absolute;top:0;left:0'><h3>Gestion des Promotions Partenaires</h3></div>";
 
         $i = 83;
         $tab_pro = array();

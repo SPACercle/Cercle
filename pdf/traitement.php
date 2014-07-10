@@ -7,7 +7,7 @@
     </page_header>
 
     <span style='font-size:12px'>
-        <div style='position:absolute;top:28;left:26'><b>Procédure de traitement Dossier</b></div>
+        <div style='position:absolute;top:0;left:0'><h3>Procédure de traitement Dossier</h3></div>
         <div style='position:absolute;top:56;left:26'><b>Responsable Delphine TATON et Carine SCALABRINO</b></div>
         <div style='position:absolute;top:142;left:26'><h5><u>1) CONTACT CLIENT</u></h5></div><i>
         <div style='position:absolute;top:174;left:30'>Courtier :</div>

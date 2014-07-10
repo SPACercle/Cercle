@@ -19,9 +19,9 @@
     <page backright='10mm'>
 
     <span style='font-size:10px'>
-       <div style='position:absolute;top:26;left:225;border: 1px solid black;padding:5px;'><h3>Dossiers Tracfin en Anomalie</h3></div>
+       <div style='position:absolute;top:26;left:230;'><h3>Dossiers Tracfin en Anomalie</h3></div>
 
-        <div style='position:absolute;top:89;left:30;color:#175AB0;'><h5>".$res2[0]['CON-Nom']." ".$res2[0]['CON-Prénom']."</h5></div>";
+        <div style='position:absolute;top:50;left:40%;color:#175AB0;'><h4>".$res2[0]['CON-Nom']." ".$res2[0]['CON-Prénom']."</h4></div>";
 
         $tab = array();
         $i = 120;

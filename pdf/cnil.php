@@ -7,7 +7,7 @@
     </page_header>
 
     <span style='font-size:12px'>
-        <div style='position:absolute;top:36;left:33'><b>Procédure de traitement CNIL</b></div>
+        <div style='position:absolute;top:0;left:33'><h2>Procédure de traitement CNIL</h2></div>
         <div style='position:absolute;top:64;left:33'><b>Responsable Alain GAZONI</b></div>
         <div style='position:absolute;top:136;left:26'><h5><u>La sécurité des fichiers</u></h5></div><i>
         <div style='position:absolute;top:170;left:30'>Tout responsable de traitement informatique de données personnelles doit adopter des mesures de sécurité physiques (sécurité des </div>

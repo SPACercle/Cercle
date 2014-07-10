@@ -11,6 +11,7 @@
     $content="<page backright='10mm'>
 
     <span style='font-size:10px'>
+        <div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
         <div style='position:absolute;top:18;left:26'><h2>Compagnies Contacts Nationaux</h2></div>
 
         <div style='position:absolute;top:89;left:30'><h4><u>".$contacts[0]['CIE-Nom']."</u></h4></div>";

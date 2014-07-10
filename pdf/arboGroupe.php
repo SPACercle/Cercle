@@ -20,9 +20,11 @@
 
 
     $content="<page>
-	<h1 align='center'>".$res2[0]['Type']." ".$res2[0]['Nom']."</h1>";
+    <div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
+    <h2>Arborescence Groupe</h2>
+	<h3 align='center'>".$res2[0]['Type']." ".$res2[0]['Nom']."</h3>";
 	foreach($res2 as $r){
-		$content.="<h3>".$r['Relation']."</h3>".$r['SousType']." ".$r['SousNom']."";
+		$content.="<h4>".$r['Relation']."</h4>".$r['SousType']." ".$r['SousNom']."";
 	}
 	 $content.="</page>";
 

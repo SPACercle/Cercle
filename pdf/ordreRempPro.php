@@ -103,7 +103,7 @@
     </page_header>
 
     <span style='font-size:12px'>
-		<div style='position:absolute;top:185;left:267;border:1px solid black;padding:5px;'><i><h4>Ordre Exclusif de Remplacement</h4></i></div>
+		<div style='position:absolute;top:185;left:267'><i><h3>Ordre Exclusif de Remplacement</h3></i></div>
 
 		<div style='position:absolute;top:347;left:46'>La société ".$res2[0]['CLT-Nom'].", N° SIRET ".$_GET['siret']." représentée par ".$_GET['rep']."</div>
 

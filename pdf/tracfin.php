@@ -7,7 +7,7 @@
     </page_header>
 
     <span style='font-size:12px'>
-        <div style='position:absolute;top:28;left:26'><b>Procédure de traitement TRACFIN</b></div>
+        <div style='position:absolute;top:0;left:0'><h3>Procédure de traitement TRACFIN</h3></div>
 
         <div style='position:absolute;top:56;left:26'><b>Responsable Stéphane SCALABRINO</b></div>
 

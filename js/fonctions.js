@@ -521,6 +521,9 @@ $(document).ready(function() {
 
 	//Masques de saisie pour les formulaires
 	$(".phone").mask("99 99 99 99 99");
-	$(".date").mask("99/99/9999");
 
+	//Portefeuille changement
+	$("#port").on("change",function(){
+		$("#port").submit();
+	});
 });

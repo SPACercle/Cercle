@@ -6,7 +6,7 @@
 		<div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
     </page_header>
 
-        <div style='position:absolute;top:28;left:26'><b>Procédure de traitement Secret Médical</b></div>
+        <div style='position:absolute;top:0;left:26'><h3>Procédure de traitement Secret Médical</h3></div>
         <div style='position:absolute;top:56;left:26'><b>Responsable Stéphane SAULNIER</b></div>
 
 

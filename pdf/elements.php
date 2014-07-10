@@ -26,8 +26,8 @@
 
     <span style='font-size:12px'>
  	
-		<i><div style='position:absolute;top:165;left:259;border:1px solid black;padding:5px;margin:0px'><h4 style='margin-top:0px;'>Eléments préparatoires à l'étude de </h4></div>
-		<div style='position:absolute;top:178;left:311'><h5>Dr Mohamed Lotfi ABDENNEBI</h5></div></i>
+		<i><div style='position:absolute;top:165;left:200'><h3 style='margin-top:0px;'>Eléments préparatoires à l'étude de </h3></div>
+		<div style='position:absolute;top:178;left:265'><h5>Dr Mohamed Lotfi ABDENNEBI</h5></div></i>
 
 		<b><span style='font-size:13px'>
 		<div style='position:absolute;top:276;left:30'>Conformément à votre demande, voici la liste des éléments nécessaires a fin de mieux préparer votre rencontre avec ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom'].", Gérant de la société ".$res2[0]['CON-Société']."</div>

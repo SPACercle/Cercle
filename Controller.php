@@ -75,15 +75,19 @@ class Controller{
 
 	//Analyse l'action demandée
 	public function analyse(){
-		if(isset($_GET["action"])){
-			if(isset($this->tab[$_GET["action"]])){
-				$f=$this->tab[$_GET["action"]];
-				$this->$f();
+		if(Auth::isLogged()){
+			if(isset($_GET["action"])){
+				if(isset($this->tab[$_GET["action"]])){
+					$f=$this->tab[$_GET["action"]];
+					$this->$f();
+				} else {
+					AffichePage("Erreur, Adresse incorrecte");
+				}
 			} else {
-				AffichePage("Erreur, Adresse incorrecte");
+				$this->AfficheDefaultAction();
 			}
 		} else {
-			$this->AfficheDefaultAction();
+			header("index.php?action=login");
 		}
 	}
 
@@ -453,7 +457,7 @@ class Controller{
 			$type_produits = $res_typ_prod->fetchALL(PDO::FETCH_ASSOC);
 
 			//Requete Produits Client
-			$query_prod = "SELECT prod_cli.`P/C-NumID`, prod.`PDT-Nom`, comp.`CIE-Nom`, typ_sit.`TSC-Nom`, cli.`CLT-Nom`, cli.`CLT-Prénom`
+			$query_prod = "SELECT prod_cli.`P/C-NumID`, prod.`PDT-Nom`, comp.`CIE-Nom`, typ_sit.`TSC-Nom`, cli.`CLT-Nom`, cli.`CLT-Prénom`, prod_cli.`P/C-DossierConcurrent`
 						   FROM `produits par clients` prod_cli, `produits` prod, `compagnies` comp, `type situations contrats` typ_sit, `clients et prospects` cli
 						   WHERE prod_cli.`P/C-NumClient` = ".$client[0]['CLT-NumID']." 
 						   AND prod.`PDT-NumID` = prod_cli.`P/C-NumProduit`
@@ -535,7 +539,7 @@ class Controller{
 		}
 		if(!empty($dateNaissance)){
 			$query = "UPDATE `clients et prospects` SET `CLT-TelPort`='$telPort',`CLT-TelDom`='$telDom',`CLT-MailPerso`='$mailPerso',`CLT-AdresseSkype`='$skype',`CLT-Adresse`='$adresse',`CLT-Code Postal`='$codePostal',
-							 `CLT-Ville`='$ville',`CLT-Sensibilite`='$sensibilite',`CLT-Commentaire`='$com',`CLT-DateNaissance`=STR_TO_DATE('$dateNaissance','%d/%m/%Y'),`CLT-SitFam`='$situation',`CLT-NbEnfants`='$nbEnfants',
+							 `CLT-Ville`='$ville',`CLT-Sensibilite`='$sensibilite',`CLT-Commentaire`='$com',`CLT-DateNaissance`=STR_TO_DATE('$dateNaissance','%Y-%m-%d'),`CLT-SitFam`='$situation',`CLT-NbEnfants`='$nbEnfants',
 							 `CLT-Nationalité`='$nationalite',`CLT-MandatGestion`=$mandatGestion,`CLT-InfoPreContrat`=$infoPre,`CLT-MandatCourtage`=$mandatCourtage,`CLT-LettreMission`=$lettreMission
 					  WHERE `CLT-NumID` = $idClient;
 			";
@@ -653,8 +657,8 @@ class Controller{
 			$cloture = 1;
 		}
 		$query = "INSERT INTO `historique par client` VALUES (null,'$idClient','$type',
-			CASE WHEN '$date' <> '' THEN STR_TO_DATE('$date','%d/%m/%Y') ELSE null END,'$commentaire',$demAssistante,$demCourtier,$cloture,
-			CASE WHEN '$dateCloture' <> '' THEN STR_TO_DATE('$dateCloture','%d/%m/%Y') ELSE null END,$tutoriel,$elements,CASE WHEN '$echMax' <> '' THEN STR_TO_DATE('$echMax','%d/%m/%Y') ELSE null END)";
+			CASE WHEN '$date' <> '' THEN STR_TO_DATE('$date','%Y-%m-%d') ELSE null END,'$commentaire',$demAssistante,$demCourtier,$cloture,
+			CASE WHEN '$dateCloture' <> '' THEN STR_TO_DATE('$dateCloture','%Y-%m-%d') ELSE null END,$tutoriel,$elements,CASE WHEN '$echMax' <> '' THEN STR_TO_DATE('$echMax','%Y-%m-%d') ELSE null END)";
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
@@ -705,13 +709,13 @@ class Controller{
 			`H/C-DemandeAssistante`=$demAssistante, 
 			`H/C-DemandeCourtier`=$demCourtier,
 			`H/C-TypeHistorique`=$type,
-			`H/C-Date`=CASE WHEN '$date' <> '' THEN STR_TO_DATE('$date','%d/%m/%Y') ELSE null END,
-			`H/C-DateMax`=CASE WHEN '$echMax' <> '' THEN STR_TO_DATE('$echMax','%d/%m/%Y') ELSE null END,
+			`H/C-Date`=CASE WHEN '$date' <> '' THEN STR_TO_DATE('$date','%Y-%m-%d') ELSE null END,
+			`H/C-DateMax`=CASE WHEN '$echMax' <> '' THEN STR_TO_DATE('$echMax','%Y-%m-%d') ELSE null END,
 			`H/C-Tutoriel`=$tutoriel,
 			`H/C-Eléments`=$elements,
 			`H/C-Commentaire`='$commentaire',
 			`H/C-Cloture`=$cloture,
-			`H/C-DateCloture`=CASE WHEN '$dateCloture' <> '' THEN STR_TO_DATE('$dateCloture','%d/%m/%Y') ELSE null END
+			`H/C-DateCloture`=CASE WHEN '$dateCloture' <> '' THEN STR_TO_DATE('$dateCloture','%Y-%m-%d') ELSE null END
 			WHERE `H/C-NumID`=$idHistorique";
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
@@ -1132,7 +1136,7 @@ class Controller{
 			$formalise = 1;
 		}
 		$query = "UPDATE `evenements par produits` SET
-				  `E/P-DateSignature`= CASE WHEN '$dateSignature' <> '' THEN STR_TO_DATE('$dateSignature','%d/%m/%Y') ELSE null END,";
+				  `E/P-DateSignature`= CASE WHEN '$dateSignature' <> '' THEN STR_TO_DATE('$dateSignature','%Y-%m-%d') ELSE null END,";
 				  if(!empty($apporteur)){
 				  	$query.="`E/P-Apporteur`= '$apporteur',";
 				  } else {
@@ -1155,11 +1159,11 @@ class Controller{
 				  	$query.="`E/P-MontantPU`= null,";
 				  }
 				  $query.="
-				  `E/P-DateEffet`= CASE WHEN '$dateEffet' <> '' THEN STR_TO_DATE('$dateEffet','%d/%m/%Y') ELSE null END,
-				  `E/P-DateEnvoi`= CASE WHEN '$dateEnvoi' <> '' THEN STR_TO_DATE('$dateEnvoi','%d/%m/%Y') ELSE null END,
+				  `E/P-DateEffet`= CASE WHEN '$dateEffet' <> '' THEN STR_TO_DATE('$dateEffet','%Y-%m-%d') ELSE null END,
+				  `E/P-DateEnvoi`= CASE WHEN '$dateEnvoi' <> '' THEN STR_TO_DATE('$dateEnvoi','%Y-%m-%d') ELSE null END,
 				  `E/P-AcceptMedicale`= $medicale,
-				  `E/P-DateRetour`= CASE WHEN '$dateRetour' <> '' THEN STR_TO_DATE('$dateRetour','%d/%m/%Y') ELSE null END,
-				  `E/P-DateRemise`= CASE WHEN '$dateRemise' <> '' THEN STR_TO_DATE('$dateRemise','%d/%m/%Y') ELSE null END,
+				  `E/P-DateRetour`= CASE WHEN '$dateRetour' <> '' THEN STR_TO_DATE('$dateRetour','%Y-%m-%d') ELSE null END,
+				  `E/P-DateRemise`= CASE WHEN '$dateRemise' <> '' THEN STR_TO_DATE('$dateRemise','%Y-%m-%d') ELSE null END,
 				  `E/P-ObligationConseils`= $formalise,
 				  `E/P-Scoring`= $scoring,
 				  `E/P-Tracfin`= $tracfin,
@@ -1232,7 +1236,7 @@ class Controller{
 		} else {
 			$cloture = 1;
 		}
-		$query = "INSERT INTO `anomalies par produits` VALUES (null,$idProduit,$type,CASE WHEN '$date' <> '' THEN STR_TO_DATE('$date','%d/%m/%Y') ELSE null END,$cloture,CASE WHEN '$dateCloture' <> '' THEN STR_TO_DATE('$dateCloture','%d/%m/%Y') ELSE null END,'$commentaire')";
+		$query = "INSERT INTO `anomalies par produits` VALUES (null,$idProduit,$type,CASE WHEN '$date' <> '' THEN STR_TO_DATE('$date','%Y-%m-%d') ELSE null END,$cloture,CASE WHEN '$dateCloture' <> '' THEN STR_TO_DATE('$dateCloture','%Y-%m-%d') ELSE null END,'$commentaire')";
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
@@ -1261,9 +1265,9 @@ class Controller{
 		}
 		$query = "UPDATE `anomalies par produits` SET
 				  `A/P-NumAnomalie`= '$type',
-				  `A/P-Date`= CASE WHEN '$date' <> '' THEN STR_TO_DATE('$date','%d/%m/%Y') ELSE null END,
+				  `A/P-Date`= CASE WHEN '$date' <> '' THEN STR_TO_DATE('$date','%Y-%m-%d') ELSE null END,
 				  `A/P-Cloture`= $cloture,
-				  `A/P-DateCloture`= CASE WHEN '$dateCloture' <> '' THEN STR_TO_DATE('$dateCloture','%d/%m/%Y') ELSE null END,
+				  `A/P-DateCloture`= CASE WHEN '$dateCloture' <> '' THEN STR_TO_DATE('$dateCloture','%Y-%m-%d') ELSE null END,
 				  `A/P-Commentaire` = '$commentaire'
 				  WHERE `A/P-NumID`= '$idAnomalie'
 				  ";

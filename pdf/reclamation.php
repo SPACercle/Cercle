@@ -7,7 +7,7 @@
     </page_header>
 
     <span style='font-size:12px'>
-        <div style='position:absolute;top:28;left:26'><b>Procédure de traitement RECLAMATION</b></div>
+        <div style='position:absolute;top:0;left:26'><h3>Procédure de traitement RECLAMATION</h3></div>
         <div style='position:absolute;top:56;left:26'><b>Responsable Alain GAZONI</b></div>
 
         <div style='position:absolute;top:297;left:29'><h5><u>2) Réception de la réclamationA</u></h5></div>

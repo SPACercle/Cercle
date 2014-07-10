@@ -35,8 +35,8 @@
     $content="<page backright='10mm'>
 
     <span style='font-size:12px'>
-
-        <div style='position:absolute;top:26;left:160'><h3 style='color:#BA1419;'>Liste des Dossiers en anomalie Non Cloturés</h3></div>";
+        <div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
+        <div style='position:absolute;top:26;left:0'><h3 style='color:#BA1419;'>Liste des Dossiers en anomalie Non Cloturés</h3></div>";
 
         $i = 90;
         $tab_cie = array();
@@ -44,7 +44,7 @@
         $tab_anom = array();
         $tab_anom2 = array();
         foreach ($res as $r) {
-            if($i > 850){
+            if($i > 950){
                 $content.="</span></page><page backright='10mm'><span style='font-size:12px'>";
                 $i=20;
             }
@@ -82,28 +82,32 @@
             if(!in_array($r['A/P-Date'],$tab_anom2)){
                 array_push($tab_anom2,$r['A/P-Date']);
                 $content.="
-                <i><span style='color:#03495C;'>
-                <div style='position:absolute;top:".$i.";left:53'><u>".$r['HIA-Nom']."</u></div>
+                <i><span style='color:red;'><b>
+                <div style='position:absolute;top:".$i.";left:20'><u>".$r['HIA-Nom']."</u></div>
 
-                <div style='position:absolute;top:".$i.";left:267'>".date("d/m/Y",strtotime($r['A/P-Date']))."</div>
+                <div style='position:absolute;top:".$i.";left:267'>".date("d/m/Y",strtotime($r['A/P-Date']))."</div></b></span>
 
-                <div style='position:absolute;top:".($i+15).";left:53;'><b>Commentaire : </b>".$r['A/P-Commentaire']."</div>
-                </span></i>";
-                if(strlen($r['A/P-Commentaire'])>100){
+                <div style='position:absolute;top:".($i+15).";left:25;'><b>Commentaire : </b>".$r['A/P-Commentaire']."</div>
+                </i>";
+                if(strlen($r['A/P-Commentaire'])>117){
                     $i = $i + 46;
                 } else {
-                     $i = $i + 31;
+                    $i = $i + 31;
                 }
             }
             $content.="
-            <i><div style='position:absolute;top:".($i+15).";left:300'>".$r['EVE-Nom']."</div>
-            <div style='position:absolute;top:".$i.";left:70'>- ".$r['PDT-Nom']."</div>
-            <div style='position:absolute;top:".($i+15).";left:76'>".$r['TSC-Nom']."</div>
+            <i><div style='position:absolute;top:".$i.";left:25'>".$r['PDT-Nom']."</div>";
+            if(strlen($r['PDT-Nom'])>38){
+                $i = $i + 15;
+            }   
+            $content.="
             <div style='position:absolute;top:".$i.";left:632'>".sprintf('%.2f &euro;',$r['E/P-MontantPP'])."</div>
             <div style='position:absolute;top:".$i.";left:710'>".sprintf('%.2f &euro;',$r['E/P-MontantPU'])."</div>
-            <div style='position:absolute;top:".$i.";left:500'>".date("d/m/Y",strtotime($r['E/P-DateSignature']))."</div>
+            <div style='position:absolute;top:".$i.";left:550'>".date("d/m/Y",strtotime($r['E/P-DateSignature']))."</div>
+            <div style='position:absolute;top:".$i.";left:400'>".$r['EVE-Nom']."</div>
+            <div style='position:absolute;top:".$i.";left:250'>".$r['TSC-Nom']."</div>
             </i>";
-            $i = $i + 25;
+            $i = $i + 7;
         }
         $content.="
     </span>

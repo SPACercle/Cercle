@@ -53,7 +53,7 @@
     $content="<page backright='10mm'>
 
     <span style='font-size:12px'>
-
+        <div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
         <div style='position:absolute;top:21;left:29'><h3>Clients Sans Expert Comptable</h3></div>";
 
         $tab = array();

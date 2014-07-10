@@ -24,7 +24,8 @@
     $content="<page backright='10mm'>
 
     <span style='font-size:12px'>
-        <div style='position:absolute;top:10;left:200'><h3>Liste des Clients par Expert-comptables</h3></div>";
+        <div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
+        <div style='position:absolute;top:10;left:0'><h3>Liste des Clients par Expert-comptables</h3></div>";
 
         $tab = array();
         $i = 78;
@@ -36,8 +37,8 @@
             if(!in_array($l['ExpertNumID'],$tab)){
                 array_push($tab,$l['ExpertNumID']);
                 $content.="
-                <div style='position:absolute;top:".$i.";left:30;width:100%'><hr/></div>
-                <div style='position:absolute;top:".$i.";left:30'><h4>".$l['ExpertNom']." ".$l['ExpertPrénom']."</h4></div>
+                <div style='position:absolute;top:".$i.";left:0;width:100%'><hr/></div>
+                <div style='position:absolute;top:".$i.";left:0'><h4>".$l['ExpertNom']." ".$l['ExpertPrénom']."</h4></div>
                 ";
                 $i = $i + 40;
             }
@@ -45,18 +46,20 @@
             $content.="
             <span style='font-size:11px'><i>
             <span style='color:#462E01'>
-            <div style='position:absolute;top:".$i.";left:42'>".$l['LienExpertClient']."</div>
-            <div style='position:absolute;top:".$i.";left:183'>".$l['ClientNom']."</div>
-            <div style='position:absolute;top:".$i.";left:305'>".$l['ClientPrénom']."</div>
-            <div style='position:absolute;top:".$i.";left:427'>".mb_strimwidth($l['ClientProfession'], 0, 30, "...")."</div>
-            <div style='position:absolute;top:".$i.";left:600'>".$l['ClientVille']."</div>
-            </span>";
-            $i = $i + 17;
-            $content.="
-            <span style='color:#785E2F'>
-            <div style='position:absolute;top:".$i.";left:77'>".$l['TYP-Nom']."</div>
-            <div style='position:absolute;top:".$i.";left:195'>".$l['CON-Nom']."</div>
-            <div style='position:absolute;top:".$i.";left:313'>".$l['CON-Prénom']."</div>
+           <div style='position:absolute;top:".$i.";left:0'>".$l['LienExpertClient']."</div>
+        <div style='position:absolute;top:".$i.";left:130'>".$l['ClientNom']." ".$l['ClientPrénom']."</div>
+        <div style='position:absolute;top:".$i.";left:315'>".mb_strimwidth($l['ClientProfession'], 0, 26, "...")."</div>";
+        if(ctype_upper(str_replace(' ', '',$l['ClientVille']))){
+            $content.="<div style='position:absolute;top:".$i.";left:460'>".mb_strimwidth($l['ClientVille'], 0, 15, "...")."</div>";
+        } else {
+            $content.="<div style='position:absolute;top:".$i.";left:460'>".mb_strimwidth($l['ClientVille'], 0, 20, "...")."</div>";
+        }
+        //$i = $i + 15;
+        
+        $content.="
+        <span style='color:#856D4D;'>
+        <div style='position:absolute;top:".$i.";left:575'>".$l['TYP-Nom']." ".$l['CON-Nom']." ".$l['CON-Prénom']."</div>
+        </span>
             </span>
             </i></span>
             ";

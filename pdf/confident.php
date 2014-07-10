@@ -7,7 +7,7 @@
     </page_header>
 
     <span style='font-size:11px'>
-        <div style='position:absolute;top:28;left:26'><b>Procédure de traitement Secret Professionnel</b></div>
+        <div style='position:absolute;top:0;left:0'><b><h3>Procédure de traitement Secret Professionnel</h3></b></div>
         <div style='position:absolute;top:56;left:26'><b>Responsable Stéphane SAULNIER</b></div>
         <div style='position:absolute;top:140;left:26'><h5><u>1) Définition</u></h5></div><i>
         <div style='position:absolute;top:174;left:30'>C’est l’interdiction faite à certains professionnels de révéler ce qu’ils ont appris dans le cadre leur profession.</div>
