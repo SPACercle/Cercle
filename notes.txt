@@ -1,16 +1,17 @@
 A FAIRE AVANT LA FIN
 ---------------------------------------------------------------------------------------------------------
 
-//- Changer le favicon
+
 //- Taille logo pdfs
 //- Code couleur pdf codes
 //- Logos strat partout (titre a gauche logo a droite)
 //- Portefeuille auto
 //- Dates
 //- Montant € champs
-//- Liste solutions colone concurents + tri (dernier)
+//- Liste solutions colone concurents + tri (dernier) INVERSER
 
-- Fiche produit (voir feuille)
+- Formalisation vérifier (truc en rouge a la fin)
+- Changer le favicon
 - Accords partenaires sur la même ligne
 - Fiche Client onglet général -> fond cadre
 - Client pro et perso -> fonc blanc nul
@@ -19,14 +20,10 @@ A FAIRE AVANT LA FIN
 - aligner case client perso
 - chargement gif client -> mettre l'autre
 - essayer cacher relationel client bug chargement
-- fiche produit jaune dans bleu
-- anomalie ligne plus petit
 - Modifier -> Enregistrer
-- Affaire nouvelle + gros
 - msg fermeture si pas enregistré
 - tailles des champs partout
 - logo en haut a gauche dégueu sur FF
-
 - Préparer PC pour Sylvain
 
 

@@ -71,7 +71,7 @@
 		
 		WHERE (((`Type Client`.`TYP-Nom`)='Client') AND ((`visualisation portefeuilles`.`VIS-NumUtilisateur`)=".$_SESSION['Auth']['id'].") AND ((`Produits par Clients`.`P/C-NumClient`)=".$_GET['idClient'].") AND ((`Produits par Clients`.`P/C-DossierConcurrent`)=0))
 
-		ORDER BY `compagnies`.`CIE-Nom`,`produits`.`PDT-Nom`,`evenements par produits`.`E/P-DateEffet` DESC;
+		ORDER BY `Type Produit`.`TPD-Nom`,`compagnies`.`CIE-Nom`,`produits`.`PDT-Nom`,`evenements par produits`.`E/P-DateEffet` DESC;
 	";
 
 	$query3="

@@ -38,46 +38,45 @@
     $res = $pdo->query($query);
     $res = $res->fetchALL(PDO::FETCH_ASSOC);
 
-    //print_r($res);
+    $content="<page>
 
-    $content="<page backright='10mm'>
-
-    <span style='font-size:12px'>";
+    <span style='font-size:9px'>";
 
     $i = 0;
     $tab = array();
     $tab_nom_mere = array();
     foreach ($res as $r) {
-        if($i > 1000){
+        if($i > 690){
          $content.="
             </span>
             </page>
-            <page backright='10mm'>
-            <span style='font-size:12px'>";
+            <page>
+            <span style='font-size:9px'>";
             $i = 22;
         }
         if(!in_array($r['CON-NumID'],$tab)){
+            $logo = explode("\\",$r['CON-Logo']);
             $tab_nom_mere = array();
             $i = 22;
             if(sizeof($tab) > 0){
                 $content.="
                 </span>
                 </page>
-                <page backright='10mm'>
-                <span style='font-size:12px'>";
+                <page backright='9mm'>
+                <span style='font-size:9px'>";
+            }
+            if(isset($logo[3])){
+                $content.="<div style='position:absolute;top:-10;left:750;'><img src='../img/logos/".$logo[3]."' ALT=''></div>";
             }
             $content.="
-            <div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
             <div style='position:absolute;top:".$i.";left:20'><h3>Codes Courtage de ".$r['CON-Prénom']." ".$r['CON-Nom']."</h3></div>";
             $content.="
             <div style='position:absolute;top:0;left:0'><i>le ".date("d/m/Y à H:i")."</i></div>";
-            $i = $i + 33;
+            $i = $i + 35;
         } else {
-            $i = $i + 20;
+            //$i = $i + 5;
         }
-        array_push($tab,$r['CON-NumID']);
-        $content.="
-        <span style='color:red;'>";
+         array_push($tab,$r['CON-NumID']);
         $i = $i + 7;
         if(!in_array($r['COD-NomCodeMere'],$tab_nom_mere)){
             $i = $i + 15;
@@ -85,23 +84,23 @@
             $content.="
             <u><div style='position:absolute;top:".($i-15).";left:0;'><h3>".$r['COD-NomCodeMere']."</h3></div>";
             $i = $i + 15;
-            $content.="<div style='position:absolute;top:".($i-25).";left:0px;width:770px;'><hr/></div></u>";
+            $content.="</u>";
             $i = $i + 5;
         }
         $content.="
         <b>
-        <div style='position:absolute;top:".($i+14).";left:570'>Code Courtier : </div>
-        <div style='position:absolute;top:".($i+14).";left:270'>Code Maître : </div>
-        <div style='position:absolute;top:".($i+14).";left:470'> Type : </div></b>";
+        <div style='position:absolute;top:".($i+14).";left:220'>Code Courtier : </div>
+        <div style='position:absolute;top:".($i+14).";left:840'>Code Maître : </div>
+        <div style='position:absolute;top:".($i+14).";left:740'> Type : </div></b>";
         $i = $i + 2;
         $content.="
-        <div style='position:absolute;top:".($i+28).";left:480'><span style='color:red;'><b>MP Dirigeant : </b></span></div></span>";
+        <div style='position:absolute;top:".($i+12).";left:980'><b>MP Dirigeant : </b></div>";
         $i = $i + 12;
         $content.="
-        <div style='position:absolute;top:".($i+15).";left:0'><span style='color:red;'><b>Identifiant :</b></span> ".$r['COD-Identifiant']."</div>
-        <div style='position:absolute;top:".$i.";left:660'>".$r['COD-Code']."</div>
-        <div style='position:absolute;top:".($i+15).";left:320'><span style='color:red;'><b>MDP :</b></span> ".$r['COD-MP']."</div>
-        <div style='position:absolute;top:".($i+15).";left:585'> ".$r['COD-MPDir']."</div>";
+        <div style='position:absolute;top:".($i).";left:385'><b>Identifiant :</b> ".$r['COD-Identifiant']."</div>
+        <div style='position:absolute;top:".$i.";left:290'>".$r['COD-Code']."</div>
+        <div style='position:absolute;top:".($i).";left:620'><b>MDP :</b> ".$r['COD-MP']."</div>
+        <div style='position:absolute;top:".($i).";left:1043'> ".$r['COD-MPDir']."</div>";
         if($r['CON-Couleur'] != null){
             $couleur = $r['CON-Couleur'];
         } else {
@@ -109,8 +108,8 @@
         }
         $content.="
         <div style='position:absolute;top:".$i.";left:0'><div style='display:inline;background-color:".$couleur.";border:1px solid black;width:10px;height:10px;'></div><b> ".$r['CIE-Nom']."</b></div>
-        <div style='position:absolute;top:".$i.";left:508'> ".$r['COD-TypeCode']."</div>
-        <div style='position:absolute;top:".$i.";left:350'>".$r['COD-CodeMere']."</div>";
+        <div style='position:absolute;top:".$i.";left:769'> ".$r['COD-TypeCode']."</div>
+        <div style='position:absolute;top:".$i.";left:900'>".$r['COD-CodeMere']."</div>";
         //$i = $i + 10;
     }
     $content.="
@@ -119,7 +118,7 @@
     ";
 
     require_once(dirname(__FILE__).'/html2pdf/html2pdf.class.php');
-    $html2pdf = new HTML2PDF('P','A4','fr');
+    $html2pdf = new HTML2PDF('L','A4','fr');
     $html2pdf->WriteHTML($content);
     $html2pdf->Output('Codes.pdf');
 

@@ -1790,12 +1790,12 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 		<tbody>';
 			$produits2 = array();
 			foreach ($produits as $produit) {
-				if($produit['P/C-DossierConcurrent'] == 1){
+				if($produit['P/C-DossierConcurrent'] != 1){
 					array_push($produits2,$produit);
 				}
 			}
 			foreach ($produits as $produit) {
-				if($produit['P/C-DossierConcurrent'] != 1){
+				if($produit['P/C-DossierConcurrent'] == 1){
 					array_push($produits2,$produit);
 				}
 			}
@@ -2172,12 +2172,9 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 				<button type="submit" class="btn btn-success" style="float:right;"><i class="fa fa-save"></i> Valider Modifications</button>
 
 				</form>
-			</div>
-		</div>
-	</div>
-	
-	<div class="col-lg-12">
-		<div class="panel panel-warning">
+
+			<br/><br/>
+			<div class="panel panel-warning">
 			<div class="panel-heading">
 				<h4 class="panel-title"><b>Différentes phases de mise en place des mes dossiers</b></h4>
 			</div>
@@ -2192,7 +2189,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					    <div class="panel-heading">
 					      <h4 class="panel-title">';
 					          	//Nom
-								$code.="<form action='index.php?action=modifEvProduit' method='post' style='display:inline;'><select name='typeEv'><b>";
+								$code.="<form action='index.php?action=modifEvProduit' method='post' style='display:inline;'><select name='typeEv' style='font-weight:bold;'><b>";
 								foreach($type_evenements as $typ){
 									if($typ['EVE-NumID'] == $ev['E/P-NumEvenement']){
 										$code.="<option value='".$typ['EVE-NumID']."' selected>".$typ['EVE-Nom']."</option>";
@@ -2202,23 +2199,17 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 								}
 								$code.="</select>";
 
-								//Date Signature
-								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Date signature : </i><b><input style='width:140px;height:22px;' type='date' name='dateSignature' value='";
-										if($ev['E/P-DateSignature']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateSignature']));}
-										$code.="'/></b>";
-
 								//Date Effet
 								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Date Effet : </i><b><input style='width:140px;height:22px;' type='date' name='dateEffet' value='";
 										if($ev['E/P-DateEffet']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateEffet']));}
 										$code.="'/></b>";
 
-								//Scoring
-								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Scoring </i>";
-								if($ev['E/P-Scoring'] == 1){
-									$code.='<input name="scoring" type="checkbox" checked/>';
-								} else {
-									$code.='<input name="scoring" type="checkbox"/>';
-								}
+								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Prime Pério : </i><b>
+								<div class='form-group'><div class='input-group'><div class='input-group-addon'>€</div>
+								<input style='width:80px;' class='form-control' type='text' name='primePério' value='".$ev['E/P-MontantPP']."'/></b></div></div>";
+
+								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Prime Unique : </i><b><input style='width:80px;' type='text' name='primeUnique' value='".$ev['E/P-MontantPU']."'/></b>";
+
 								$code.='
 					        	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					        	<button type="submit" class="btn btn-warning btn-xs"><i class="fa fa-save"></i> Enregistrer</button>
@@ -2252,7 +2243,11 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					}
 					$code.="</select>";
 
-					$code.="<br/><br/><b>Envoyé </b>";
+					$code.="<br/><br/><b>Date signature : </b><b><input style='width:140px;height:22px;' type='date' name='dateSignature' value='";
+							if($ev['E/P-DateSignature']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateSignature']));}
+							$code.="'/></b>";
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Envoyé </b>";
 					if($ev['E/P-DossierEnvoyéClt'] == 1){
 						$code.='<input name="env" type="checkbox" checked/>';
 					} else {
@@ -2278,11 +2273,14 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 							if($ev['E/P-DateRemise']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateRemise']));}
 							$code.="'/>";
 
-					$code.="<br/><br/><b>Prime Pério : </b><input style='width:80px;' type='text' name='primePério' value='".$ev['E/P-MontantPP']."'/>";
+					$code.="<br/><br/><b>Scoring </b>";
+					if($ev['E/P-Scoring'] == 1){
+						$code.='<input name="scoring" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="scoring" type="checkbox"/>';
+					}
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Prime Unique : </b><input style='width:80px;' type='text' name='primeUnique' value='".$ev['E/P-MontantPU']."'/>";
-
-					$code.="<br/><br/><b>Formalisé </b>";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Formalisé </b>";
 					if($ev['E/P-ObligationConseils'] == 1){
 						$code.='<input name="formalise" type="checkbox" checked/>';
 					} else {
@@ -2358,6 +2356,16 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 
 			</div>
 		</div>
+
+			</div>
+		</div>
+
+		
+
+	</div>
+	
+	<div class="col-lg-12">
+		
 	</div>
 	';
 	$menu = '<li><a href="index.php?action=ficheClient&idClient='.$produit['P/C-NumClient'].'&onglet=solution"><i class="fa fa-backward fa-lg"></i><b> Retour Fiche Client</b></a></li>';
