@@ -2173,12 +2173,8 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 
 				</form>
 
-			<br/><br/>
-			<div class="panel panel-warning">
-			<div class="panel-heading">
-				<h4 class="panel-title"><b>Différentes phases de mise en place des mes dossiers</b></h4>
-			</div>
-			<div class="panel-body" style="font-size:11px;">';
+			<br/><br/><hr/><h4>Evenements liés au produit :</h4>';
+
 				// Pour chaque ligne déroulante
 				$n = array("One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen");
 				$i = 0;
@@ -2186,10 +2182,10 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					$code.='
 					<div class="panel-group" id="accordion">
 					  <div class="panel panel-default">
-					    <div class="panel-heading">
+					    <div class="panel-heading" style="background-color:#CECECE;border: 1px solid grey;">
 					      <h4 class="panel-title">';
 					          	//Nom
-								$code.="<form action='index.php?action=modifEvProduit' method='post' style='display:inline;'><select name='typeEv' style='font-weight:bold;'><b>";
+								$code.="<form action='index.php?action=modifEvProduit' method='post' style='display:inline;'><i class='fa fa-folder-open'></i> <select name='typeEv' style='font-weight:bold;'><b>";
 								foreach($type_evenements as $typ){
 									if($typ['EVE-NumID'] == $ev['E/P-NumEvenement']){
 										$code.="<option value='".$typ['EVE-NumID']."' selected>".$typ['EVE-Nom']."</option>";
@@ -2204,11 +2200,9 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 										if($ev['E/P-DateEffet']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateEffet']));}
 										$code.="'/></b>";
 
-								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Prime Pério : </i><b>
-								<div class='form-group'><div class='input-group'><div class='input-group-addon'>€</div>
-								<input style='width:80px;' class='form-control' type='text' name='primePério' value='".$ev['E/P-MontantPP']."'/></b></div></div>";
+								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Prime Pério : </i><b><input style='width:80px;' type='text' name='primePério' value='".$ev['E/P-MontantPP']."'/>€</b>";
 
-								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Prime Unique : </i><b><input style='width:80px;' type='text' name='primeUnique' value='".$ev['E/P-MontantPU']."'/></b>";
+								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Prime Unique : </i><b><input style='width:80px;' type='text' name='primeUnique' value='".$ev['E/P-MontantPU']."'/>€</b>";
 
 								$code.='
 					        	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -2219,7 +2213,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 							$code.='
 						</div>
 					    <div id="collapse'.$n[$i].'" class="panel-collapse collapse">
-					      <div class="panel-body">
+					      <div class="panel-body" style="background-color:#EFEFEF;border: 1px solid grey;">
 					      ';
 					
 					$i++;
@@ -2243,27 +2237,16 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					}
 					$code.="</select>";
 
-					$code.="<br/><br/><b>Date signature : </b><b><input style='width:140px;height:22px;' type='date' name='dateSignature' value='";
-							if($ev['E/P-DateSignature']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateSignature']));}
-							$code.="'/></b>";
+					$code.="<br/><br/><div class='well well-sm' style='background-color:#DFF0D8'>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Envoyé </b>";
-					if($ev['E/P-DossierEnvoyéClt'] == 1){
-						$code.='<input name="env" type="checkbox" checked/>';
-					} else {
-						$code.='<input name="env" type="checkbox"/>';
-					}
+					$code.="<b>Date signature : </b><input style='width:120px;height:22px;' type='date' name='dateSignature' value='";
+							if($ev['E/P-DateSignature']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateSignature']));}
+							$code.="'/>";
 
 					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Date Envoi Cie : </b><input style='width:120px;height:22px;' type='date' name='dateEnvoi' value='";
 							if($ev['E/P-DateEnvoi']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateEnvoi']));}
 							$code.="'/>";
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Médical ?</b> ";
-					if($ev['E/P-AcceptMedicale'] == 1){
-						$code.='<input name="medicale" type="checkbox" checked/>';
-					} else {
-						$code.='<input name="medicale" type="checkbox"/>';
-					}
 
 					$code.="<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Retour : </b> <input style='width:120px;height:22px;' type='date' name='dateRetour' value='";
 							if($ev['E/P-DateRetour']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateRetour']));}
@@ -2273,7 +2256,25 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 							if($ev['E/P-DateRemise']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateRemise']));}
 							$code.="'/>";
 
-					$code.="<br/><br/><b>Scoring </b>";
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Médical ?</b> ";
+					if($ev['E/P-AcceptMedicale'] == 1){
+						$code.='<input name="medicale" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="medicale" type="checkbox"/>';
+					}
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Envoyé </b>";
+					if($ev['E/P-DossierEnvoyéClt'] == 1){
+						$code.='<input name="env" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="env" type="checkbox"/>';
+					}
+
+					$code.="<span style='float:right;color:#3C763D'><h4><i>Circuit Envoi/Suivi</i></h4></span></div>";
+
+					$code.="<div class='well well-sm' style='background-color:#D9EDF7'>";
+
+					$code.="<b>Scoring </b>";
 					if($ev['E/P-Scoring'] == 1){
 						$code.='<input name="scoring" type="checkbox" checked/>';
 					} else {
@@ -2308,8 +2309,11 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 						$code.='<input name="pdc" type="checkbox"/>';
 					}
 
-					$code.="<br/><br/>
-					<b>Commentaire : </b><input style='width:500px;' type='text' name='commentaire' value='".$ev['E/P-Commentaire']."'/><br/><br/>
+					$code.="<span style='float:right;color:#31708F'><h4><i>Conformité du dossier</i></h4></span></div>";
+
+					$code.="<div class='well well-sm' style='background-color:#FCF8E3'>";
+
+					$code.="
 					<b>Frais négociés</b>&nbsp;&nbsp;&nbsp;&nbsp;
 					Entrée &nbsp;<input style='width:30px;' type='text' name='fraisEnt' value='".$ev['E/P-FraisEntNégo']."'/>%&nbsp;&nbsp;&nbsp;
 					Gestion &nbsp;<input style='width:30px;' type='text' name='gestionEnt' value='".$ev['E/P-GestEntNégo']."'/>%&nbsp;&nbsp;&nbsp;
@@ -2327,8 +2331,12 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 							$code.="<option value='".$com['C/P-NumID']."'>".$com['C/P-ProtocoleNom']." - ".$com['C/P-ProtocoleAnnée']." - ".$com['C/P-DétailExplicatif']." - Escompte : ".$com['C/P-ComEsc']." - Linéaire : ".$com['C/P-ComLin']."</option>";
 						}
 					}
-					$code.="</select>
-					<br/><br/>
+					$code.="</select>";
+
+					$code.="<span style='float:right;color:#8A6D3B'><h4><i>Commissions</i></h4></span></div>";
+
+					$code.="
+					<b>Commentaire : </b><input style='width:500px;' type='text' name='commentaire' value='".$ev['E/P-Commentaire']."'/><br/><br/>
 						<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
 						<input type='hidden' name='idEv' value='".$ev['E/P-NumID']."'/>
 						<button type='submit' class='btn btn-warning btn-xs'><i class='fa fa-save'></i> Enregistrer</button>
@@ -2353,9 +2361,6 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 				";
 
 				$code.='
-
-			</div>
-		</div>
 
 			</div>
 		</div>
