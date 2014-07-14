@@ -36,6 +36,29 @@ if(!(Auth::isLogged())){
   <!-- Pour le drag and drop -->
   <link rel="stylesheet" type="text/css" href="css/styleDragDrop.css" />
   <link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+
+  <!-- JavaScript -->
+  <script src="js/jquery-1.10.2.js"></script>
+  <script src="js/bootstrap.js"></script>
+
+  <!-- Perso -->
+  <script src="js/fonctions.js"></script>
+
+  <!-- Autres Plugins -->
+  <script src="js/tablesorter/jquery.tablesorter.js"></script>
+  <script src="js/tablesorter/tables.js"></script>
+  <script src="js/jquery.maskedinput.min.js" type="text/javascript"></script>
+
+  <!-- Pour le drag and drop -->
+  <script src="js/jquery-ui.js"></script>
+  <script src="js/fieldChooser.js"></script>
+  <script>
+      $(document).ready(function () {
+          var $sourceFields = $("#sourceFields");
+          var $destinationFields = $("#destinationFields");
+          var $chooser = $("#fieldChooser").fieldChooser(sourceFields, destinationFields);
+      });
+  </script>
   
 </head>
 
@@ -100,7 +123,7 @@ if(!(Auth::isLogged())){
     <!-- Barre du haut -->
     <nav class="navbar navbar-inverse navbar-fixed-top" style="height:61px;background:#362F29;border:1px solid black;" role="navigation">
       <div class="navbar-header">
-       <a class="navbar-brand" href="index.php" style="margin-right:25px;margin-left:25px;"><img src="img/logo3marron.png" style="width:90px;height:50px;margin-top:-12px;padding:0px"/></a>
+       <a class="navbar-brand" href="index.php" style="margin-right:25px;margin-left:25px;"><img src="img/logo3marron.png" style="width:90px;height:50px;margin-top:-12px;padding:0px;-ms-interpolation-mode: bicubic;"/></a>
       </div>
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <!-- Menu du côté -->
@@ -116,7 +139,7 @@ if(!(Auth::isLogged())){
 
         <ul class="nav navbar-nav navbar-left navbar-user">
           <li <?php if(!isset($_GET['action'])){ echo "class='active'"; } ?>><a href="index.php"><b><img src="img/home.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp;Accueil</b></a></li>
-          <li <?php if(isset($_GET['action']) && preg_match("#[c|C]lient#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=client" onclick="$('#myModal').modal('show')"><b><img src="img/client.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Clients</b></a></li>
+          <li <?php if(isset($_GET['action']) && preg_match("#[c|C]lient#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=client"><b><img src="img/client.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Clients</b></a></li>
           <li <?php if(isset($_GET['action']) && preg_match("#partenaire#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=partenaire&onglet=accord"><b><img src="img/partenaire.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Partenaires</b></a></li>
           <li <?php if(isset($_GET['action']) && preg_match("#compagnie#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=compagnie"><b><img src="img/produit.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Compagnies</b></a></li>
           <li <?php if(isset($_GET['action']) && preg_match("#procedure#",$_GET['action'])){ echo "class='active'"; } ?>><a href="index.php?action=procedure"><b><img src="img/procedure.png" style="width:40px;height:40px;margin:-5px;padding:0px"/>&nbsp;&nbsp;&nbsp; Procédures</b></a></li>
@@ -188,29 +211,6 @@ if(!(Auth::isLogged())){
     </div>
 
   </div>
-
-  <!-- JavaScript -->
-  <script src="js/jquery-1.10.2.js"></script>
-  <script src="js/bootstrap.js"></script>
-
-  <!-- Autres Plugins -->
-  <script src="js/tablesorter/jquery.tablesorter.js"></script>
-  <script src="js/tablesorter/tables.js"></script>
-  <script src="js/jquery.maskedinput.min.js" type="text/javascript"></script>
-
-  <!-- Perso -->
-  <script src="js/fonctions.js"></script>
-
-  <!-- Pour le drag and drop -->
-  <script src="js/jquery-ui.js"></script>
-  <script src="js/fieldChooser.js"></script>
-  <script>
-      $(document).ready(function () {
-          var $sourceFields = $("#sourceFields");
-          var $destinationFields = $("#destinationFields");
-          var $chooser = $("#fieldChooser").fieldChooser(sourceFields, destinationFields);
-      });
-  </script>
 
 </body>
 </html>

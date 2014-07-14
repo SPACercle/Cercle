@@ -1,7 +1,7 @@
 A FAIRE AVANT LA FIN
 ---------------------------------------------------------------------------------------------------------
 
-
+FAIT
 //- Taille logo pdfs
 //- Code couleur pdf codes
 //- Logos strat partout (titre a gauche logo a droite)
@@ -10,46 +10,35 @@ A FAIRE AVANT LA FIN
 //- Montant € champs
 //- Liste solutions colone concurents + tri (dernier) INVERSER
 
-- Formalisation vérifier (truc en rouge a la fin)
-- Changer le favicon
-- Accords partenaires sur la même ligne
-- Fiche Client onglet général -> fond cadre
-- Client pro et perso -> fonc blanc nul
-- cliquez tr solutions au lieu de acceder
-- bouton supprimer client décaler vers la droite
-- aligner case client perso
-- chargement gif client -> mettre l'autre
-- essayer cacher relationel client bug chargement
-- Modifier -> Enregistrer
-- msg fermeture si pas enregistré
+A VALIDER
+//- Smiley bouton
+//- Chargement vrai temps
+//- Formalisation vérifier (demander si requete ok) => besoin exprimé, mais pas de solutions retenues ?
+//- Changer le favicon
+//- Client pro et perso -> fond gris
+//- cliquez tr solutions au lieu de acceder
+//- bouton supprimer client décaler vers la droite
+//- aligner bouton pdf client perso
+//- essayer cacher relationel client bug chargement
+//- Modifier -> Enregistrer
+
+A FAIRE
 - tailles des champs partout
-- logo en haut a gauche dégueu sur FF
-- Préparer PC pour Sylvain
+- msg fermeture si pas enregistré
+- chargement gif client -> mettre l'autre
+- Accords partenaires sur la même ligne
 
 
 A LA FIN
 ---------------------------------------------------------------------------------------------------------
 
-Documentation : Liste de tous les outils (mettre à jour à la fin et recupérer)
+- Préparer PC pour Sylvain
 
-Récuperer tous les fichiers + BDD
+- Documentation : Liste de tous les outils (mettre à jour à la fin et recupérer)
 
-Virer DOF
+- Récuperer tous les fichiers + BDD
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- Virer DOF
 
 ---------------------------------------------------------------------------------------------------------
 

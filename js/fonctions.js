@@ -526,4 +526,10 @@ $(document).ready(function() {
 	$("#port").on("change",function(){
 		$("#port").submit();
 	});
+
+	//Smiley
+	$("#activeSmiley").click(function(){
+		$("#smileySort").click().click();
+	});
+
 });

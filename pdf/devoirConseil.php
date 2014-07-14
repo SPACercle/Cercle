@@ -96,10 +96,15 @@
 	$res8 = $res->fetchALL(PDO::FETCH_ASSOC);
 
 
-	$query8 ="
+	/*$query8 ="
 		SELECT DISTINCT `Type Produit`.`TPD-Nom`
 		FROM `Clients et Prospects` INNER JOIN ((`Type Produit` INNER JOIN `Besoins par Type Produits` ON `Type Produit`.`TPD-NumID` = `Besoins par Type Produits`.`B/T-NumType`) INNER JOIN `Besoins par Client` ON (`Besoins par Type Produits`.`B/T-NumOcc` = `Besoins par Client`.`B/C-NumOcc`) AND (`Besoins par Type Produits`.`B/T-NumBesoin` = `Besoins par Client`.`B/C-NumBesoin`) AND (`Besoins par Type Produits`.`B/T-NumType` = `Besoins par Client`.`B/C-NumType`)) ON `Clients et Prospects`.`CLT-NumID` = `Besoins par Client`.`B/C-NumClient`
 		WHERE (((`Clients et Prospects`.`CLT-NumID`)=".$_GET['idClient']."));
+	";*/
+	$query8 = "
+	SELECT DISTINCT `type produit`.`TPD-Nom`
+	FROM `produits par clients` INNER JOIN (`type produit` INNER JOIN ((`besoins existants` INNER JOIN `besoins par type produits` ON `besoins existants`.`BES-NumID` = `besoins par type produits`.`B/T-NumBesoin`) INNER JOIN (`clients et prospects` INNER JOIN `besoins par client` ON `clients et prospects`.`CLT-NumID` = `besoins par client`.`B/C-NumClient`) ON (`besoins par type produits`.`B/T-NumType` = `besoins par client`.`B/C-NumType`) AND (`besoins par type produits`.`B/T-NumOcc` = `besoins par client`.`B/C-NumOcc`)) ON `type produit`.`TPD-NumID` = `besoins par type produits`.`B/T-NumType`) ON `produits par clients`.`P/C-NumClient` = `clients et prospects`.`CLT-NumID`
+	WHERE (((`clients et prospects`.`CLT-NumID`)=".$_GET['idClient'].")) AND `type produit`.`TPD-Nom` NOT IN (SELECT DISTINCT(`TPD-Nom`) FROM `produits par clients`, `produits`, `type produit` WHERE `P/C-NumClient` = ".$_GET['idClient']." AND `P/C-NumProduit` = `PDT-NumID` AND `PDT-Type` = `TPD-NumID`);
 	";
 	$pdo->exec("SET NAMES UTF8");
 	$res = $pdo->query($query8);
