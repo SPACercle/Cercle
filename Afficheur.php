@@ -122,7 +122,9 @@ function AfficheClient($clients,$types,$filtre){
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class='btn btn-default'><i class='fa fa-refresh'></i> Actualiser</button>
 	</form>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<button id='activeSmiley' class='btn btn-default'><img src='img/1.png' style='width:22px;height22px;background-color:#F6F6F6;' /> Contact Client</button>
+	<button id='activeSmiley' class='btn btn-default'><img src='img/1.png' style='width:22px;height22px;background-color:#F6F6F6;' /> Suivi Contact (ON)</button>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href='index.php?action=client' class='btn btn-default'><img src='img/3.png' style='width:22px;height22px;background-color:#F6F6F6;' /> Suivi Contact (OFF)</a>
 	";
 	$code.= "<hr/><div class='col-lg-12'><div class='table-responsive'>
 	<table class='table table-hover tablesorter' id='clients'>
@@ -131,7 +133,7 @@ function AfficheClient($clients,$types,$filtre){
 	<th style='width:90px;'>Etat <i class='fa fa-sort' id='smileySort'></i></th>
 	<th style='width:65px;'>Civilité <i class='fa fa-sort'></i></th>
 	<th>Type <i class='fa fa-sort'></i></th>
-	<th>Nom Client <i class='fa fa-sort'></i></th>
+	<th>Nom Client <i class='fa fa-sort' id='alphaSort'></i></th>
 	<th style='width:120px;'>Date naissance <i class='fa fa-sort'></i></th>
 	<th>Profession <i class='fa fa-sort'></i></th>
 	<th >Ville <i class='fa fa-sort'></i></th>
@@ -322,7 +324,7 @@ function AfficheClientAjout($formes){
 }
 
 //Affichage de la fiche client
-function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$raisons,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques,$types_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli,$type_produits,$compagnies,$produits){
+function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$raisons,$professions,$status,$types_revenus,$revenus,$types_historique,$historiques,$types_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli,$type_produits,$compagnies,$produits,$anom1,$anom2){
 	$code='
 	<h4 style="display:inline;">'.$client["CLT-Nom"].' '.$client["CLT-Prénom"].'</h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h5 style="display:inline;"><i>'.Auth::getInfo('ongletTitre').'</i></h5>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -422,7 +424,7 @@ function AfficheFicheClient($client,$types_client,$conseillers,$civilites,$situa
 	}
 	//Onglet Solutions retenues
 	if($_GET['onglet'] == "solution"){
-		$code.=AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits);
+		$code.=AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits,$anom1,$anom2);
 	}
 
 	//Le reste à faire
@@ -649,7 +651,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 		<form method="post" action="index.php?action=modifClientPersonnel" class="form-horizontal">
 			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 			<div class="col-lg-6">
-				 <div class="panel panel-info" style="background-color:#EBEAE8;">
+				 <div class="panel panel-primary" style="background-color:#EBEAE8;">
 		             <div class="panel-heading">
 		              <h4 class="panel-title"><b>Contact Perso</b></h4>
 		             </div>
@@ -684,7 +686,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 			</div>
 
 			<div class="col-lg-6">
-				  <div class="panel panel-info" style="background-color:#EBEAE8;">
+				  <div class="panel panel-primary" style="background-color:#EBEAE8;">
 		             <div class="panel-heading">
 		                <h4 class="panel-title"><b>Particularités Client</b></h4>
 		             </div>
@@ -813,7 +815,7 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 	<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 
 	<div class="col-lg-6">
-		 <div class="panel panel-info" style="background-color:#EBEAE8;">
+		 <div class="panel panel-primary" style="background-color:#EBEAE8;">
             <div class="panel-heading">
               <h4 class="panel-title"><b>Contact Professionnel</b></h4>
             </div>
@@ -851,7 +853,7 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 	</div>
 
 	<div class="col-lg-6">
-		 <div class="panel panel-info" style="background-color:#EBEAE8;">
+		 <div class="panel panel-primary" style="background-color:#EBEAE8;">
             <div class="panel-heading">
               <h4 class="panel-title"><b>Informations Professionnelles</b></h4>
             </div>
@@ -1765,7 +1767,26 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 	return($code);
 }
 
-function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits){
+function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits,$anom1,$anom2){
+	//ANOMALIE
+	$anomalie = "non";
+	//Les dossiers non formalisés
+	$anom11 = array();
+	foreach ($anom1 as $a1) {
+		array_push($anom11,$a1['TPD-Nom']);
+	}
+	//Les besoins saisis
+	$anom22 = array();
+	foreach ($anom2 as $a2) {
+		array_push($anom22,$a2['TPD-Nom']);
+	}
+	//Vérif
+	foreach ($anom11 as $a11) {
+		if(!in_array($a11,$anom22)){
+			$anomalie = "oui";
+		}
+	}
+
 	$code='<div class="tab-pane fade in';
 	if(isset($_GET['onglet']) && $_GET['onglet'] == "solution"){
 		$code.=' active';
@@ -1774,12 +1795,11 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 
 	<button class="btn btn-success" id="ajoutProduit" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Produit</button>
 
-	<a type="button" onclick="dev_cons()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Devoir de conseil</a>&nbsp;
 	<script>
-	function dev_cons() {
-	    window.open("pdf/devoirConseil.php?idClient='.$client['CLT-NumID'].'");
-	}
-	</script>&nbsp;&nbsp;&nbsp;&nbsp;
+		anomalie = "'.$anomalie.'";
+		idClient = '.$client['CLT-NumID'].';
+	</script>
+	<a type="button" id="dev_cons" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Devoir de conseil</a>&nbsp;
 
 	<a type="button" onclick="rec_cont()" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Recapitulatif Contrats</a>&nbsp;
 	<script>
@@ -1814,12 +1834,12 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 				}
 			}
 			foreach ($produits2 as $produit) {
-				$code.='<tr onclick="window.open(\'index.php?action=ficheClientProduit&idProduit='.$produit['P/C-NumID'].'\');" class="rowClient">';
-				$code.="<td>".$produit['CLT-Nom']." ".$produit['CLT-Prénom']."</td>";
-				$code.="<td>".$produit['CIE-Nom']."</td>";
-				$code.="<td>".$produit['PDT-Nom']."</td>";
-				$code.="<td>".$produit['TSC-Nom']."</td>";
-				$code.="<td>";
+				$code.='<tr>';
+				$code.="<td onclick=\"window.open('index.php?action=ficheClientProduit&idProduit=".$produit['P/C-NumID']."');\" class=\"rowClient\">".$produit['CLT-Nom']." ".$produit['CLT-Prénom']."</td>";
+				$code.="<td onclick=\"window.open('index.php?action=ficheClientProduit&idProduit=".$produit['P/C-NumID']."');\" class=\"rowClient\">".$produit['CIE-Nom']."</td>";
+				$code.="<td onclick=\"window.open('index.php?action=ficheClientProduit&idProduit=".$produit['P/C-NumID']."');\" class=\"rowClient\">".$produit['PDT-Nom']."</td>";
+				$code.="<td onclick=\"window.open('index.php?action=ficheClientProduit&idProduit=".$produit['P/C-NumID']."');\" class=\"rowClient\">".$produit['TSC-Nom']."</td>";
+				$code.="<td onclick=\"window.open('index.php?action=ficheClientProduit&idProduit=".$produit['P/C-NumID']."');\" class=\"rowClient\">";
 				if($produit['P/C-DossierConcurrent'] == 1){
 					$code.="<input type='checkbox' checked>";
 				} else {
@@ -2080,10 +2100,12 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 				<i>Contrat Maître : </i><b>
 				<select name="maitre">';
 				foreach ($maitre as $mai) {
-					if($mai['P/C-NumContratMaitre'] == $produit['P/C-NumContratMaitre']){
-						$code.='<option value="'.$mai['P/C-NumContratMaitre'].'" selected>'.$mai['P/C-NumContratMaitre'].'</option>';
-					} else {
-						$code.='<option value="'.$mai['P/C-NumContratMaitre'].'">'.$mai['P/C-NumContratMaitre'].'</option>';
+					if(isset($mai['P/C-NumContratMaitre'])){
+						if($mai['P/C-NumContratMaitre'] == $produit['P/C-NumContratMaitre']){
+							$code.='<option value="'.$mai['P/C-NumContratMaitre'].'" selected>'.$mai['P/C-NumContratMaitre'].'</option>';
+						} else {
+							$code.='<option value="'.$mai['P/C-NumContratMaitre'].'">'.$mai['P/C-NumContratMaitre'].'</option>';
+						}
 					}
 				}
 				$code.='
@@ -2209,19 +2231,24 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 								$code.="</select>";
 
 								//Date Effet
-								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Date Effet : </i><b><input style='width:140px;height:22px;' type='date' name='dateEffet' value='";
+								$code.="&nbsp;&nbsp;&nbsp;<i>Date Effet : </i><b><input style='width:140px;height:22px;' type='date' name='dateEffet' value='";
 										if($ev['E/P-DateEffet']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateEffet']));}
 										$code.="'/></b>";
 
-								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Prime Pério : </i><b><input style='width:80px;' type='text' name='primePério' value='".$ev['E/P-MontantPP']."'/>€</b>";
+								$code.="&nbsp;&nbsp;&nbsp;<i>Prime Pério : </i><b><input style='width:80px;' type='text' name='primePério' value='".$ev['E/P-MontantPP']."'/>€</b>";
 
-								$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>Prime Unique : </i><b><input style='width:80px;' type='text' name='primeUnique' value='".$ev['E/P-MontantPU']."'/>€</b>";
+								$code.="&nbsp;&nbsp;&nbsp;<i>Prime Unique : </i><b><input style='width:80px;' type='text' name='primeUnique' value='".$ev['E/P-MontantPU']."'/>€</b>";
 
 								$code.='
-					        	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					        	&nbsp;&nbsp;&nbsp;
 					        	<button type="submit" class="btn btn-warning btn-xs"><i class="fa fa-save"></i> Enregistrer</button>
-					        	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					        	<a data-toggle="collapse" data-parent="#accordion" href="#collapse'.$n[$i].'"><i class="fa fa-chevron-circle-down"></i> Afficher</a>
+					        	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					        	<a data-toggle="collapse" data-parent="#accordion" href="#collapse'.$n[$i].'"><i class="fa fa-chevron-circle-down"></i> Afficher</a>';
+					    		$code.="&nbsp;&nbsp;&nbsp;";
+								if($ev['E/P-ObligationConseils'] == 1){
+									$code.='<b>(Formalisé)</b>';
+								}
+								$code.='
 					      </h4>';
 							$code.='
 						</div>
@@ -2256,17 +2283,15 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 							if($ev['E/P-DateSignature']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateSignature']));}
 							$code.="'/>";
 
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Envoyé Clt </b>";
+					if($ev['E/P-DossierEnvoyéClt'] == 1){
+						$code.='<input name="env" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="env" type="checkbox"/>';
+					}
+
 					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Date Envoi Cie : </b><input style='width:120px;height:22px;' type='date' name='dateEnvoi' value='";
 							if($ev['E/P-DateEnvoi']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateEnvoi']));}
-							$code.="'/>";
-
-
-					$code.="<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Retour : </b> <input style='width:120px;height:22px;' type='date' name='dateRetour' value='";
-							if($ev['E/P-DateRetour']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateRetour']));}
-							$code.="'/>";
-
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Date Remise : </b><input style='width:120px;height:22px;' type='date' name='dateRemise' value='";
-							if($ev['E/P-DateRemise']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateRemise']));}
 							$code.="'/>";
 
 					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Médical ?</b> ";
@@ -2276,12 +2301,13 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 						$code.='<input name="medicale" type="checkbox"/>';
 					}
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Envoyé </b>";
-					if($ev['E/P-DossierEnvoyéClt'] == 1){
-						$code.='<input name="env" type="checkbox" checked/>';
-					} else {
-						$code.='<input name="env" type="checkbox"/>';
-					}
+					$code.="<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date Retour : </b> <input style='width:120px;height:22px;' type='date' name='dateRetour' value='";
+							if($ev['E/P-DateRetour']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateRetour']));}
+							$code.="'/>";
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Date Remise : </b><input style='width:120px;height:22px;' type='date' name='dateRemise' value='";
+							if($ev['E/P-DateRemise']!=null){$code.=date('Y-m-d',strtotime($ev['E/P-DateRemise']));}
+							$code.="'/>";
 
 					$code.="<span style='float:right;color:#3C763D'><h4><i>Circuit Envoi/Suivi</i></h4></span></div>";
 
@@ -2294,18 +2320,18 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 						$code.='<input name="scoring" type="checkbox"/>';
 					}
 
-					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Formalisé </b>";
-					if($ev['E/P-ObligationConseils'] == 1){
-						$code.='<input name="formalise" type="checkbox" checked/>';
-					} else {
-						$code.='<input name="formalise" type="checkbox"/>';
-					}
-
 					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Tracfin </b>";
 					if($ev['E/P-Tracfin'] == 1){
 						$code.='<input name="tracfin" type="checkbox" checked/>';
 					} else {
 						$code.='<input name="tracfin" type="checkbox"/>';
+					}
+
+					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Formalisé </b>";
+					if($ev['E/P-ObligationConseils'] == 1){
+						$code.='<input name="formalise" type="checkbox" checked/>';
+					} else {
+						$code.='<input name="formalise" type="checkbox"/>';
 					}
 
 					$code.="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Complet </b>";

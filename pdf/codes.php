@@ -10,14 +10,14 @@
         $query = "
         SELECT * FROM `codes compagnies`, `conseillers`, `compagnies`
         WHERE `COD-NumConseiller` = ".$idUser." AND `CON-NumID` = `COD-NumConseiller` AND `COD-NumCie` = `CIE-NumID`
-        ORDER BY `COD-NomCodeMere`, `CIE-Nom`, `CON-NumID`,`Codes Compagnies`.`COD-NomCodeMere`;
+        ORDER BY `CON-NumID`,`COD-NomCodeMere`, `CIE-Nom`;
         ";
     } else {
         if(isset($all)){
             $query = "
             SELECT * FROM `codes compagnies`, `conseillers`, `compagnies`
             WHERE `CON-NumID` = `COD-NumConseiller` AND `COD-NumCie` = `CIE-NumID`
-            ORDER BY `CON-NumID`,`Codes Compagnies`.`COD-NomCodeMere`,`CIE-Nom`;
+            ORDER BY `CON-NumID`,`COD-NomCodeMere`,`CIE-Nom`;
             ";
         } else {
             $query = "
@@ -28,7 +28,7 @@
                 $query.="AND `visualisation portefeuilles`.`VIS-NumORIAS`=".$_SESSION['Auth']['orias']."";
             }
             $query.="))
-            ORDER BY `Codes Compagnies`.`COD-NomCodeMere`, Compagnies.`CIE-Nom`, Conseillers.`CON-NumID` ;
+            ORDER BY `CON-NumID`,`COD-NomCodeMere`,`CIE-Nom` ;
             ";
         }
     }
@@ -76,7 +76,7 @@
         } else {
             //$i = $i + 5;
         }
-         array_push($tab,$r['CON-NumID']);
+        array_push($tab,$r['CON-NumID']);
         $i = $i + 7;
         if(!in_array($r['COD-NomCodeMere'],$tab_nom_mere)){
             $i = $i + 15;
@@ -98,7 +98,7 @@
         $i = $i + 12;
         $content.="
         <div style='position:absolute;top:".($i).";left:385'><b>Identifiant :</b> ".$r['COD-Identifiant']."</div>
-        <div style='position:absolute;top:".$i.";left:290'>".$r['COD-Code']."</div>
+        <div style='position:absolute;top:".$i.";left:290;color:blue;'><b>".$r['COD-Code']."</b></div>
         <div style='position:absolute;top:".($i).";left:620'><b>MDP :</b> ".$r['COD-MP']."</div>
         <div style='position:absolute;top:".($i).";left:1043'> ".$r['COD-MPDir']."</div>";
         if($r['CON-Couleur'] != null){

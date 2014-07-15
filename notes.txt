@@ -23,11 +23,12 @@ A VALIDER
 //- Modifier -> Enregistrer
 
 A FAIRE
-- tailles des champs partout
-- msg fermeture si pas enregistré
-- chargement gif client -> mettre l'autre
-- Accords partenaires sur la même ligne
-
+- Recherche dans personne creation lien
+- Taille ecriture ou police
+- Griser bouton ON/OFF smiley
+- Vérif logos sur pdf
+- Vérif form avec nombre
+- Quitter sans enregistrer (voir fin fonctions.js)
 
 A LA FIN
 ---------------------------------------------------------------------------------------------------------

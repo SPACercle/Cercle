@@ -532,4 +532,24 @@ $(document).ready(function() {
 		$("#smileySort").click().click();
 	});
 
+	//Avertissement anomalie avant pdf devoir conseil
+	$("#dev_cons").click(function(){
+		if(anomalie == "oui"){
+			var test = confirm('ATTENTION ! Il existe des solutions non formalisés qui n\'ont pas fait l\'objet d\'un besoin. Générer quand même le document ?');
+			if(test){
+		    	window.open("pdf/devoirConseil.php?idClient="+idClient+"");
+		    }
+		} else {
+			window.open("pdf/devoirConseil.php?idClient="+idClient+"");
+		}
+	});
+
+	$("input").keyup(function () {
+   		var changed = true;
+	});
+
+	/*$(window).bind('beforeunload', function() {
+		return 'Êtes-vous sûr de vouloir vous déconnecter ?';
+	});*/
+
 });

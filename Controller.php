@@ -469,8 +469,25 @@ class Controller{
 			$res_prod = $pdo->query($query_prod);
 			$produits = $res_prod->fetchALL(PDO::FETCH_ASSOC);
 
+			//Vérif Anomalie
+			$query_anom1="SELECT DISTINCT `Type Produit`.`TPD-Nom`
+			FROM (Compagnies INNER JOIN ((`Type Produit` INNER JOIN Produits ON `Type Produit`.`TPD-NumID` = Produits.`PDT-Type`) INNER JOIN (`Clients et Prospects` INNER JOIN `Produits par Clients` ON `Clients et Prospects`.`CLT-NumID` = `Produits par Clients`.`P/C-NumClient`) ON Produits.`PDT-NumID` = `Produits par Clients`.`P/C-NumProduit`) ON Compagnies.`CIE-NumID` = Produits.`PDT-Cie`) INNER JOIN `Evenements par Produits` ON `Produits par Clients`.`P/C-NumID` = `Evenements par Produits`.`E/P-NumProduitClient`
+			WHERE (((`Clients et Prospects`.`CLT-NumID`)=".$client[0]['CLT-NumID'].") AND ((`Evenements par Produits`.`E/P-ObligationConseils`)=0) AND ((`Produits par Clients`.`P/C-DossierConcurrent`)=0) AND ((`Produits par Clients`.`P/C-SituationContrat`) In (1,2,12)));
+			";
+			$pdo->exec("SET NAMES UTF8");
+			$res_anom1 = $pdo->query($query_anom1);
+			$anom1 = $res_anom1->fetchALL(PDO::FETCH_ASSOC);
+
+			$query_anom2="SELECT DISTINCT `Type Produit`.`TPD-Nom`
+			FROM `Clients et Prospects` INNER JOIN ((`Type Produit` INNER JOIN `Besoins par Type Produits` ON `Type Produit`.`TPD-NumID` = `Besoins par Type Produits`.`B/T-NumType`) INNER JOIN `Besoins par Client` ON (`Besoins par Type Produits`.`B/T-NumOcc` = `Besoins par Client`.`B/C-NumOcc`) AND (`Besoins par Type Produits`.`B/T-NumBesoin` = `Besoins par Client`.`B/C-NumBesoin`) AND (`Besoins par Type Produits`.`B/T-NumType` = `Besoins par Client`.`B/C-NumType`)) ON `Clients et Prospects`.`CLT-NumID` = `Besoins par Client`.`B/C-NumClient`
+			WHERE (((`Clients et Prospects`.`CLT-NumID`)=".$client[0]['CLT-NumID']."));
+			";
+			$pdo->exec("SET NAMES UTF8");
+			$res_anom2 = $pdo->query($query_anom2);
+			$anom2 = $res_anom2->fetchALL(PDO::FETCH_ASSOC);
+
 			Auth::setInfo('page',$client[0]['CLT-Nom']);
-			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$raisons,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques,$type_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli,$type_produits,$compagnies,$produits));
+			AffichePage(AfficheFicheClient($client[0],$types_client,$conseillers,$civilites,$situations,$sensibilites,$categories,$raisons,$professions,$status,$type_revenus,$revenus,$type_historique,$historiques,$type_relation,$relations,$personnes,$besoins,$occurences,$besoins_cli,$type_produits,$compagnies,$produits,$anom1,$anom2));
 		} else {
 			AffichePage(AffichePageMessage("Erreur !"));
 		}
@@ -568,8 +585,13 @@ class Controller{
 		}
 		$query = "UPDATE `clients et prospects` SET 
 					`CLT-RaisonSocialePro`='$raisonPro',
-					`CLT-AdressePro`='$adressePro',
-					`CLT-CodePostalPro`='$codePostalPro',
+					`CLT-AdressePro`='$adressePro',";
+					if(!empty($codePostalPro)){
+						$query.="`CLT-CodePostalPro`='$codePostalPro',";
+					} else {
+						$query.="`CLT-CodePostalPro`=null,";
+					}
+					$query.="
 					`CLT-VillePro`='$villePro',
 					`CLT-TelPro`='$telPro',
 					`CLT-FaxPro`='$faxPro',
@@ -583,8 +605,13 @@ class Controller{
 						$query.="`CLT-Promotion`=null,";
 					}
 		$query.="
-					`CLT-Statut`='$statut',
-					`CLT-CBC`='$mois',
+					`CLT-Statut`='$statut',";
+					if(!empty($mois)){
+						$query.="`CLT-CBC`='$mois',";
+					} else {
+						$query.="`CLT-CBC`=null,";
+					}
+					$query.="
 					`CLT-OptionIS`=$optionIS
 				  WHERE `CLT-NumID` = $idClient;
 		";

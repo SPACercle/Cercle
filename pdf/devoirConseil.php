@@ -101,18 +101,27 @@
 		FROM `Clients et Prospects` INNER JOIN ((`Type Produit` INNER JOIN `Besoins par Type Produits` ON `Type Produit`.`TPD-NumID` = `Besoins par Type Produits`.`B/T-NumType`) INNER JOIN `Besoins par Client` ON (`Besoins par Type Produits`.`B/T-NumOcc` = `Besoins par Client`.`B/C-NumOcc`) AND (`Besoins par Type Produits`.`B/T-NumBesoin` = `Besoins par Client`.`B/C-NumBesoin`) AND (`Besoins par Type Produits`.`B/T-NumType` = `Besoins par Client`.`B/C-NumType`)) ON `Clients et Prospects`.`CLT-NumID` = `Besoins par Client`.`B/C-NumClient`
 		WHERE (((`Clients et Prospects`.`CLT-NumID`)=".$_GET['idClient']."));
 	";*/
-	$query8 = "
+	/*$query8 = "
 	SELECT DISTINCT `type produit`.`TPD-Nom`
 	FROM `produits par clients` INNER JOIN (`type produit` INNER JOIN ((`besoins existants` INNER JOIN `besoins par type produits` ON `besoins existants`.`BES-NumID` = `besoins par type produits`.`B/T-NumBesoin`) INNER JOIN (`clients et prospects` INNER JOIN `besoins par client` ON `clients et prospects`.`CLT-NumID` = `besoins par client`.`B/C-NumClient`) ON (`besoins par type produits`.`B/T-NumType` = `besoins par client`.`B/C-NumType`) AND (`besoins par type produits`.`B/T-NumOcc` = `besoins par client`.`B/C-NumOcc`)) ON `type produit`.`TPD-NumID` = `besoins par type produits`.`B/T-NumType`) ON `produits par clients`.`P/C-NumClient` = `clients et prospects`.`CLT-NumID`
 	WHERE (((`clients et prospects`.`CLT-NumID`)=".$_GET['idClient'].")) AND `type produit`.`TPD-Nom` NOT IN (SELECT DISTINCT(`TPD-Nom`) FROM `produits par clients`, `produits`, `type produit` WHERE `P/C-NumClient` = ".$_GET['idClient']." AND `P/C-NumProduit` = `PDT-NumID` AND `PDT-Type` = `TPD-NumID`);
+	";*/
+	$query8="SELECT DISTINCT `type produit`.`TPD-Nom`
+	FROM `produits par clients` INNER JOIN (`type produit` INNER JOIN ((`besoins existants` INNER JOIN `besoins par type produits` ON `besoins existants`.`BES-NumID` = `besoins par type produits`.`B/T-NumBesoin`) INNER JOIN (`clients et prospects` INNER JOIN `besoins par client` ON `clients et prospects`.`CLT-NumID` = `besoins par client`.`B/C-NumClient`) ON (`besoins par type produits`.`B/T-NumType` = `besoins par client`.`B/C-NumType`) AND (`besoins par type produits`.`B/T-NumOcc` = `besoins par client`.`B/C-NumOcc`)) ON `type produit`.`TPD-NumID` = `besoins par type produits`.`B/T-NumType`) ON `produits par clients`.`P/C-NumClient` = `clients et prospects`.`CLT-NumID`
+	WHERE (((`clients et prospects`.`CLT-NumID`)=".$_GET['idClient'].")) AND `type produit`.`TPD-Nom` NOT IN (
+		SELECT DISTINCT(`TPD-Nom`) 
+		FROM `produits par clients`, `produits`, `type produit`, `evenements par produits`
+		WHERE `P/C-NumClient` = 2440 AND `P/C-NumProduit` = `PDT-NumID` AND `PDT-Type` = `TPD-NumID` AND `P/C-DossierConcurrent` = 0 AND `E/P-ObligationConseils` = 0 AND `E/P-NumProduitClient` = `P/C-NumID`
+	);
 	";
+	
 	$pdo->exec("SET NAMES UTF8");
 	$res = $pdo->query($query8);
 	$res9 = $res->fetchALL(PDO::FETCH_ASSOC);
 
 
 	$query9 ="
-		SELECT min(`E/P-DateSignature`) AS DateSignature FROM `evenements par produits` eve, `produits par clients` pro WHERE pro.`P/C-NumID` = eve.`E/P-NumProduitClient` AND pro.`P/C-NumClient` = ".$_GET['idClient'].";
+		SELECT min(`E/P-DateSignature`) AS DateSignature FROM `evenements par produits` eve, `produits par clients` pro WHERE pro.`P/C-NumID` = eve.`E/P-NumProduitClient` AND pro.`P/C-NumClient` = ".$_GET['idClient']." AND `E/P-ObligationConseils` = 0;
 	";
 
 	$pdo->exec("SET NAMES UTF8");
@@ -124,11 +133,8 @@
     $content="<page backright='10mm'>
 
 	<page_header>
-		<div style='position:absolute;top:0;left:0'><img style='width:250px;height:48px;' src='../img/logos/".$logo."' ALT=''></div>
+		<div style='position:absolute;top:-5;left:0'><img src='../img/logos/".$logo."' ALT=''></div>
 		<div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
-		<span style='font-size:10px;color:#6F6F46'><div style='position:absolute;top:63;left:20'>".$res2[0]['CON-Adresse']."</div>
-		<div style='position:absolute;top:73;left:20'>".$res2[0]['CON-Adresse2']."</div>
-		<div style='position:absolute;top:84;left:20'>".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</div></span>
     </page_header>
 
     <span style='font-size:12px'><i>
@@ -188,7 +194,7 @@
 	}
 
 	$content.="
-	<div style='position:absolute;top:1000;left:700'>Page 1/3</div>
+	<div style='position:absolute;top:1000;left:700'>Page 1/4</div>
 	</span>
 
 	<div style='position:absolute;top:1015;left:700;border:1px solid black;font-size:9px;padding-left:10px;padding-right:10px;'>Paraphe<br/><br/><br/><br/></div>
@@ -208,20 +214,15 @@
 	<page backright='10mm'>
 
 	<page_header>
-		<div style='position:absolute;top:0;left:0'><img style='width:250px;height:48px;' src='../img/logos/".$logo."' ALT=''></div>
+		<div style='position:absolute;top:-5;left:0'><img src='../img/logos/".$logo."' ALT=''></div>
 		<div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
-		<span style='font-size:10px;color:#6F6F46'><div style='position:absolute;top:63;left:20'>".$res2[0]['CON-Adresse']."</div>
-		<div style='position:absolute;top:73;left:20'>".$res2[0]['CON-Adresse2']."</div>
-		<div style='position:absolute;top:84;left:20'>".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</div></span>
     </page_header>
 
     <span style='font-size:11px'>
 
-	<div style='position:absolute;top:141;left:33'><h4><i>III- Et voici plus précisément le recueil des besoins que vous avez formulé</i></h4></div>
+	<div style='position:absolute;top:90;left:33'><h4><i>III- Et voici plus précisément le recueil des besoins que vous avez formulé</i></h4></div>";
 
-	<div style='position:absolute;top:197;left:33;border:1px solid black;padding:5px;background-color:#B4EE98;'> Vous souhaitez ...</div>";
-
-	$i = 235;
+	$i = 150;
 	$dejaPasse = array();
 	foreach ($res6 as $r) {
 		if(!in_array($r['TPD-Nom'],$dejaPasse)){
@@ -234,7 +235,12 @@
 			foreach ($res6 as $r) {
 				if($r['TPD-Nom'] == $nom){
 					$content.="<div style='position:absolute;top:".$i.";left:33;color:#54644A;'>- ".$r['BES-Nom'].", ".$r['OCC-Nom']."</div>";
-					$i = $i + 15;
+					if(strlen($r['BES-Nom'].", ".$r['OCC-Nom']) > 140){
+						$i = $i + 25;
+					} else {
+						$i = $i + 15;
+					}
+					
 				}
 			}
 			$i = $i + 10;
@@ -242,9 +248,35 @@
 	}
 
 	$content.="
-	<div style='position:absolute;top:".$i.";left:33;border:1px solid black;padding:5px;background-color:#F59191;'> Vous ne souhaitez pas...</div>";
+	<div style='position:absolute;top:1000;left:700'>Page 2/4</div>
+	<div style='position:absolute;top:1015;left:700;border:1px solid black;font-size:9px;padding-left:10px;padding-right:10px;'>Paraphe<br/><br/><br/><br/></div>
+	</span>
 
-	$i = $i + 38;
+    <page_footer>
+    	<span style='font-size:10px'>
+    	<b><div style='position:absolute;top:1015;left:90'><span>Siège Social : ".$res2[0]['CON-Adresse']." ".$res2[0]['CON-Adresse2']." ".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div></b>
+		<div style='position:absolute;top:1030;left:40'><span>SARL au Capital de ".$res2[0]['CON-CapitalSocial']." euros inscrite au Registre du commerce et des Sociétés de ".$res2[0]['CON-RCSVille']." sous le N°".$res2[0]['CON-NumRCS']." -  Code APE ".$res2[0]['CON-APE']."</span></div>
+		<div style='position:absolute;top:1045;left:110'><span> Téléphone :  ".$res2[0]['CON-Tel']."        Fax : ".$res2[0]['CON-Fax']."       ".$res2[0]['CON-Internet']."</span></div>
+		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  à l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
+		<div style='position:absolute;top:1075;left:85'><span>Responsabilité Civile Professionnelle et Garanties Financières conformes aux articles L.530-1 et L.530-2 du Code des Assurances</span></div>
+		</span>
+    </page_footer>
+
+	</page>
+
+	<page backright='10mm'>
+
+	<page_header>
+		<div style='position:absolute;top:-5;left:0'><img src='../img/logos/".$logo."' ALT=''></div>
+		<div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
+    </page_header>
+
+    <span style='font-size:11px'>";
+
+	$i = 150;
+	$content.="
+	<div style='position:absolute;top:".($i-35).";left:33;border:1px solid black;padding:5px;background-color:#F59191;'> Pour information, voici les besoins que vous n'avez pas souhaité retenir : </div>";
+	
 	$dejaPasse = array();
 	foreach ($res7 as $r) {
 		if(!in_array($r['TPD-Nom'],$dejaPasse)){
@@ -263,10 +295,11 @@
 	}
 
 	$content.="
-	<div style='position:absolute;top:1000;left:700'>Page 2/3</div>
+	<div style='position:absolute;top:1000;left:700'>Page 3/4</div>
 	<div style='position:absolute;top:1015;left:700;border:1px solid black;font-size:9px;padding-left:10px;padding-right:10px;'>Paraphe<br/><br/><br/><br/></div>
-	</span>
+	</span>";
 
+	$content.="
     <page_footer>
     	<span style='font-size:10px'>
     	<b><div style='position:absolute;top:1015;left:90'><span>Siège Social : ".$res2[0]['CON-Adresse']." ".$res2[0]['CON-Adresse2']." ".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div></b>
@@ -282,27 +315,28 @@
 	<page backright='10mm'>
 
 	<page_header>
-		<div style='position:absolute;top:0;left:0'><img style='width:250px;height:48px;' src='../img/logos/".$logo."' ALT=''></div>
+		<div style='position:absolute;top:-5;left:0'><img src='../img/logos/".$logo."' ALT=''></div>
 		<div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
-		<span style='font-size:10px;color:#6F6F46'><div style='position:absolute;top:63;left:20'>".$res2[0]['CON-Adresse']."</div>
-		<div style='position:absolute;top:73;left:20'>".$res2[0]['CON-Adresse2']."</div>
-		<div style='position:absolute;top:84;left:20'>".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</div></span>
     </page_header>
 
     <span style='font-size:12px'><i>
 		
-	<div style='position:absolute;top:120;left:29'><h4><i>IV- Solutions retenues en fonction de vos besoins</i></h4></div>
+	<div style='position:absolute;top:90;left:29'><h4><i>IV- Solutions retenues en fonction de vos besoins</i></h4></div>
 
-	<div style='position:absolute;top:165;left:29'>En fonction des informations communiquées et validées ensemble, l’intermédiaire a analysé en toute impartialité les contrats d’assurances. 
+	<div style='position:absolute;top:125;left:29'>En fonction des informations communiquées et validées ensemble, l’intermédiaire a analysé en toute impartialité les contrats d’assurances. 
 	<br/>Vous avez choisi et accepté en toute connaissance de cause et après que des explications claires et motivées vous aient été fournies, de retenir les propositions suivantes : </div>
 
-	<div style='position:absolute;top:229;left:29'>Les critères suivants ont été pris en compte : rapport qualité prix, fiscalité conforme aux dispositions fiscales et sociales en vigueur, taux de cotisation, procédures d'adhésion </div>";
+	<div style='position:absolute;top:189;left:29'>Les critères suivants ont été pris en compte : rapport qualité prix, fiscalité conforme aux dispositions fiscales et sociales en vigueur, taux de cotisation, procédures d'adhésion </div>";
 	
-	$i = 261;
+	$i = 221;
+	$tab_couv = array();
 	foreach ($res8 as $r) {
-		$content.="<div style='position:absolute;top:".$i.";left:29;color:#54644A;'><u><b>Couverture du Risque ".$r['TPD-Nom']."</b></u></div>";
-		$i = $i + 27;
-		$content.="<div style='position:absolute;top:".$i.";left:45;color:#54644A;'>".$r['PDT-Nom']." géré par la compagnie d'assurance ".$r['CIE-Nom']."</div>";
+		if(!in_array($r['TPD-Nom'],$tab_couv)){
+			array_push($tab_couv,$r['TPD-Nom']);
+			$content.="<div style='position:absolute;top:".$i.";left:29;color:#54644A;'><u><b>Couverture du Risque ".$r['TPD-Nom']."</b></u></div>";
+			$i = $i + 27;
+		}
+		$content.="<div style='position:absolute;top:".$i.";left:45;color:#54644A;'>- ".$r['PDT-Nom']." géré par la compagnie d'assurance ".$r['CIE-Nom']."</div>";
 		$i = $i + 20;
 		$content.="<div style='position:absolute;top:".$i.";left:53;color:#54644A;'>dont les conditions et les modalités retenues constituent une solution au regard de votre situation en matière de ".$r['TPD-Nom']."</div>";
 		$i = $i + 20;
@@ -403,9 +437,9 @@
 	<div style='position:absolute;top:".($i+150).";left:501'> ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</div>
 	<div style='position:absolute;top:".($i+150).";left:184'>".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</div>
 	<div style='position:absolute;top:".($i+125).";left:473'> L'intermédiaire en Assurances</div>
-	<div style='position:absolute;top:".($i+125).";left:191'>Le Candidat à l'Assurance</div>
+	<div style='position:absolute;top:".($i+125).";left:184'>Le Candidat à l'Assurance</div>
 	
-	<div style='position:absolute;top:1000;left:700'>Page 3/3</div>
+	<div style='position:absolute;top:1000;left:700'>Page 4/4</div>
 	<div style='position:absolute;top:1015;left:700;border:1px solid black;font-size:9px;padding-left:10px;padding-right:10px;'>Paraphe<br/><br/><br/><br/></div>
 
 	</span>

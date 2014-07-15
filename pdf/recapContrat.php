@@ -177,7 +177,7 @@
 				$i=$i+15;
 			}
 			if(!in_array($r['P/C-NumContrat'],$tab_produit) && $r['P/C-NumContrat'] != ""){
-				$i=$i+5;
+				$i=$i+10;
 				array_push($tab_produit,$r['P/C-NumContrat']);
 				$content.="
 				<div style='position:absolute;top:".$i.";left:-10;color:#49628C;'><b><ul><li><u>".$r['CIE-Nom']." - ".$r['PDT-Nom']." N° ".$r['P/C-NumContrat']."</u></li></ul></b></div>";
@@ -209,10 +209,11 @@
 						$content.="Fiscalité - ".$r['Fiscalité'];
 					}
 				}
+				$i = $i + 7;
 				$content.="</div>";
 			} 
 			if($r['P/C-NumContrat'] != ""){
-				//$i=$i+6;
+				//$i=$i+3;
 
 				$content.="
 				<div style='position:absolute;top:".$i.";left:50;color:#49628C;'><ul><li>".$r['EVE-Nom']." en date du ".date('d/m/Y',strtotime($r['E/P-DateEffet']))."</li></ul></div>";
@@ -227,7 +228,9 @@
 				$content.="
 				</b></div>";
 				//$i=$i+6;
-			} 								
+			}  else {
+				$i=$i+6;
+			}							
 		}
 		$i = $i + 50;
 		
