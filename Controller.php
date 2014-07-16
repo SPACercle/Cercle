@@ -989,11 +989,16 @@ class Controller{
 	public function AddClientProduitAction(){
 		Controller::nettoyagePOST();
 		extract($_POST);
-		$query = "INSERT INTO `produits par clients` (`P/C-NumClient`,`P/C-NumProduit`,`P/C-SituationContrat`,`P/C-NumSouscripteur`,`P/C-Type Prescripteur`) VALUES ($idClient,$idProduit,16,$idClient,'Non défini')";
+		$query = "INSERT INTO `produits par clients` (`P/C-NumClient`,`P/C-NumProduit`,`P/C-SituationContrat`,`P/C-NumSouscripteur`,`P/C-Type Prescripteur`) VALUES ($idClient,$idProduit,12,$idClient,'Non défini')";
 		$pdo = BDD::getConnection();
 		$pdo->exec("SET NAMES UTF8");
 		$res = $pdo->exec($query);
 		$idProduit = $pdo->lastInsertId();
+
+		//L'evenement phpr défaut
+		$query = "INSERT INTO `evenements par produits` (`E/P-NumProduitClient`,`E/P-Réalisateur`,`E/P-DateEffet`) VALUES ($idProduit,$idRealisateur,NOW())";
+		$res = $pdo->exec($query);
+
 		header("Location: index.php?action=ficheClientProduit&idProduit=".$idProduit."&onglet=solution");
 	}
 

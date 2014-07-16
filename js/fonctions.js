@@ -528,8 +528,12 @@ $(document).ready(function() {
 	});
 
 	//Smiley
+	$("#desSmiley").hide();
+
 	$("#activeSmiley").click(function(){
 		$("#smileySort").click().click();
+		$("#activeSmiley").hide();
+		$("#desSmiley").show();
 	});
 
 	//Avertissement anomalie avant pdf devoir conseil

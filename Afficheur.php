@@ -18,7 +18,7 @@ function AffichePageMessage($message){
 
 //Affichage de l'accueil
 function AfficheHome(){
-	return('<center><br/><br/><br/><br/><img src="img/logo3marron.png" style="width:40%;height:40%;"/><br/><br/><h4><span style="color:white">Version Beta</span></h4></center>');
+	return('<center><br/><br/><br/><br/><img src="img/logo3marron.png" style="width:40%;height:40%;"/><br/><br/><h4><span style="color:white">Version 1.0</span></h4></center>');
 }
 
 //Affichage des droits
@@ -124,7 +124,7 @@ function AfficheClient($clients,$types,$filtre){
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<button id='activeSmiley' class='btn btn-default'><img src='img/1.png' style='width:22px;height22px;background-color:#F6F6F6;' /> Suivi Contact (ON)</button>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a href='index.php?action=client' class='btn btn-default'><img src='img/3.png' style='width:22px;height22px;background-color:#F6F6F6;' /> Suivi Contact (OFF)</a>
+	<a href='index.php?action=client' id='desSmiley' class='btn btn-default'><img src='img/3.png' style='width:22px;height22px;background-color:#F6F6F6;' /> Suivi Contact (OFF)</a>
 	";
 	$code.= "<hr/><div class='col-lg-12'><div class='table-responsive'>
 	<table class='table table-hover tablesorter' id='clients'>
@@ -904,8 +904,10 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 				function date() {
 				    var x;
 				    var date = prompt("A quelle date souhaites-tu l\'émettre ?","");
+				    var siret = prompt("N° de siret de l\'entreprise ?","");
+				    var rep = prompt("Représentant de l\'entreprise ?","");
 				    if (date != null) {
-				        window.open("pdf/mandatPro.php?idClient='.$client['CLT-NumID'].'&date="+date);
+				        window.open("pdf/mandatPro.php?idClient='.$client['CLT-NumID'].'&date="+date+"&siret="+siret+"&rep="+rep);
 				    }
 				}
 				</script>
@@ -1881,6 +1883,7 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 
 		<div id="fieldChooser" tabIndex="1">
 			<form method="post" action="index.php?action=addClientProduit" id="formAddProduit">
+			<input type="hidden" name="idRealisateur" value="'.Auth::getInfo('id').'"/>
 			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 	        <div id="sourceFields" style="float:left;height:150px;width:300px;"></div>
 		</div>

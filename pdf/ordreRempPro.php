@@ -95,15 +95,12 @@
     $content="<page backright='15mm'>
 
 	<page_header>
-		<div style='position:absolute;top:0;left:0'><img style='width:250px;height:48px;' src='../img/logos/".$logo."' ALT=''></div>
+		<div style='position:absolute;top:0;left:0'><img src='../img/logos/".$logo."' ALT=''></div>
 		<div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
-		<span style='font-size:10px;color:#6F6F46'><div style='position:absolute;top:63;left:20'>".$res2[0]['CON-Adresse']."</div>
-		<div style='position:absolute;top:73;left:20'>".$res2[0]['CON-Adresse2']."</div>
-		<div style='position:absolute;top:84;left:20'>".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</div></span>
     </page_header>
 
     <span style='font-size:12px'>
-		<div style='position:absolute;top:185;left:267'><i><h3>Ordre Exclusif de Remplacement</h3></i></div>
+		<div style='position:absolute;top:185;left:237'><i><h3>Ordre Exclusif de Remplacement</h3></i></div>
 
 		<div style='position:absolute;top:347;left:46'>La société ".$res2[0]['CLT-Nom'].", N° SIRET ".$_GET['siret']." représentée par ".$_GET['rep']."</div>
 
@@ -111,25 +108,25 @@
 		
 		<div style='position:absolute;top:453;left:65'>".$_GET['num']." </div>
 		</b>
-		<div style='position:absolute;top:607;left:50'>Cet ordre exclusif est accompagné de la dénonciation régulière de la (les) police(s) visée(s) ci-dessus pour sa (leur) date d'échéance annuelle.</div>
+		<div style='position:absolute;top:577;left:50'>Cet ordre exclusif est accompagné de la dénonciation régulière de la (les) police(s) visée(s) ci-dessus pour sa (leur) date d'échéance annuelle.</div>
 
-		<div style='position:absolute;top:666;left:50'>Le présent ordre annule dans tous ses effets tout ordre qui aurait pu être donné antérieurement concernant la (les) police(s) ci-dessus visée(s).</div>
+		<div style='position:absolute;top:636;left:50'>Le présent ordre annule dans tous ses effets tout ordre qui aurait pu être donné antérieurement concernant la (les) police(s) ci-dessus visée(s).</div>
 		
-		<div style='position:absolute;top:728;left:50'>Fait en 2 exemplaires originaux à ".$res2[0]['CLT-Ville'].", le ".$date."</div>
+		<div style='position:absolute;top:698;left:50'>Fait en 2 exemplaires originaux à ".$res2[0]['CLT-VillePro'].", le ".$date."</div>
 
-		<div style='position:absolute;top:808;left:445'> ".$res2[0]['CON-Société']."</div>
-		<div style='position:absolute;top:832;left:157'>Pour la société ".$res2[0]['CLT-Nom']."</div>
-		<div style='position:absolute;top:783;left:492'> Le Mandataire</div>
-		<div style='position:absolute;top:807;left:201'>Le Mandant</div>
-		<div style='position:absolute;top:831;left:428'> Représentée par ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</div>
+		<div style='position:absolute;top:777;left:445'> ".$res2[0]['CON-Société']."</div>
+		<div style='position:absolute;top:802;left:157'>Pour la société ".$res2[0]['CLT-Nom']."</div>
+		<div style='position:absolute;top:751;left:492'> Le Mandataire</div>
+		<div style='position:absolute;top:777;left:201'>Le Mandant</div>
+		<div style='position:absolute;top:801;left:428'> Représentée par ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</div>
 		
-		<i><div style='position:absolute;top:921;left:164'>Signature précédée de la mention</div>
-		<div style='position:absolute;top:937;left:164'>Lu et Approuvé, bon pour Mandat</div>
-		<div style='position:absolute;top:921;left:460'> Signature précédée de la mention</div>
-		<div style='position:absolute;top:937;left:425'>Lu et Approuvé, bon pour Acceptation de Mandat</div>
+		<i><div style='position:absolute;top:891;left:164'>Signature précédée de la mention</div>
+		<div style='position:absolute;top:907;left:164'>Lu et Approuvé, bon pour Mandat</div>
+		<div style='position:absolute;top:891;left:460'> Signature précédée de la mention</div>
+		<div style='position:absolute;top:907;left:425'>Lu et Approuvé, bon pour Acceptation de Mandat</div>
 
-		<div style='position:absolute;top:995;left:70'><span style='font-size:10px'>Loi du 6 janvier 1978 : Le(s) signataire(s) peut (peuvent) demander communication et rectification de toute information le concernant.</span></div>
-		</i>
+		<span style='color: #614B3A;font-size:10px;'><div style='position:absolute;top:995;left:70'><span style='font-size:10px'>Loi du 6 janvier 1978 : Le(s) signataire(s) peut (peuvent) demander communication et rectification de toute information le concernant.</span></div>
+		</span></i>
 	</span>
 
     <page_footer>

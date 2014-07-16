@@ -111,17 +111,16 @@
 	WHERE (((`clients et prospects`.`CLT-NumID`)=".$_GET['idClient'].")) AND `type produit`.`TPD-Nom` NOT IN (
 		SELECT DISTINCT(`TPD-Nom`) 
 		FROM `produits par clients`, `produits`, `type produit`, `evenements par produits`
-		WHERE `P/C-NumClient` = 2440 AND `P/C-NumProduit` = `PDT-NumID` AND `PDT-Type` = `TPD-NumID` AND `P/C-DossierConcurrent` = 0 AND `E/P-ObligationConseils` = 0 AND `E/P-NumProduitClient` = `P/C-NumID`
+		WHERE `P/C-NumClient` = ".$_GET['idClient']." AND `P/C-NumProduit` = `PDT-NumID` AND `PDT-Type` = `TPD-NumID` AND `P/C-DossierConcurrent` = 0 AND `E/P-ObligationConseils` = 0 AND `E/P-NumProduitClient` = `P/C-NumID` AND `P/C-SituationContrat` IN (1,2,12)
 	);
 	";
-	
 	$pdo->exec("SET NAMES UTF8");
 	$res = $pdo->query($query8);
 	$res9 = $res->fetchALL(PDO::FETCH_ASSOC);
-
+	//print_r($res9);
 
 	$query9 ="
-		SELECT min(`E/P-DateSignature`) AS DateSignature FROM `evenements par produits` eve, `produits par clients` pro WHERE pro.`P/C-NumID` = eve.`E/P-NumProduitClient` AND pro.`P/C-NumClient` = ".$_GET['idClient']." AND `E/P-ObligationConseils` = 0;
+		SELECT min(`E/P-DateSignature`) AS DateSignature FROM `evenements par produits` eve, `produits par clients` pro WHERE pro.`P/C-NumID` = eve.`E/P-NumProduitClient` AND pro.`P/C-NumClient` = ".$_GET['idClient']." AND `E/P-ObligationConseils` = 0 AND `P/C-SituationContrat` IN (1,2,12);
 	";
 
 	$pdo->exec("SET NAMES UTF8");
@@ -141,7 +140,7 @@
     
     <div style='position:absolute;top:133;left:250;'><i><h4 style='margin-top:0px;'>Formalisation du Devoir de conseil</h4></i></div>
 
-    <div style='position:absolute;top:159;left:150'>(Loi n°2005-1564 du 15 décembre 2005 complétée par le décret n°2006-1091 du 30 aout 2006)</div>
+    <span style='color: #614B3A;font-size:10px;'><div style='position:absolute;top:159;left:150'>(Loi n°2005-1564 du 15 décembre 2005 complétée par le décret n°2006-1091 du 30 aout 2006)</div></span>
 
     <div style='position:absolute;top:201;left:25'>".$res2[0]['CIV-NomDétaillé']." ".$res2[0]['CLT-Nom'].",</div>
 
@@ -274,9 +273,8 @@
     <span style='font-size:11px'>";
 
 	$i = 150;
-	$content.="
-	<div style='position:absolute;top:".($i-35).";left:33;border:1px solid black;padding:5px;background-color:#F59191;'> Pour information, voici les besoins que vous n'avez pas souhaité retenir : </div>";
-	
+	$content.="<div style='position:absolute;top:90;left:33'><h4><i>IV-  Pour information, voici les besoins que vous n'avez pas souhaité retenir </i></h4></div>";
+
 	$dejaPasse = array();
 	foreach ($res7 as $r) {
 		if(!in_array($r['TPD-Nom'],$dejaPasse)){
@@ -321,7 +319,7 @@
 
     <span style='font-size:12px'><i>
 		
-	<div style='position:absolute;top:90;left:29'><h4><i>IV- Solutions retenues en fonction de vos besoins</i></h4></div>
+	<div style='position:absolute;top:90;left:29'><h4><i>V- Solutions retenues en fonction de vos besoins</i></h4></div>
 
 	<div style='position:absolute;top:125;left:29'>En fonction des informations communiquées et validées ensemble, l’intermédiaire a analysé en toute impartialité les contrats d’assurances. 
 	<br/>Vous avez choisi et accepté en toute connaissance de cause et après que des explications claires et motivées vous aient été fournies, de retenir les propositions suivantes : </div>
@@ -336,7 +334,7 @@
 			$content.="<div style='position:absolute;top:".$i.";left:29;color:#54644A;'><u><b>Couverture du Risque ".$r['TPD-Nom']."</b></u></div>";
 			$i = $i + 27;
 		}
-		$content.="<div style='position:absolute;top:".$i.";left:45;color:#54644A;'>- ".$r['PDT-Nom']." géré par la compagnie d'assurance ".$r['CIE-Nom']."</div>";
+		$content.="<div style='position:absolute;top:".$i.";left:45;color:#54644A;'>- <b>".$r['PDT-Nom']."</b> géré par la compagnie d'assurance <b>".$r['CIE-Nom']."</b></div>";
 		$i = $i + 20;
 		$content.="<div style='position:absolute;top:".$i.";left:53;color:#54644A;'>dont les conditions et les modalités retenues constituent une solution au regard de votre situation en matière de ".$r['TPD-Nom']."</div>";
 		$i = $i + 20;
@@ -344,7 +342,7 @@
 
 	$i = $i + 15;
 	if(isset($res9[0])){
-		$content.="<div style='position:absolute;top:".$i.";left:25;color:#BA1419;'><h4>V- Solutions qui feront l'objet d'une étude ultérieure</h4></div>";
+		$content.="<div style='position:absolute;top:".$i.";left:25;color:#BA1419;'><h4>VI- Solutions qui feront l'objet d'une étude ultérieure</h4></div>";
 		$i = $i + 40;
 		$content.="<div style='position:absolute;top:".$i.";left:25;color:#BA1419;'>Attention, Prenez note du fait que, compte tenu de différentes contraintes, les risques suivants ne sont pas couverts dans l'immédiat et feront l'objet d'une étude ultérieure</div>";
 		$i = $i + 30;
@@ -443,6 +441,8 @@
 	<div style='position:absolute;top:1015;left:700;border:1px solid black;font-size:9px;padding-left:10px;padding-right:10px;'>Paraphe<br/><br/><br/><br/></div>
 
 	</span>
+
+	<span style='color: #614B3A;font-size:10px;'><i><div style='position:absolute;top:990;left:70'><span style='font-size:10px'>Loi du 6 janvier 1978 : Le(s) signataire(s) peut (peuvent) demander communication et rectification de toute information le concernant.</span></div></i></span>
 
     <page_footer>
     	<span style='font-size:10px'>

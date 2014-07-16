@@ -23,12 +23,11 @@ A VALIDER
 //- Modifier -> Enregistrer
 
 A FAIRE
-- Recherche dans personne creation lien
-- Taille ecriture ou police
-- Griser bouton ON/OFF smiley
-- Vérif logos sur pdf
-- Vérif form avec nombre
+- à bug
+- Msg cas = besoin sans produit "Vous avez saisi des besoins pour lequels aucun dossier mis en place ne solutionne ce besoin actuellement, ils seront spécifiés en rouge dans le paragraphe VI de ce document."
 - Quitter sans enregistrer (voir fin fonctions.js)
+- Recherche dans personne creation lien
+- Vérif form avec nombre
 
 A LA FIN
 ---------------------------------------------------------------------------------------------------------

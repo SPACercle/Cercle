@@ -95,16 +95,13 @@
     $content="<page backright='10mm'>
 
 	<page_header>
-		<div style='position:absolute;top:0;left:0'><img style='width:250px;height:48px;' src='../img/logos/".$logo."' ALT=''></div>
+		<div style='position:absolute;top:0;left:0'><img src='../img/logos/".$logo."' ALT=''></div>
 		<div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
-		<span style='font-size:10px;color:#6F6F46'><div style='position:absolute;top:63;left:20'>".$res2[0]['CON-Adresse']."</div>
-		<div style='position:absolute;top:73;left:20'>".$res2[0]['CON-Adresse2']."</div>
-		<div style='position:absolute;top:84;left:20'>".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</div></span>
     </page_header>
 
     <span style='font-size:12px'>
-    <b><div style='position:absolute;top:312;left:20'><span>Je Soussigné(e) ".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</span></div></b>
-	<div style='position:absolute;top:342;left:45'><span>Demeurant au ".$res2[0]['CLT-AdressePro']." ".$res2[0]['CLT-CodePostalPro']." ".$res2[0]['CLT-VillePro']."</span></div>
+    <b><div style='position:absolute;top:312;left:20'><span>Je Soussigné(e) ".$res2[0]['CIV-Nom']." ".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</span></div></b>
+	<div style='position:absolute;top:342;left:45'><span>Demeurant au ".$res2[0]['CLT-Adresse']." ".$res2[0]['CLT-Code Postal']." ".$res2[0]['CLT-Ville']."</span></div>
 	<div style='position:absolute;top:365;left:45'><span>Né(e) le ".date('d/m/Y',strtotime($res2[0]['CLT-DateNaissance']))."</span></div>
 	<div style='position:absolute;top:422;left:20'><span>Donne par la présente, mandat conformément aux articles 1984 et suivants du Code civil,<br/><br/>
 	<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;au cabinet ".$res2[0]['CON-Société']."</b></span></div>
@@ -113,10 +110,10 @@
 
 	<div style='position:absolute;top:578;left:50'><span>- recevoir toute correspondance en mon nom et adresser tout document nécessitant mon accord et/ou ma signature,<br/>- adresser toute réponse aux organismes précités, et <br/>- fournir toute information dans le but d'étudier ma situation.</span></div>
 
-	<div style='position:absolute;top:660;left:20'><span>Le présent mandat prend effet à compter de ce jour pour une durée indéterminée. Il peut être révoqué par lettre recommandée avec AR, à tout moment par l'une ou l'autre des parties moyennant un délai de préavis de 1 mois</span></div>
+	<div style='position:absolute;top:660;left:20'><span>Le présent mandat prend effet à compter de ce jour pour une durée indéterminée. Il peut être révoqué par lettre recommandée avec AR, à tout moment par l'une ou l'autre des parties moyennant un délai de préavis de 1 mois.</span></div>
 
-	<div style='position:absolute;top:739;left:20'><span>Fait en 2 exemplaires originaux à ".$res2[0]['CLT-VillePro'].", le ".$date."</span></div>
-	<div style='position:absolute;top:205;left:250'><span><h3><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mandat Administratif<br/>Audit Social, Fiscal ou Patrimonial</i></h3></span></div>
+	<div style='position:absolute;top:739;left:20'><span>Fait en 2 exemplaires originaux à ".$res2[0]['CLT-Ville'].", le ".$date."</span></div>
+	<div style='position:absolute;top:150;left:215'><span><h3><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mandat Administratif<br/>Audit Social, Fiscal ou Patrimonial</i></h3></span></div>
 	<div style='position:absolute;top:798;left:450'><span>".$res2[0]['CON-Société']."</span></div>
 	<div style='position:absolute;top:818;left:430'><span>Représentée par ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</span></div>
 
@@ -128,7 +125,7 @@
 	<div style='position:absolute;top:918;left:137'><span>Lu et Approuvé, bon pour Mandat</span></div>
 	<div style='position:absolute;top:899;left:427'><span>Signature précédée de la mention</span></div>
 	<div style='position:absolute;top:917;left:412'><span>Lu et Approuvé, bon pour Acceptation de Mandat</span></div>
-	<i><div style='position:absolute;top:975;left:40'><span>Loi du 6 janvier 1978 : Le(s) signataire(s) peut (peuvent) demander communication et rectification de toute information le concernant.</span></div></i>
+	<i><span style='color: #614B3A;'><div style='position:absolute;top:975;left:60;font-size:10px;'>Loi du 6 janvier 1978 : Le(s) signataire(s) peut (peuvent) demander communication et rectification de toute information le concernant.</div></span></i>
 	</span>
 
     <page_footer>

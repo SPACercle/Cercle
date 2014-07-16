@@ -95,41 +95,38 @@
     $content="<page backright='15mm'>
 
 	<page_header>
-		<div style='position:absolute;top:0;left:0'><img style='width:250px;height:48px;' src='../img/logos/".$logo."' ALT=''></div>
+		<div style='position:absolute;top:0;left:0'><img src='../img/logos/".$logo."' ALT=''></div>
 		<div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
-		<span style='font-size:10px;color:#6F6F46'><div style='position:absolute;top:63;left:20'>".$res2[0]['CON-Adresse']."</div>
-		<div style='position:absolute;top:73;left:20'>".$res2[0]['CON-Adresse2']."</div>
-		<div style='position:absolute;top:84;left:20'>".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</div></span>
     </page_header>
 
     <span style='font-size:12px'>
-		<div style='position:absolute;top:205;left:229'><h3><i>Mandat d'étude et de placement exclusif</i></h3></div>
+		<div style='position:absolute;top:150;left:209'><h3><i>Mandat d'étude et de placement exclusif</i></h3></div>
 
     	<div style='position:absolute;top:292;left:50'>La société ".$res2[0]['CLT-Nom'].", N° SIRET ".$_GET['siret']." représentée par ".$_GET['rep']."</div>
 
-		<b><div style='position:absolute;top:336;left:46'>Donne par la présente, Mandat exclusif à la société de courtage en assurances ".$res2[0]['CON-Société'].", à l'exclusion de tous autres intermédiaires d'assurance habilités</div>
+		<b><div style='position:absolute;top:336;left:46'>Donne par la présente, Mandat exclusif à la société de courtage en assurances ".$res2[0]['CON-Société'].", à l'exclusion de tout autre intermédiaire d'assurance habilité : </div>
 		</b>
-		<div style='position:absolute;top:422;left:50'>- pour effectuer en mon nom, l'étude, la négociation, le placement du (des) risque(s) ci-dessous désigné(s) :</div>
+		<div style='position:absolute;top:422;left:50'>- pour effectuer en mon nom, l'étude, la négociation, le placement du (des) risque(s) ci-dessous désigné(s)</div>
 
 		<b><div style='position:absolute;top:462;left:65'>".$_GET['risques']."</div></b>
 
-		<div style='position:absolute;top:603;left:50'>- pour effectuer l'assistance et le suivi du ou des contrat(s) d'assurance souscrit(s)</div>
+		<div style='position:absolute;top:563;left:50'>- pour effectuer l'assistance et le suivi du ou des contrat(s) d'assurance souscrit(s)</div>
 
-		<div style='position:absolute;top:662;left:50'>Le présent mandat prend effet à compter de ce jour pour une durée de un an avec tacite reconduction. A l'issue de la première année, il peut y être mis fin à tout moment par l'une ou l'autre des parties moyennant l'envoi d'une lettre recommandée avec AR et le respect d'un délai de préavis de 1 mois</div>
+		<div style='position:absolute;top:622;left:50'>Le présent mandat prend effet à compter de ce jour pour une durée de un an avec tacite reconduction. A l'issue de la première année, il peut y être mis fin à tout moment par l'une ou l'autre des parties moyennant l'envoi d'une lettre recommandée avec AR et le respect d'un délai de préavis de 1 mois.</div>
 
-		<div style='position:absolute;top:748;left:50'>Fait en 2 exemplaires originaux à ".$res2[0]['CLT-Ville'].", le ".$date."</div>
+		<div style='position:absolute;top:708;left:50'>Fait en 2 exemplaires originaux à ".$res2[0]['CLT-VillePro'].", le ".$date."</div>
 		
-		<div style='position:absolute;top:803;left:450'> ".$res2[0]['CON-Société']."</div>
-		<div style='position:absolute;top:787;left:500'>Le Mandataire</div>
-		<div style='position:absolute;top:787;left:200'>Le Mandant</div>
-		<div style='position:absolute;top:803;left:165'>Pour la société ".$res2[0]['CLT-Nom']."</div>
+		<div style='position:absolute;top:783;left:450'> ".$res2[0]['CON-Société']."</div>
+		<div style='position:absolute;top:767;left:500'>Le Mandataire</div>
+		<div style='position:absolute;top:767;left:200'>Le Mandant</div>
+		<div style='position:absolute;top:783;left:165'>Pour la société ".$res2[0]['CLT-Nom']."</div>
 
-		<i><div style='position:absolute;top:865;left:150'>Signature précédée de la mention</div>
-		<div style='position:absolute;top:881;left:150'>Lu et Approuvé, bon pour Mandat</div>
-		<div style='position:absolute;top:865;left:445'> Signature précédée de la mention</div>
-		<div style='position:absolute;top:881;left:415'>Lu et Approuvé, bon pour Acceptation de Mandat</div></i>
+		<i><div style='position:absolute;top:885;left:150'>Signature précédée de la mention</div>
+		<div style='position:absolute;top:861;left:150'>Lu et Approuvé, bon pour Mandat</div>
+		<div style='position:absolute;top:861;left:445'> Signature précédée de la mention</div>
+		<div style='position:absolute;top:885;left:415'>Lu et Approuvé, bon pour Acceptation de Mandat</div></i>
 		
-		<i><div style='position:absolute;top:990;left:70'><span style='font-size:10px'>Loi du 6 janvier 1978 : Le(s) signataire(s) peut (peuvent) demander communication et rectification de toute information le concernant.</span></div></i>
+		<span style='color: #614B3A;font-size:10px;'><i><div style='position:absolute;top:990;left:70'><span style='font-size:10px'>Loi du 6 janvier 1978 : Le(s) signataire(s) peut (peuvent) demander communication et rectification de toute information le concernant.</span></div></i></span>
 		
 	</span>
 

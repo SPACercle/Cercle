@@ -95,45 +95,42 @@
     $content="<page backright='15mm'>
 
 	<page_header>
-		<div style='position:absolute;top:0;left:0'><img style='width:250px;height:48px;' src='../img/logos/".$logo."' ALT=''></div>
+		<div style='position:absolute;top:0;left:0'><img src='../img/logos/".$logo."' ALT=''></div>
 		<div style='position:absolute;top:0;left:500'><img style='width:220px;height:70px;' src='../img/logos/strategie/blanc_strategie.jpg' ALT=''></div>
-		<span style='font-size:10px;color:#6F6F46'><div style='position:absolute;top:63;left:20'>".$res2[0]['CON-Adresse']."</div>
-		<div style='position:absolute;top:73;left:20'>".$res2[0]['CON-Adresse2']."</div>
-		<div style='position:absolute;top:84;left:20'>".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</div></span>
     </page_header>
 
     <span style='font-size:12px'>
-    	<div style='position:absolute;top:205;left:267'><i><h3>Ordre Exclusif de Remplacement</h3></i></div>
+    	<div style='position:absolute;top:125;left:230'><i><h3>Ordre Exclusif de Remplacement</h3></i></div>
 
-    	<b><div style='position:absolute;top:292;left:50'>Je Soussigné(e) ".$res2[0]['CIV-Nom']." ".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</div></b>
+    	<b><div style='position:absolute;top:252;left:50'>Je Soussigné(e) ".$res2[0]['CIV-Nom']." ".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</div></b>
 
-		<div style='position:absolute;top:322;left:75'>Demeurant au ".$res2[0]['CLT-Adresse']." ".$res2[0]['CLT-Code Postal']." ".$res2[0]['CLT-Ville']."</div>
+		<div style='position:absolute;top:282;left:75'>Demeurant au ".$res2[0]['CLT-Adresse']." ".$res2[0]['CLT-Code Postal']." ".$res2[0]['CLT-Ville']."</div>
 
-		<div style='position:absolute;top:352;left:75'>Né(e) le ".date('d/m/Y',strtotime($res2[0]['CLT-DateNaissance']))."</div>
+		<div style='position:absolute;top:312;left:75'>Né(e) le ".date('d/m/Y',strtotime($res2[0]['CLT-DateNaissance']))."</div>
 
-		<b><div style='position:absolute;top:407;left:50'>Donne par la présente, ordre exclusif de remplacement à la société de courtage en assurances, Social Concept Développement, pour les polices d'assurances suivantes</div>
+		<b><div style='position:absolute;top:357;left:50'>Donne par la présente, ordre exclusif de remplacement à la société de courtage en assurances, Social Concept Développement, pour les polices d'assurances suivantes : </div>
 		</b>
-		<div style='position:absolute;top:473;left:65'>".$_GET['num']."</div>
+		<div style='position:absolute;top:393;left:65'>".$_GET['num']."</div>
 
-		<div style='position:absolute;top:597;left:50'>Cet ordre exclusif est accompagné de la dénonciation régulière de la (les) police(s) visée(s) ci-dessus pour sa (leur) date d'échéance annuelle.</div>
+		<div style='position:absolute;top:517;left:50'>Cet ordre exclusif est accompagné de la dénonciation régulière de la (les) police(s) visée(s) ci-dessus pour sa (leur) date d'échéance annuelle.</div>
 
-		<div style='position:absolute;top:656;left:50'>Le présent ordre annule dans tous ses effets tout ordre qui aurait pu être donné antérieurement concernant la (les) police(s) ci-dessus visée(s).</div>
+		<div style='position:absolute;top:566;left:50'>Le présent ordre annule dans tous ses effets tout ordre qui aurait pu être donné antérieurement concernant la (les) police(s) ci-dessus visée(s).</div>
 
-		<div style='position:absolute;top:718;left:50'>Fait en 2 exemplaires originaux à ".$res2[0]['CLT-Ville'].", le ".$date."</div>
+		<div style='position:absolute;top:628;left:50'>Fait en 2 exemplaires originaux à ".$res2[0]['CLT-Ville'].", le ".$date."</div>
 
-		<div style='position:absolute;top:818;left:435'> ".$res2[0]['CON-Société']."</div>
-		<div style='position:absolute;top:842;left:146'>".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</div>
-		<div style='position:absolute;top:793;left:482'> Le Mandataire</div>
-		<div style='position:absolute;top:817;left:191'>Le Mandant</div>
-		<div style='position:absolute;top:841;left:470'> ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</div>
+		<div style='position:absolute;top:728;left:435'> ".$res2[0]['CON-Société']."</div>
+		<div style='position:absolute;top:762;left:146'>".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</div>
+		<div style='position:absolute;top:713;left:482'> Le Mandataire</div>
+		<div style='position:absolute;top:717;left:191'>Le Mandant</div>
+		<div style='position:absolute;top:762;left:465'> ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</div>
 		
-		<i><div style='position:absolute;top:931;left:154'>Signature précédée de la mention</div>
-		<div style='position:absolute;top:947;left:154'>Lu et Approuvé, bon pour Mandat</div>
-		<div style='position:absolute;top:931;left:450'> Signature précédée de la mention</div>
-		<div style='position:absolute;top:947;left:415'>Lu et Approuvé, bon pour Acceptation de Mandat</div>
+		<i><div style='position:absolute;top:851;left:154'>Signature précédée de la mention</div>
+		<div style='position:absolute;top:867;left:154'>Lu et Approuvé, bon pour Mandat</div>
+		<div style='position:absolute;top:851;left:450'> Signature précédée de la mention</div>
+		<div style='position:absolute;top:867;left:415'>Lu et Approuvé, bon pour Acceptation de Mandat</div>
 
-		<div style='position:absolute;top:990;left:85'><span style='font-size:10px'>Loi du 6 janvier 1978 : Le(s) signataire(s) peut (peuvent) demander communication et rectification de toute information le concernant.</span></div>
-		</i>
+		<span style='color: #614B3A;'><div style='position:absolute;top:980;left:85'><span style='font-size:10px'>Loi du 6 janvier 1978 : Le(s) signataire(s) peut (peuvent) demander communication et rectification de toute information le concernant.</span></div>
+		</span></i>
 	</span>
 
     <page_footer>
@@ -151,6 +148,7 @@
     require_once(dirname(__FILE__).'/html2pdf/html2pdf.class.php');
     $html2pdf = new HTML2PDF('P','A4','fr');
     $html2pdf->WriteHTML($content);
+    $html2pdf->setDefaultFont('times'); 
     $html2pdf->Output('OrdreRemplacement.pdf');
 
 

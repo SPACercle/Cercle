@@ -109,7 +109,6 @@ if(!(Auth::isLogged())){
         echo '<form style="display:inline;" action="index.php?action=backAgence" method="post"><button type="submit" class="btn btn-warning btn-xs" style="position:absolute;">Retour en Mode Agence</button></form>';
       }
       ?>
-      <div class="alert alert-warning" role="alert" style="display:inline;witdh:500;padding:5px;margin-left:160px;"><i class="fa fa-arrow-left"></i> Selectionnez un "Portefeuille" ou soyez en "Mode Agence"</div>
     </div><hr/>
     <?php
     } else {
