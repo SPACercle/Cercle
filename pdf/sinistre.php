@@ -11,7 +11,7 @@
 
     <span style='font-size:11px'>
         <div style='position:absolute;top:437;left:26'><h5><u>1) Réception du sinistre</u></h5></div>
-        <i><div style='position:absolute;top:549;left:29'>Par courrier ou mail (cf joint) précisant les documents à fournir, démarches nécessaires et déroulé</div></i>
+        <i><div style='position:absolute;top:549;left:29'>Par courrier ou mail (cf joint) précisant les documents á fournir, démarches nécessaires et déroulé</div></i>
         <div style='position:absolute;top:516;left:26'><h5><u>2) Confirmation de la prise en charge</u></h5></div>
         <div style='position:absolute;top:579;left:26'><h5><u>3) Impression du courrier pour dossier</u></h5></div>
         <i><div style='position:absolute;top:658;left:29'>Dans l’historique avec une alerte ( case anomalie sinistre=.alerte )</div></i>
@@ -25,7 +25,7 @@
         <div style='position:absolute;top:484;left:26'>b) client</div>
         <div style='position:absolute;top:498;left:26'>Dans les deux cas contacter le client, afin de l’informer  des couvertures liées au contrat.</div>
         <div style='position:absolute;top:611;left:30'>Classement du courrier dans le dossier suivi, pour traçabilité.</div>
-        <div style='position:absolute;top:713;left:30'>Positionner un rendez-vous physique ou téléphonique à 15 jours au plus tard pour point situation et avancement du dossier.</div>
+        <div style='position:absolute;top:713;left:30'>Positionner un rendez-vous physique ou téléphonique á 15 jours au plus tard pour point situation et avancement du dossier.</div>
         <div style='position:absolute;top:728;left:30'>Inscription sur Agenda courtier  Agenda assistante commerciale.</div>
         <div style='position:absolute;top:855;left:30'>Rappel téléphonique ou envoi par courrier pour recueillir  le ressenti  client sur la qualité et la rapidité du traitement du dossier.</div>
         <div style='position:absolute;top:870;left:30'>Inscription Cercle qualité back office compagnie.</div>
@@ -35,12 +35,12 @@
         <div style='position:absolute;top:217;left:26'>La mesure doit être réalisée rapidement après la prestation de services. La durée de l'interview doit être très courte, l'interview devant être centrée sur quelques points principaux.</div>
         <div style='position:absolute;top:247;left:26'>La technique d'interview utilisée peut être le téléphone ou le questionnaire online selon les cas et les possibilités.</div>
         <div style='position:absolute;top:276;left:26'>La certification de service</div>
-        <div style='position:absolute;top:291;left:26'>C'est un système complet permettant d'assurer à ses clients un niveau de qualité de prestation rendue correspondant aux attentes. Ce système prend donc en compte plusieurs techniques :</div>
+        <div style='position:absolute;top:291;left:26'>C'est un système complet permettant d'assurer á ses clients un niveau de qualité de prestation rendue correspondant aux attentes. Ce système prend donc en compte plusieurs techniques :</div>
         <div style='position:absolute;top:335;left:26'>• L'écoute client permettant de comprendre les attentes.</div>
         <div style='position:absolute;top:349;left:26'>• La traduction des attentes en engagements.</div>
         <div style='position:absolute;top:364;left:26'>• La mesure de tenue des engagements.</div>
         <div style='position:absolute;top:379;left:26'>• La certi ication de l'ensemble pour un organisme agréé.</div>
-        <div style='position:absolute;top:408;left:26'>Encore novateur, ce système permet à une entreprise de service de se différencier par un avantage concurrentiel très pertinent.</div></i>
+        <div style='position:absolute;top:408;left:26'>Encore novateur, ce système permet á une entreprise de service de se différencier par un avantage concurrentiel très pertinent.</div></i>
     </span>
     </page>
 
@@ -56,28 +56,28 @@
     <span style='font-size:11px'>
         <div style='position:absolute;top:140;left:26'><h5><u>8) Courrier</u></h5></div>
         <i><div style='position:absolute;top:174;left:30'>Bonjour Mr ………..,</div>
-        <div style='position:absolute;top:203;left:30'>Je fais suite à notre entretien téléphonique de ce matin nous informant du sinistre,nous vous souhaitons un prompt rétablissement.</div>
-        <div style='position:absolute;top:232;left:30'>Notre rôle est avant tout de vous faciliter toutes les démarches nécessaires à une prise en charge rapide et efficace, à ce titre et afin de vous faire gagner du temps, voici les premiers éléments nécessaires à l'ouverture de votre dossier :</div>
+        <div style='position:absolute;top:203;left:30'>Je fais suite á notre entretien téléphonique de ce matin nous informant du sinistre,nous vous souhaitons un prompt rétablissement.</div>
+        <div style='position:absolute;top:232;left:30'>Notre rôle est avant tout de vous faciliter toutes les démarches nécessaires á une prise en charge rapide et efficace, á ce titre et afin de vous faire gagner du temps, voici les premiers éléments nécessaires á l'ouverture de votre dossier :</div>
         <div style='position:absolute;top:276;left:30'>Contrat (Nom), n° ……………</div>
-        <div style='position:absolute;top:291;left:30'>• Pièces à fournir :</div>
+        <div style='position:absolute;top:291;left:30'>• Pièces á fournir :</div>
         <div style='position:absolute;top:305;left:30'>. un bulletin d'hospitalisation</div>
         <div style='position:absolute;top:320;left:30'>. un certificat médical indiquant le motif de l’hospitalisation</div>
-        <div style='position:absolute;top:349;left:30'>• A envoyer à : </div>
+        <div style='position:absolute;top:349;left:30'>• A envoyer á : </div>
         <div style='position:absolute;top:379;left:30'>ADRESSE COMPAGNIE</div>
         <div style='position:absolute;top:393;left:30'>Service gestion sinistres</div>
-        <div style='position:absolute;top:423;left:30'>Dans un second temps, à réception de ces documents, la compagnie vous enverra un dossier précisant les pièces justificatives à leur faire parvenir afin de finaliser l'indemnisation de ce sinistre.</div>
+        <div style='position:absolute;top:423;left:30'>Dans un second temps, á réception de ces documents, la compagnie vous enverra un dossier précisant les pièces justificatives á leur faire parvenir afin de finaliser l'indemnisation de ce sinistre.</div>
         <div style='position:absolute;top:467;left:30'>Si vous rencontrez la moindre difficulté (de mise en place ou d'incompréhension), il est important de vous rapprocher de votre intermédiaire Mr…….. ou en son absence, de notre cabinet (un des ses associés assurera sa bonne continuité). </div>
-        <div style='position:absolute;top:511;left:30'>A des fins d'amélioration permanente de la qualité du traitement que nos clients sont en droit d'attendre, ainsi que celle des compagnies avec lesquelles nous vous mettons en relation, nous nous permettrons de vous contacter à compter du (quinzaine de jours) (un rappel est d'ores et déjà généré dans l'agenda de votre intermédiaire Mr…….) pour faire le point sur l'indemnisation et avoir votre ressenti sur le bon déroulement de celle-ci.</div>
+        <div style='position:absolute;top:511;left:30'>A des fins d'amélioration permanente de la qualité du traitement que nos clients sont en droit d'attendre, ainsi que celle des compagnies avec lesquelles nous vous mettons en relation, nous nous permettrons de vous contacter á compter du (quinzaine de jours) (un rappel est d'ores et déjá généré dans l'agenda de votre intermédiaire Mr…….) pour faire le point sur l'indemnisation et avoir votre ressenti sur le bon déroulement de celle-ci.</div>
         <div style='position:absolute;top:584;left:30'>Bien cordialement</div>
         <div style='position:absolute;top:635;left:30'>Stratégies d’avenir et ses adhérents ont un réel besoin de retours sur leur action,au profit de leurs clients.</div>
-        <div style='position:absolute;top:664;left:30'>Afin d’améliorer leurs services n’hésitez pas à nous faire connaître votre avis, notamment  pour qu’elle soit en mesure de :</div>
+        <div style='position:absolute;top:664;left:30'>Afin d’améliorer leurs services n’hésitez pas á nous faire connaître votre avis, notamment  pour qu’elle soit en mesure de :</div>
         <div style='position:absolute;top:694;left:30'>• Bien vous accueillir</div>
         <div style='position:absolute;top:708;left:30'>• Bien comprendre votre situation personnelle et vos attentes</div>
-        <div style='position:absolute;top:723;left:30'>• Bien expliquer la marche à suivre dans le cheminement de votre demande</div>
+        <div style='position:absolute;top:723;left:30'>• Bien expliquer la marche á suivre dans le cheminement de votre demande</div>
         <div style='position:absolute;top:738;left:30'>• Bien vous informer sur l’avancée de votre dossier</div>
         <div style='position:absolute;top:752;left:30'>• Bien vous informer des possibilités de recours</div>
-        <div style='position:absolute;top:782;left:30'>Merci du temps que vous consacrez à remplir ce questionnaire.</div>
-        <div style='position:absolute;top:811;left:30'>Vous contribuez ainsi à améliorer le dispositif à votre profit et à celui des autres clients.</div>
+        <div style='position:absolute;top:782;left:30'>Merci du temps que vous consacrez á remplir ce questionnaire.</div>
+        <div style='position:absolute;top:811;left:30'>Vous contribuez ainsi á améliorer le dispositif á votre profit et á celui des autres clients.</div>
         <div style='position:absolute;top:855;left:30'>1-Date du remplissage du questionnaire :</div>
         <div style='position:absolute;top:899;left:30'>2-Vous êtes…..</div>
         <div style='position:absolute;top:913;left:30'>                             L’assuré                            Le conjoint                              Autre aidant</div>

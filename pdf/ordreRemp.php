@@ -108,7 +108,7 @@
 
 		<div style='position:absolute;top:312;left:75'>Né(e) le ".date('d/m/Y',strtotime($res2[0]['CLT-DateNaissance']))."</div>
 
-		<b><div style='position:absolute;top:357;left:50'>Donne par la présente, ordre exclusif de remplacement à la société de courtage en assurances, Social Concept Développement, pour les polices d'assurances suivantes : </div>
+		<b><div style='position:absolute;top:357;left:50'>Donne par la présente, ordre exclusif de remplacement á la société de courtage en assurances, Social Concept Développement, pour les polices d'assurances suivantes : </div>
 		</b>
 		<div style='position:absolute;top:393;left:65'>".$_GET['num']."</div>
 
@@ -116,7 +116,7 @@
 
 		<div style='position:absolute;top:566;left:50'>Le présent ordre annule dans tous ses effets tout ordre qui aurait pu être donné antérieurement concernant la (les) police(s) ci-dessus visée(s).</div>
 
-		<div style='position:absolute;top:628;left:50'>Fait en 2 exemplaires originaux à ".$res2[0]['CLT-Ville'].", le ".$date."</div>
+		<div style='position:absolute;top:628;left:50'>Fait en 2 exemplaires originaux á ".$res2[0]['CLT-Ville'].", le ".$date."</div>
 
 		<div style='position:absolute;top:728;left:435'> ".$res2[0]['CON-Société']."</div>
 		<div style='position:absolute;top:762;left:146'>".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</div>
@@ -138,7 +138,7 @@
     	<b><div style='position:absolute;top:1015;left:90'><span>Siège Social : ".$res2[0]['CON-Adresse']." ".$res2[0]['CON-Adresse2']." ".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div></b>
 		<div style='position:absolute;top:1030;left:40'><span>SARL au Capital de ".$res2[0]['CON-CapitalSocial']." euros inscrite au Registre du commerce et des Sociétés de ".$res2[0]['CON-RCSVille']." sous le N°".$res2[0]['CON-NumRCS']." -  Code APE ".$res2[0]['CON-APE']."</span></div>
 		<div style='position:absolute;top:1045;left:110'><span> Téléphone :  ".$res2[0]['CON-Tel']."        Fax : ".$res2[0]['CON-Fax']."       ".$res2[0]['CON-Internet']."</span></div>
-		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  à l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
+		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  á l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
 		<div style='position:absolute;top:1075;left:85'><span>Responsabilité Civile Professionnelle et Garanties Financières conformes aux articles L.530-1 et L.530-2 du Code des Assurances</span></div>
 		</span>
     </page_footer>

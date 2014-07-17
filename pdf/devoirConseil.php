@@ -144,16 +144,16 @@
 
     <div style='position:absolute;top:201;left:25'>".$res2[0]['CIV-NomDétaillé']." ".$res2[0]['CLT-Nom'].",</div>
 
-	<div style='position:absolute;top:224;left:25'>Le présent document retrace notre dialogue et nos échanges préalables à votre décision d’adhérer à un contrat d’assurance. Cette  démarche nous a permis ensemble de préciser votre situation personnelle et professionnelle et de définir vos souhaits et objectifs en matière de protection sociale.</div>
+	<div style='position:absolute;top:224;left:25'>Le présent document retrace notre dialogue et nos échanges préalables á votre décision d’adhérer á un contrat d’assurance. Cette  démarche nous a permis ensemble de préciser votre situation personnelle et professionnelle et de définir vos souhaits et objectifs en matière de protection sociale.</div>
 	
 	<u><b><div style='position:absolute;top:274;left:25'>Importance des cotisations</div></b></u>
 
-	<div style='position:absolute;top:290;left:25'>Vous attestez par la présente que les garanties proposées, les modalités de paiement des cotisations et leur évolution éventuelle ont été évoquées. Votre attention a été attirée sur le fait que l'interruption des cotisations périodiques entrainera pour certains dossier la résiliation automatique de certaines garanties (en cas d'incapacité, d'invalidité, ou de garanties de bonne fin en cas de décès par exemple), dans les délais prévus aux dispositions générales. Le défaut de paiement peut  provoquer la mise en réduction de l'adhésion avec toutes ses conséquences. Malgré le fait que certaines compagnies vous permettent à nouveau la reprise de ces versements, nous vous engageons à vous rapprocher de votre cabinet, pour en mesurer les risques et les conséquences.</div>
+	<div style='position:absolute;top:290;left:25'>Vous attestez par la présente que les garanties proposées, les modalités de paiement des cotisations et leur évolution éventuelle ont été évoquées. Votre attention a été attirée sur le fait que l'interruption des cotisations périodiques entrainera pour certains dossier la résiliation automatique de certaines garanties (en cas d'incapacité, d'invalidité, ou de garanties de bonne fin en cas de décès par exemple), dans les délais prévus aux dispositions générales. Le défaut de paiement peut  provoquer la mise en réduction de l'adhésion avec toutes ses conséquences. Malgré le fait que certaines compagnies vous permettent á nouveau la reprise de ces versements, nous vous engageons á vous rapprocher de votre cabinet, pour en mesurer les risques et les conséquences.</div>
 
 	<u><b><div style='position:absolute;top:378;left:25'>Prise d'effet des garanties</div></b></u>
 
 	<div style='position:absolute;top:397;left:25'>La prise d'effet des garanties indiquée sur le Certificat d’adhésion par la compagnie d'Assurances, est liée aux conditions suspensives du paiement de la première cotisation et sous réserve d’acceptation par cette même compagnie, concrétisée par l’émission d’un Certificat d’adhésion précisant le montant des garanties pour chacun des risques couverts.
-	<br/>Note de couverture : L’Assuré peut bénéficier d’une  garantie supplémentaire temporaire en cas de décès suite à un Accident survenu entre la date de signature de la demande d’adhésion et la date d’acceptation par la compagnie d'Assurances.</div>
+	<br/>Note de couverture : L’Assuré peut bénéficier d’une  garantie supplémentaire temporaire en cas de décès suite á un Accident survenu entre la date de signature de la demande d’adhésion et la date d’acceptation par la compagnie d'Assurances.</div>
 
 	<div style='position:absolute;top:456;left:25'><h4>I- Votre situation</h4></div></i>
 
@@ -167,11 +167,11 @@
 	$content.="</div>";
 
 	if(isset($res3[0])){
-		$content.="<div style='position:absolute;top:574;left:25'>Les derniers revenus portés à notre connaissance sont ceux de l'année ".$res3[0]['Année'].", ils s'élèvent à ".$res3[0]['Montant']." euros</div>";
+		$content.="<div style='position:absolute;top:574;left:25'>Les derniers revenus portés á notre connaissance sont ceux de l'année ".$res3[0]['Année'].", ils s'élèvent á ".$res3[0]['Montant']." euros</div>";
 	}
 
 	$content.="
-	<div style='position:absolute;top:598;left:25'><h4><i>II- Informations relatives à vos besoins actuels</i></h4></div>
+	<div style='position:absolute;top:598;left:25'><h4><i>II- Informations relatives á vos besoins actuels</i></h4></div>
 
 	<b><i><u><div style='position:absolute;top:647;left:33'>Vous souhaitez étudier sur un contrat spécifique </div>
 	<div style='position:absolute;top:664;left:33'>votre couverture en matière de ...</div></u></i></b>";
@@ -203,7 +203,7 @@
     	<b><div style='position:absolute;top:1015;left:90'><span>Siège Social : ".$res2[0]['CON-Adresse']." ".$res2[0]['CON-Adresse2']." ".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div></b>
 		<div style='position:absolute;top:1030;left:40'><span>SARL au Capital de ".$res2[0]['CON-CapitalSocial']." euros inscrite au Registre du commerce et des Sociétés de ".$res2[0]['CON-RCSVille']." sous le N°".$res2[0]['CON-NumRCS']." -  Code APE ".$res2[0]['CON-APE']."</span></div>
 		<div style='position:absolute;top:1045;left:110'><span> Téléphone :  ".$res2[0]['CON-Tel']."        Fax : ".$res2[0]['CON-Fax']."       ".$res2[0]['CON-Internet']."</span></div>
-		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  à l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
+		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  á l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
 		<div style='position:absolute;top:1075;left:85'><span>Responsabilité Civile Professionnelle et Garanties Financières conformes aux articles L.530-1 et L.530-2 du Code des Assurances</span></div>
 		</span>
     </page_footer>
@@ -256,7 +256,7 @@
     	<b><div style='position:absolute;top:1015;left:90'><span>Siège Social : ".$res2[0]['CON-Adresse']." ".$res2[0]['CON-Adresse2']." ".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div></b>
 		<div style='position:absolute;top:1030;left:40'><span>SARL au Capital de ".$res2[0]['CON-CapitalSocial']." euros inscrite au Registre du commerce et des Sociétés de ".$res2[0]['CON-RCSVille']." sous le N°".$res2[0]['CON-NumRCS']." -  Code APE ".$res2[0]['CON-APE']."</span></div>
 		<div style='position:absolute;top:1045;left:110'><span> Téléphone :  ".$res2[0]['CON-Tel']."        Fax : ".$res2[0]['CON-Fax']."       ".$res2[0]['CON-Internet']."</span></div>
-		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  à l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
+		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  á l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
 		<div style='position:absolute;top:1075;left:85'><span>Responsabilité Civile Professionnelle et Garanties Financières conformes aux articles L.530-1 et L.530-2 du Code des Assurances</span></div>
 		</span>
     </page_footer>
@@ -303,7 +303,7 @@
     	<b><div style='position:absolute;top:1015;left:90'><span>Siège Social : ".$res2[0]['CON-Adresse']." ".$res2[0]['CON-Adresse2']." ".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div></b>
 		<div style='position:absolute;top:1030;left:40'><span>SARL au Capital de ".$res2[0]['CON-CapitalSocial']." euros inscrite au Registre du commerce et des Sociétés de ".$res2[0]['CON-RCSVille']." sous le N°".$res2[0]['CON-NumRCS']." -  Code APE ".$res2[0]['CON-APE']."</span></div>
 		<div style='position:absolute;top:1045;left:110'><span> Téléphone :  ".$res2[0]['CON-Tel']."        Fax : ".$res2[0]['CON-Fax']."       ".$res2[0]['CON-Internet']."</span></div>
-		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  à l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
+		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  á l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
 		<div style='position:absolute;top:1075;left:85'><span>Responsabilité Civile Professionnelle et Garanties Financières conformes aux articles L.530-1 et L.530-2 du Code des Assurances</span></div>
 		</span>
     </page_footer>
@@ -427,15 +427,15 @@
 
 	$content.="
 
-	<div style='position:absolute;top:".$i.";left:25'>Le client reconnaît avoir pris connaissance de contenu du présent document préalablement à la signature du ou des contrats d’assurance proposé(s) ci-dessus et en accepter les termes. Il reconnait également avoir reçu les Conditions générales de ces mêmes contrats, et après lecture attentive, en accepter les termes.</div>
+	<div style='position:absolute;top:".$i.";left:25'>Le client reconnaît avoir pris connaissance de contenu du présent document préalablement á la signature du ou des contrats d’assurance proposé(s) ci-dessus et en accepter les termes. Il reconnait également avoir reçu les Conditions générales de ces mêmes contrats, et après lecture attentive, en accepter les termes.</div>
 	</i>
 
-	<div style='position:absolute;top:".($i+62).";left:25'>Fait à ".$res2[0]['CLT-Ville'].", le ".$date." en deux exemplaires, dont un pour ".$res2[0]['CIV-Nom']." ".$res2[0]['CLT-Prénom']."  ".$res2[0]['CLT-Nom']." qui reconnait l'a voir reçu.</div>
+	<div style='position:absolute;top:".($i+62).";left:25'>Fait á ".$res2[0]['CLT-Ville'].", le ".$date." en deux exemplaires, dont un pour ".$res2[0]['CIV-Nom']." ".$res2[0]['CLT-Prénom']."  ".$res2[0]['CLT-Nom']." qui reconnait l'a voir reçu.</div>
 
 	<div style='position:absolute;top:".($i+150).";left:501'> ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</div>
 	<div style='position:absolute;top:".($i+150).";left:184'>".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</div>
 	<div style='position:absolute;top:".($i+125).";left:473'> L'intermédiaire en Assurances</div>
-	<div style='position:absolute;top:".($i+125).";left:184'>Le Candidat à l'Assurance</div>
+	<div style='position:absolute;top:".($i+125).";left:184'>Le Candidat á l'Assurance</div>
 	
 	<div style='position:absolute;top:1000;left:700'>Page 4/4</div>
 	<div style='position:absolute;top:1015;left:700;border:1px solid black;font-size:9px;padding-left:10px;padding-right:10px;'>Paraphe<br/><br/><br/><br/></div>
@@ -449,7 +449,7 @@
     	<b><div style='position:absolute;top:1015;left:90'><span>Siège Social : ".$res2[0]['CON-Adresse']." ".$res2[0]['CON-Adresse2']." ".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div></b>
 		<div style='position:absolute;top:1030;left:40'><span>SARL au Capital de ".$res2[0]['CON-CapitalSocial']." euros inscrite au Registre du commerce et des Sociétés de ".$res2[0]['CON-RCSVille']." sous le N°".$res2[0]['CON-NumRCS']." -  Code APE ".$res2[0]['CON-APE']."</span></div>
 		<div style='position:absolute;top:1045;left:110'><span> Téléphone :  ".$res2[0]['CON-Tel']."        Fax : ".$res2[0]['CON-Fax']."       ".$res2[0]['CON-Internet']."</span></div>
-		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  à l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
+		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  á l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
 		<div style='position:absolute;top:1075;left:85'><span>Responsabilité Civile Professionnelle et Garanties Financières conformes aux articles L.530-1 et L.530-2 du Code des Assurances</span></div>
 		</span>
     </page_footer>

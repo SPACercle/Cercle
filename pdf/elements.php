@@ -26,11 +26,11 @@
 
     <span style='font-size:12px'>
  	
-		<i><div style='position:absolute;top:165;left:200'><h3 style='margin-top:0px;'>Eléments préparatoires à l'étude de </h3></div>
+		<i><div style='position:absolute;top:165;left:200'><h3 style='margin-top:0px;'>Eléments préparatoires á l'étude de </h3></div>
 		<div style='position:absolute;top:178;left:265'><h5>Dr Mohamed Lotfi ABDENNEBI</h5></div></i>
 
 		<b><span style='font-size:13px'>
-		<div style='position:absolute;top:276;left:30'>Conformément à votre demande, voici la liste des éléments nécessaires a fin de mieux préparer votre rencontre avec ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom'].", Gérant de la société ".$res2[0]['CON-Société']."</div>
+		<div style='position:absolute;top:276;left:30'>Conformément á votre demande, voici la liste des éléments nécessaires a fin de mieux préparer votre rencontre avec ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom'].", Gérant de la société ".$res2[0]['CON-Société']."</div>
 		</span></b>
 
 		<span style='font-size:10px'><i>
@@ -38,7 +38,7 @@
 
 		<div style='position:absolute;top:320;left:50'>Sise ".$res2[0]['CON-Adresse']." ".$res2[0]['CON-Adresse2']." ".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</div>
 
-		<div style='position:absolute;top:331;left:50'>Immatriculée  à l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACP - 61 rue Taitbout - 75436 PARIS Cedex 09</div>
+		<div style='position:absolute;top:331;left:50'>Immatriculée  á l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACP - 61 rue Taitbout - 75436 PARIS Cedex 09</div>
 		</i></span>
 
 		<div style='position:absolute;top:488;left:450'>Avis Imposition (2042)</div>";
@@ -373,7 +373,7 @@
     	<b><div style='position:absolute;top:1015;left:90'><span>Siège Social : ".$res2[0]['CON-Adresse']." ".$res2[0]['CON-Adresse2']." ".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div></b>
 		<div style='position:absolute;top:1030;left:40'><span>SARL au Capital de ".$res2[0]['CON-CapitalSocial']." euros inscrite au Registre du commerce et des Sociétés de ".$res2[0]['CON-RCSVille']." sous le N°".$res2[0]['CON-NumRCS']." -  Code APE ".$res2[0]['CON-APE']."</span></div>
 		<div style='position:absolute;top:1045;left:110'><span> Téléphone :  ".$res2[0]['CON-Tel']."        Fax : ".$res2[0]['CON-Fax']."       ".$res2[0]['CON-Internet']."</span></div>
-		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  à l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
+		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  á l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
 		<div style='position:absolute;top:1075;left:85'><span>Responsabilité Civile Professionnelle et Garanties Financières conformes aux articles L.530-1 et L.530-2 du Code des Assurances</span></div>
 		</span>
     </page_footer>

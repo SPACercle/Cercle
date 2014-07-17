@@ -538,22 +538,43 @@ $(document).ready(function() {
 
 	//Avertissement anomalie avant pdf devoir conseil
 	$("#dev_cons").click(function(){
-		if(anomalie == "oui"){
-			var test = confirm('ATTENTION ! Il existe des solutions non formalisés qui n\'ont pas fait l\'objet d\'un besoin. Générer quand même le document ?');
+		if(anomalie1 == "oui"){
+			var test = confirm('ATTENTION ! Il existe des solutions non formalisés qui n\'ont pas fait l\'objet d\'un besoin. Souhaitez-vous quand même générer le document ?');
 			if(test){
 		    	window.open("pdf/devoirConseil.php?idClient="+idClient+"");
 		    }
 		} else {
-			window.open("pdf/devoirConseil.php?idClient="+idClient+"");
+			if(anomalie2 == "oui"){
+				var test = confirm('ATTENTION ! Vous avez saisi un ou plusieurs besoin(s) pour lequel(s) aucun dossier n\'a été mis en place. Ils seront spécifiés en rouge dans le paragraphe VI de ce document comme faisant l\'objet d\'une étude ultérieure. Souhaitez-vous quand même générer le document ?');
+				if(test){
+			    	window.open("pdf/devoirConseil.php?idClient="+idClient+"");
+			    }
+			} else {
+				if(anomalie3 == "oui"){
+					var test = confirm('ATTENTION ! Vous avez saisi ni besoin ni solutions qui répondent au critères, le document n\'a donc aucun sens. Souhaitez-vous quand même générer le document ?');
+					if(test){
+				    	window.open("pdf/devoirConseil.php?idClient="+idClient+"");
+				    } 
+			    } else {
+			    	window.open("pdf/devoirConseil.php?idClient="+idClient+"");
+			    }
+				
+			}
 		}
 	});
 
-	$("input").keyup(function () {
+	/*$("input").keyup(function () {
    		var changed = true;
+	});*/
+
+	$(":submit").click(function(event){
+		$(window).unbind('beforeunload');
 	});
 
-	/*$(window).bind('beforeunload', function() {
-		return 'Êtes-vous sûr de vouloir vous déconnecter ?';
-	});*/
+	$(".formQuit").change(function(){
+		$(window).bind('beforeunload', function() {
+			return 'ATTENTION ! Vous avez saisi/modifié des données dans un formulaire. Continuer à saisir ou quitter et enregistrer ?';
+		});
+	});
 
 });

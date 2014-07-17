@@ -235,7 +235,7 @@
 		$i = $i + 50;
 		
 		$content.="<span style='font-size:10px'>
-		<div style='position:absolute;top:".$i.";left:0;color:#95847A;'><h4><i>Dossiers Externes à titre indicatif</i></h4></div>";
+		<div style='position:absolute;top:".$i.";left:0;color:#95847A;'><h4><i>Dossiers Externes á titre indicatif</i></h4></div>";
 		$i = $i +1;
 		$content.="
 		<div style='position:absolute;top:".$i.";left:390;color:#95847A;'><h5><i> ces dossiers n'étant pas gérés directement par le cabinet</i></h5></div>";

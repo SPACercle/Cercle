@@ -9,8 +9,6 @@ FAIT
 //- Dates
 //- Montant € champs
 //- Liste solutions colone concurents + tri (dernier) INVERSER
-
-A VALIDER
 //- Smiley bouton
 //- Chargement vrai temps
 //- Formalisation vérifier (demander si requete ok) => besoin exprimé, mais pas de solutions retenues ?
@@ -23,13 +21,16 @@ A VALIDER
 //- Modifier -> Enregistrer
 
 A FAIRE
-- reduire taille smiley
+//- Schéma Navicat
+//- Schéma Access
+//- Msg cas = besoin sans produit
+//- Quitter sans enregistrer (voir fin fonctions.js)
+
 - à bug
-- Msg cas = besoin sans produit "Vous avez saisi des besoins pour lequels aucun dossier mis en place ne solutionne ce besoin actuellement, ils seront spécifiés en rouge dans le paragraphe VI de ce document."
-- Quitter sans enregistrer (voir fin fonctions.js)
-- Recherche dans personne creation lien
-- Vérif form avec nombre
-- installer logiciel steph
+
+- collage schéma
+- documentation git
+- repasser sur touts les docs
 
 A LA FIN
 ---------------------------------------------------------------------------------------------------------

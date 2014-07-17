@@ -106,19 +106,19 @@
 	<div style='position:absolute;top:422;left:20'><span>Donne par la présente, mandat conformément aux articles 1984 et suivants du Code civil,<br/><br/>
 	<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;au cabinet ".$res2[0]['CON-Société']."</b></span></div>
 
-	<div style='position:absolute;top:507;left:20'><span>Afin de collecter pour mon compte, directement auprès de mes employeurs, organismes de retraite (CNAV, RSI, ARRCO, AGIRC, ....), entreprises d'assurances, et plus généralement, à intervenir auprès de tout organisme nécessaire à l'élaboration de mon Audit Social, Fiscal ou Patrimonial et en particulier : </span></div>
+	<div style='position:absolute;top:507;left:20'><span>Afin de collecter pour mon compte, directement auprès de mes employeurs, organismes de retraite (CNAV, RSI, ARRCO, AGIRC, ....), entreprises d'assurances, et plus généralement, á intervenir auprès de tout organisme nécessaire á l'élaboration de mon Audit Social, Fiscal ou Patrimonial et en particulier : </span></div>
 
 	<div style='position:absolute;top:578;left:50'><span>- recevoir toute correspondance en mon nom et adresser tout document nécessitant mon accord et/ou ma signature,<br/>- adresser toute réponse aux organismes précités, et <br/>- fournir toute information dans le but d'étudier ma situation.</span></div>
 
-	<div style='position:absolute;top:660;left:20'><span>Le présent mandat prend effet à compter de ce jour pour une durée indéterminée. Il peut être révoqué par lettre recommandée avec AR, à tout moment par l'une ou l'autre des parties moyennant un délai de préavis de 1 mois.</span></div>
+	<div style='position:absolute;top:660;left:20'><span>Le présent mandat prend effet á compter de ce jour pour une durée indéterminée. Il peut être révoqué par lettre recommandée avec AR, á tout moment par l'une ou l'autre des parties moyennant un délai de préavis de 1 mois.</span></div>
 
-	<div style='position:absolute;top:739;left:20'><span>Fait en 2 exemplaires originaux à ".$res2[0]['CLT-Ville'].", le ".$date."</span></div>
+	<div style='position:absolute;top:739;left:20'><span>Fait en 2 exemplaires originaux á ".$res2[0]['CLT-Ville'].", le ".$date."</span></div>
 	<div style='position:absolute;top:150;left:215'><span><h3><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mandat Administratif<br/>Audit Social, Fiscal ou Patrimonial</i></h3></span></div>
 	<div style='position:absolute;top:798;left:450'><span>".$res2[0]['CON-Société']."</span></div>
 	<div style='position:absolute;top:818;left:430'><span>Représentée par ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</span></div>
 
 	<div style='position:absolute;top:818;left:143'><span>".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</span></div>
-	<div style='position:absolute;top:774;left:480'><span>Le Mandataire</span></div>
+	<div style='position:absolute;top:774;left:480'><span>Le Mandataire </span></div>
 	<div style='position:absolute;top:798;left:182'><span>Le Mandant</span></div>
 
 	<div style='position:absolute;top:898;left:137'><span>Signature précédée de la mention</span></div>
@@ -133,7 +133,7 @@
     	<b><div style='position:absolute;top:1015;left:90'><span>Siège Social : ".$res2[0]['CON-Adresse']." ".$res2[0]['CON-Adresse2']." ".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div></b>
 		<div style='position:absolute;top:1030;left:40'><span>SARL au Capital de ".$res2[0]['CON-CapitalSocial']." euros inscrite au Registre du commerce et des Sociétés de ".$res2[0]['CON-RCSVille']." sous le N°".$res2[0]['CON-NumRCS']." -  Code APE ".$res2[0]['CON-APE']."</span></div>
 		<div style='position:absolute;top:1045;left:110'><span> Téléphone :  ".$res2[0]['CON-Tel']."        Fax : ".$res2[0]['CON-Fax']."       ".$res2[0]['CON-Internet']."</span></div>
-		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  à l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
+		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  á l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
 		<div style='position:absolute;top:1075;left:85'><span>Responsabilité Civile Professionnelle et Garanties Financières conformes aux articles L.530-1 et L.530-2 du Code des Assurances</span></div>
 		</span>
     </page_footer>

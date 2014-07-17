@@ -3247,6 +3247,7 @@ if (!defined('__CLASS_HTML2PDF__')) {
             }
 
             // get the text to write
+            //$txt = utf8_decode($param['txt']);
             $txt = $param['txt'];
 
             if ($this->_isAfterFloat) {

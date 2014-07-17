@@ -12,7 +12,7 @@
 
         <div style='position:absolute;top:297;left:29'><h5><u>2) Réception de la réclamationA</u></h5></div>
 
-        <i><div style='position:absolute;top:363;left:33'>Confirmation de la prise en charge du sinistre auprès du client (par courrier AR ou mail), lui précisant les  documents à fournir, démarches nécessaires et déroulé.</div>
+        <i><div style='position:absolute;top:363;left:33'>Confirmation de la prise en charge du sinistre auprès du client (par courrier AR ou mail), lui précisant les  documents á fournir, démarches nécessaires et déroulé.</div>
         </i>
         <div style='position:absolute;top:328;left:29'><h5><u>3) Confirmation de la prise en charge</u></h5></div>
 
@@ -39,7 +39,7 @@
         <i><div style='position:absolute;top:171;left:30'>Remises lors de la première rencontre et indiquant :</div>
         </i>
          
-        <i><div style='position:absolute;top:186;left:30'>&quot;Toutes informations complémentaires concernant les dossiers en cours peuvent être obtenues en adressant directement cette demande au cabinet &quot;Coordonnées du cabinet de courtage&quot;. En cas de difficultés rencontrées, vous pouvez notifier par recommandé avec AR au service réclamation du cabinet &quot;Coordonnées du cabinet de courtage&quot;, le motif  de vos réclamations, qui vous répondra dans les plus bref délais. En cas de désaccord, et si toutes les voies de recours amiable ont été épuisées, l'adhérent peut adresser une réclamation écrite avec le motif du litige à l’autorité de Contrôle  Prudentiel (ACP) dont les coordonnées sont les suivantes : 61, rue Taitbout – 75436 Paris cedex 09. Vous pouvez également demander l'avis d'un médiateur. Les modalités vous seront communiquées, sur simple demande par le Service Réclamation du cabinet &quot;Coordonnées du cabinet de courtage&quot;</div>
+        <i><div style='position:absolute;top:186;left:30'>&quot;Toutes informations complémentaires concernant les dossiers en cours peuvent être obtenues en adressant directement cette demande au cabinet &quot;Coordonnées du cabinet de courtage&quot;. En cas de difficultés rencontrées, vous pouvez notifier par recommandé avec AR au service réclamation du cabinet &quot;Coordonnées du cabinet de courtage&quot;, le motif  de vos réclamations, qui vous répondra dans les plus bref délais. En cas de désaccord, et si toutes les voies de recours amiable ont été épuisées, l'adhérent peut adresser une réclamation écrite avec le motif du litige á l’autorité de Contrôle  Prudentiel (ACP) dont les coordonnées sont les suivantes : 61, rue Taitbout – 75436 Paris cedex 09. Vous pouvez également demander l'avis d'un médiateur. Les modalités vous seront communiquées, sur simple demande par le Service Réclamation du cabinet &quot;Coordonnées du cabinet de courtage&quot;</div>
         </i>
         <div style='position:absolute;top:136;left:26'><h5><u>1) Informations pré-contractuelles</u></h5></div>
     </span>

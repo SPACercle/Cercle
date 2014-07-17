@@ -108,7 +108,7 @@
 
 		<div style='position:absolute;top:322;left:75'>Né(e) le ".date('d/m/Y',strtotime($res2[0]['CLT-DateNaissance']))."</div>
 
-		<div style='position:absolute;top:384;left:50'><b>Donne par la présente, Mandat exclusif à la société de courtage en assurances, ".$res2[0]['CON-Société'].", à l'exclusion de tout autre intermédiaire d'assurance habilité : </b></div>
+		<div style='position:absolute;top:384;left:50'><b>Donne par la présente, Mandat exclusif á la société de courtage en assurances, ".$res2[0]['CON-Société'].", á l'exclusion de tout autre intermédiaire d'assurance habilité : </b></div>
 		
 		<div style='position:absolute;top:440;left:50'>- pour effectuer en mon nom, l'étude, la négociation, le placement du (des) risque(s) ci-dessous désigné(s) :</div>
 		
@@ -116,9 +116,9 @@
 
 		<div style='position:absolute;top:549;left:50'>- pour effectuer l'assistance et le suivi du ou des contrat(s) d'assurance souscrit(s).</div>
 
-		<div style='position:absolute;top:609;left:50'>Le présent mandat prend effet à compter de ce jour pour une durée de un an avec tacite reconduction. A l'issue de la première année, il peut y être mis fin à tout moment par l'une ou l'autre des parties moyennant l'envoi d'une lettre recommandée avec AR et le respect d'un délai de préavis de 1 mois.</div>
+		<div style='position:absolute;top:609;left:50'>Le présent mandat prend effet á compter de ce jour pour une durée de un an avec tacite reconduction. A l'issue de la première année, il peut y être mis fin á tout moment par l'une ou l'autre des parties moyennant l'envoi d'une lettre recommandée avec AR et le respect d'un délai de préavis de 1 mois.</div>
 		
-		<div style='position:absolute;top:698;left:50'>Fait en 2 exemplaires originaux à ".$res2[0]['CLT-Ville'].", le ".$date."</div>
+		<div style='position:absolute;top:698;left:50'>Fait en 2 exemplaires originaux á ".$res2[0]['CLT-Ville'].", le ".$date."</div>
 
 		<div style='position:absolute;top:778;left:435'> ".$res2[0]['CON-Société']."</div>
 		<div style='position:absolute;top:802;left:146'>".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</div>
@@ -140,7 +140,7 @@
     	<b><div style='position:absolute;top:1015;left:90'><span>Siège Social : ".$res2[0]['CON-Adresse']." ".$res2[0]['CON-Adresse2']." ".$res2[0]['CON-CP']." ".$res2[0]['CON-VIlle']."</span></div></b>
 		<div style='position:absolute;top:1030;left:40'><span>SARL au Capital de ".$res2[0]['CON-CapitalSocial']." euros inscrite au Registre du commerce et des Sociétés de ".$res2[0]['CON-RCSVille']." sous le N°".$res2[0]['CON-NumRCS']." -  Code APE ".$res2[0]['CON-APE']."</span></div>
 		<div style='position:absolute;top:1045;left:110'><span> Téléphone :  ".$res2[0]['CON-Tel']."        Fax : ".$res2[0]['CON-Fax']."       ".$res2[0]['CON-Internet']."</span></div>
-		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  à l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
+		<div style='position:absolute;top:1060;left:65'><span>Immatriculée  á l'ORIAS sous le N° ".$res2[0]['CON-NumORIAS']." www.orias.fr et placée sous le contrôle de l'ACPR - 61 rue Taitbout - 75436 PARIS Cedex 09</span></div>
 		<div style='position:absolute;top:1075;left:85'><span>Responsabilité Civile Professionnelle et Garanties Financières conformes aux articles L.530-1 et L.530-2 du Code des Assurances</span></div>
 		</span>
     </page_footer>

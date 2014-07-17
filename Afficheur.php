@@ -283,7 +283,7 @@ function AfficheClientAjout($formes){
 	<br/>
 	<div class="tab-content">
 	<div class="tab-pane fade in active" id="physique">
-	<form action="index.php?action=addClientPhysique" method="post">
+	<form action="index.php?action=addClientPhysique" class="formQuit" method="post">
 	<div class="form-group">
 	<label>Nom : </label><br/>
 	<input type="text" class="form-control" name="nom" placeholder="Nom" style="width:275px;" required/>
@@ -300,7 +300,7 @@ function AfficheClientAjout($formes){
 	</form>
 	</div>
 	<div class="tab-pane fade" id="morale">
-	<form action="index.php?action=addClientMorale" method="post">
+	<form action="index.php?action=addClientMorale" class="formQuit" method="post">
 	<div class="form-group">
 	<label for="name">Forme juridique : </label><br/>
 	<select name="forme" class="form-control" required style="width:275px;">';
@@ -572,7 +572,7 @@ function AfficheFicheClientGeneral($client,$types_client,$conseillers,$civilites
 		$code.=' active';
 	}
 	$code.='" id="general">
-	<form action="index.php?action=modifClientGeneral" method="post">
+	<form class="formQuit" action="index.php?action=modifClientGeneral" method="post">
 	<div class="col-lg-4">
 	<div class="form-group">
 	<label>Type : </label><br/>
@@ -634,7 +634,7 @@ function AfficheFicheClientGeneral($client,$types_client,$conseillers,$civilites
 	</div>
 	</div>
 	<div class="col-lg-12">
-		<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Valider Modifications</button>
+		<button type="submit" class="btn btn-warning"><i class="fa fa-save"></i> Enregistrer</button>
 	</div>
 	</form>
 	</div>';
@@ -648,7 +648,7 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 			$code.=' active';
 	}
 	$code.='" id="personel">
-		<form method="post" action="index.php?action=modifClientPersonnel" class="form-horizontal">
+		<form class="formQuit" method="post" action="index.php?action=modifClientPersonnel" class="form-horizontal">
 			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 			<div class="col-lg-6">
 				 <div class="panel panel-primary" style="background-color:#EBEAE8;">
@@ -717,8 +717,8 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 					<input type="text" name="nbEnfants" style="width:25px;" value="'.$client['CLT-NbEnfants'].'"/><br/><br/>
 					<label>Nationalité : </label>
 					<input type="text" name="nationalite" style="width:180px;" value="'.$client['CLT-Nationalité'].'"/><br/><br/>
-					<button type="button" onClick="window.open(\'elements.php?idClient='.$client['CLT-NumID'].'\',\'Eléments Préparatoires\',\'toolbar=no,status=no,width=800,height=800,scrollbars=yes,location=no,resize=yes,menubar=non\')" class="btn btn-default"><i class="fa fa-check-square-o"></i> Eléments préparatoires</button>&nbsp;&nbsp;&nbsp;&nbsp;<br/><br/>
-					<a type="button" onclick="date()" target="_blank" style="width:200px;margin-right:10px;" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Mandat Administratif</a>&nbsp;
+					<button type="button" onClick="window.open(\'elements.php?idClient='.$client['CLT-NumID'].'\',\'Eléments Préparatoires\',\'toolbar=no,status=no,width=800,height=800,scrollbars=yes,location=no,resize=yes,menubar=non\')" class="btn btn-primary"><i class="fa fa-check-square-o"></i> Eléments préparatoires</button>&nbsp;&nbsp;&nbsp;&nbsp;<br/><br/>
+					<a type="button" onclick="date()" target="_blank" style="width:190px;margin-right:10px;text-align:left;" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Mandat Administratif</a>&nbsp;
 					<script>
 					function date() {
 					    var date = prompt("A quelle date souhaites-tu l\'émettre ?","");
@@ -727,14 +727,14 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 					    }
 					}
 					</script>
-					<label style="margin-right:10px;">Mandat Administratif</label>';
+					';
 					if($client['CLT-MandatGestion'] == 1){
 						$code.='<input type="checkbox" name="mandatGestion" checked>';
 					} else {
 						$code.='<input type="checkbox" name="mandatGestion">'; 
 					}
-					$code.='<br/><br/>
-					<a type="button" onclick="date_pre1()" target="_blank" style="width:200px;margin-right:10px;" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Infos Précontractuelles</a>&nbsp;
+					$code.='&nbsp;&nbsp;<label style="margin-right:10px;font-size:10px;">Mandat Administratif</label><br/><br/>
+					<a type="button" onclick="date_pre1()" target="_blank" style="width:190px;margin-right:10px;text-align:left;" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Infos Précontractuelles</a>&nbsp;
 					<script>
 					function date_pre1() {
 					    var date1 = prompt("A quelle date souhaites-tu émettre le premier document ?","");
@@ -744,14 +744,14 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 					    }
 					}
 					</script>
-					<label style="margin-right:10px;">Info-Précontractuelles</label>';
+					';
 					if($client['CLT-InfoPreContrat'] == 1){
 						$code.='<input type="checkbox" name="infoPre" checked>';
 					} else {
 						$code.='<input type="checkbox" name="infoPre">'; 
 					}
-					$code.='<br/><br/>
-					<a type="button" onclick="date_place()" target="_blank" style="width:200px;margin-right:10px;" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Mandat Placement</a>&nbsp;
+					$code.='&nbsp;&nbsp;<label style="margin-right:10px;font-size:10px;">Info-Précontractuelles</label><br/><br/>
+					<a type="button" onclick="date_place()" target="_blank" style="width:190px;margin-right:10px;text-align:left;" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Mandat Placement</a>&nbsp;
 					<script>
 					function date_place() {
 					    var date = prompt("A quelle date souhaites-tu émettre le premier document ?","");
@@ -761,22 +761,22 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 					    }
 					}
 					</script>
-					<label style="margin-right:10px;">Mandat Placement Exclusif</label>';
+					';
 					if($client['CLT-MandatCourtage'] == 1){
 						$code.='<input type="checkbox" name="mandatCourtage" checked>';
 					} else {
 						$code.='<input type="checkbox" name="mandatCourtage">'; 
 					}
-					$code.='<br/><br/>
-					<button type="button" style="width:200px;margin-right:10px;" class="btn btn-primary disabled"><img src="img/pdf.png" class="pdf"/> Lettre de Mission</button>
-					<label style="margin-right:10px;">Lettre de Mission</label>';
+					$code.='&nbsp;&nbsp;<label style="margin-right:10px;font-size:10px;">Mandat Placement Exclusif</label><br/><br/>
+					<button type="button" style="width:190px;margin-right:10px;text-align:left;" class="btn btn-primary disabled"><img src="img/pdf.png" class="pdf"/> Lettre de Mission</button>
+					&nbsp;';
 					if($client['CLT-LettreMission'] == 1){
 						$code.='<input type="checkbox" name="lettreMission" checked>';
 					} else {
 						$code.='<input type="checkbox" name="lettreMission">'; 
 					}
-					$code.='<br/><br/>
-					<button type="button" onclick="date_ordre()" style="width:200px;margin-right:10px;" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/>Ordre de remplacement</button>
+					$code.='&nbsp;&nbsp;<label style="margin-right:10px;font-size:10px;">Lettre de Mission</label><br/><br/>
+					<button type="button" onclick="date_ordre()" style="width:190px;margin-right:10px;text-align:left;" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/>Ordre de remplacement</button>
 					<script>
 					function date_ordre() {
 					    var date = prompt("A quelle date souhaites-tu émettre le document ?","");
@@ -785,19 +785,19 @@ function AfficheFicheClientPersonel($client,$types_client,$conseillers,$civilite
 					        window.open("pdf/ordreRemp.php?idClient='.$client['CLT-NumID'].'&date="+date+"&num="+num);
 					    }
 					}
-					</script>
-					<label style="margin-right:10px;">Ordre de remplacement</label>';
+					</script>&nbsp;
+					';
 					if($client['CLT-MandatCourtage'] == 1){
 						$code.='<input type="checkbox" name="ordreRemp" checked>';
 					} else {
 						$code.='<input type="checkbox" name="ordreRemp">'; 
 					}
-					$code.='
+					$code.='&nbsp;&nbsp;<label style="margin-right:10px;font-size:10px;">Ordre de remplacement</label>
 					</div>
 				</div>       
 			</div>
 
-			<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Valider Modifications</button>
+			<button type="submit" class="btn btn-warning"><i class="fa fa-save"></i> Enregistrer</button>
 			</form>
 
 	</div>';
@@ -811,7 +811,7 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 		$code.=' active';
 	}
 	$code.='" id="pro">
-	<form method="post" action="index.php?action=modifClientPro">
+	<form class="formQuit" method="post" action="index.php?action=modifClientPro">
 	<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 
 	<div class="col-lg-6">
@@ -940,7 +940,7 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
 		</div>
 	</div>
 
-	<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Valider Modifications</button>
+	<button type="submit" class="btn btn-warning"><i class="fa fa-save"></i> Enregistrer</button>
 	</form>
 	</div>';
 	return($code);
@@ -974,7 +974,7 @@ function AfficheFicheClientRevenus($client,$types_revenus,$revenus){
 		<tbody>';
 		foreach($revenus as $revenu) { 
 			$code.='
-			<tr><td><form method="post" action="index.php?action=modifClientRevenu" style="display:inline;">
+			<tr><td><form method="post" class="formQuit" action="index.php?action=modifClientRevenu" style="display:inline;">
 				<input type="hidden" name="idRevenu" value="'.$revenu['R/C-NumID'].'"/>
 				<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 				<select name="type" style="width:200px;" required><option></option>';
@@ -1001,7 +1001,7 @@ function AfficheFicheClientRevenus($client,$types_revenus,$revenus){
 		<br/><br/>
 		<div id="formRevenu">
 		<h4>Ajouter un Revenu</h4>
-		<form method="post" action="index.php?action=addClientRevenu">
+		<form class="formQuit" method="post" action="index.php?action=addClientRevenu">
 			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 			<select name="type" style="width:200px;" required><option></option>';
 			foreach ($types_revenus as $type) {
@@ -1044,7 +1044,7 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 		<tbody>';
 		foreach ($historiques as $historique) {
 			$code.='<tr>
-			<form method="post" action="index.php?action=modifClientHistorique" style="display:inline;">
+			<form class="formQuit" method="post" action="index.php?action=modifClientHistorique" style="display:inline;">
 			<input type="hidden" name="idHistorique" value="'.$historique['H/C-NumID'].'"/>
 			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>';
 			$code.='<td style="min-width: 100px;">';
@@ -1122,7 +1122,7 @@ function AfficheFicheClientHistorique($client,$types_historique,$historiques){
 		}
 	$code.=' 
 		<tr id="formHistorique">
-		<form method="post" action="index.php?action=addClientHistorique" id="formHistorique">
+		<form class="formQuit" method="post" action="index.php?action=addClientHistorique" id="formHistorique">
 			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 			<td style="min-width: 100px;"><input type="checkbox" name="demAssistante"> Assistante<br/>
 			<input type="checkbox" name="demCourtier"> Courtier</td> 
@@ -1170,7 +1170,7 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 		<tbody>';
 		foreach ($relations as $relation) {
 			$code.='<tr>
-			<form method="post" action="index.php?action=modifClientRelationel" style="display:inline;">
+			<form class="formQuit" method="post" action="index.php?action=modifClientRelationel" style="display:inline;">
 			<input type="hidden" name="idApp" value="'.$relation['R/P-NumApporteur'].'"/>
 			<input type="hidden" name="idReco" value="'.$relation['R/P-NumReco'].'"/>
 			<input type="hidden" name="idType" value="'.$relation['R/P-Type'].'"/>
@@ -1232,7 +1232,7 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 		            </div>
 		        </div>
             	<div id="lien">
-	            	<form method="post" action="index.php?action=addClientRelationel" id="formLien">
+	            	<form class="formQuit" method="post" action="index.php?action=addClientRelationel" id="formLien">
 		            	<div id="destinationFields">
 		            	</div>
 			            <input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
@@ -1406,7 +1406,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin1">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post" id="form1">
+				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form1">
 	                	Besoin : <select id="besoin2" name="idBesoin">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1462,7 +1462,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin2">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post" id="form2"/>
+				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form2"/>
 	                	Besoin : <select id="besoin3" name="idBesoin2">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1518,7 +1518,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin3">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post" id="form3"/>
+				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form3"/>
 	                	Besoin : <select id="besoin4" name="idBesoin3">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1574,7 +1574,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin4">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post" id="form4"/>
+				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form4"/>
 	                	Besoin : <select id="besoin5" name="idBesoin4">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1630,7 +1630,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin5">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post" id="form5"/>
+				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form5"/>
 	                	Besoin : <select id="besoin6" name="idBesoin5">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1686,7 +1686,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin6">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post" id="form6"/>
+				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form6"/>
 	                	Besoin : <select id="besoin7" name="idBesoin6">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1742,7 +1742,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin7">
 				        <h4>Ajouter un besoin </h4>
-				        <form action="index.php?action=addClientBesoin" method="post" id="form7"/>
+				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form7"/>
 	                	Besoin : <select id="besoin8" name="idBesoin7">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1771,23 +1771,50 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 
 function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits,$anom1,$anom2){
 	//ANOMALIE
-	$anomalie = "non";
-	//Les dossiers non formalisés
-	$anom11 = array();
-	foreach ($anom1 as $a1) {
-		array_push($anom11,$a1['TPD-Nom']);
-	}
-	//Les besoins saisis
-	$anom22 = array();
-	foreach ($anom2 as $a2) {
-		array_push($anom22,$a2['TPD-Nom']);
-	}
-	//Vérif
-	foreach ($anom11 as $a11) {
-		if(!in_array($a11,$anom22)){
-			$anomalie = "oui";
+	$anomalie1 = "non";
+	$anomalie2 = "non";
+	$anomalie3 = "non";
+	if(sizeof($anom1) != 0 || sizeof($anom2) !=0){
+		//msg1
+		//Les dossiers non formalisés
+		$anom11 = array();
+		foreach ($anom1 as $a1) {
+			array_push($anom11,$a1['TPD-Nom']);
 		}
+		//Les besoins saisis
+		$anom22 = array();
+		foreach ($anom2 as $a2) {
+			array_push($anom22,$a2['TPD-Nom']);
+		}
+		//Vérif
+		foreach ($anom11 as $a11) {
+			if(!in_array($a11,$anom22)){
+				$anomalie1 = "oui";
+			}
+		}
+
+		//msg 2
+		//Les dossiers non formalisés
+		$anom11 = array();
+		foreach ($anom1 as $a1) {
+			array_push($anom11,$a2['TPD-Nom']);
+		}
+		//Les besoins saisis
+		$anom22 = array();
+		foreach ($anom2 as $a2) {
+			array_push($anom22,$a2['TPD-Nom']);
+		}
+		//Vérif
+		foreach ($anom22 as $a22) {
+			if(!in_array($a22,$anom11)){
+				$anomalie2 = "oui";
+			}
+		}
+	} else {
+		//msg3
+		$anomalie3 = "oui";
 	}
+
 
 	$code='<div class="tab-pane fade in';
 	if(isset($_GET['onglet']) && $_GET['onglet'] == "solution"){
@@ -1798,7 +1825,9 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 	<button class="btn btn-success" id="ajoutProduit" style="float:right;"><i class="fa fa-plus fa-lg"></i> Ajouter un Produit</button>
 
 	<script>
-		anomalie = "'.$anomalie.'";
+		anomalie3 = "'.$anomalie3.'";
+		anomalie1 = "'.$anomalie1.'";
+		anomalie2 = "'.$anomalie2.'";
 		idClient = '.$client['CLT-NumID'].';
 	</script>
 	<a type="button" id="dev_cons" target="_blank" class="btn btn-primary"><img src="img/pdf.png" class="pdf"/> Devoir de conseil</a>&nbsp;
@@ -1882,7 +1911,7 @@ function AfficheFicheClientSolution($client,$type_produits,$compagnies,$produits
 	<div id="produitListe">
 
 		<div id="fieldChooser" tabIndex="1">
-			<form method="post" action="index.php?action=addClientProduit" id="formAddProduit">
+			<form class="formQuit" method="post" action="index.php?action=addClientProduit" id="formAddProduit">
 			<input type="hidden" name="idRealisateur" value="'.Auth::getInfo('id').'"/>
 			<input type="hidden" name="idClient" value="'.$client['CLT-NumID'].'"/>
 	        <div id="sourceFields" style="float:left;height:150px;width:300px;"></div>
@@ -1934,7 +1963,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 				        </thead>
 						<tbody>';
 						foreach ($anomalies as $ann) {
-							$code.='<tr style="color:red;"><td><form action="index.php?action=modifAnomalieProduit" method="post">
+							$code.='<tr style="color:red;"><td><form class="formQuit" action="index.php?action=modifAnomalieProduit" method="post">
 									<input type="hidden" name="idProduit" value="'.$produit['P/C-NumID'].'"/>
 									<input type="hidden" name="idAnomalie" value="'.$ann['A/P-NumID'].'"/><select name="type">';
 							foreach ($type_anomalies as $typ) {
@@ -1969,7 +1998,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 						$code.='
 				
 						<tr>
-							<form action="index.php?action=addAnomalieProduit" method="post">
+							<form class="formQuit" action="index.php?action=addAnomalieProduit" method="post">
 							<input type="hidden" name="idProduit" value="'.$produit['P/C-NumID'].'"/>
 							<td><select name="type" required><option></option>';
 							foreach ($type_anomalies as $typ) {
@@ -2004,7 +2033,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 	}
 
 	$code.='
-	<form action="index.php?action=modifClientProduit1" method="post">
+	<form class="formQuit" action="index.php?action=modifClientProduit1" method="post">
 
 	<div class="col-lg-12">
 		<div class="panel panel-primary">
@@ -2223,7 +2252,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 					    <div class="panel-heading" style="background-color:#CECECE;border: 1px solid grey;">
 					      <h4 class="panel-title">';
 					          	//Nom
-								$code.="<form action='index.php?action=modifEvProduit' method='post' style='display:inline;'><i class='fa fa-folder-open'></i> <select name='typeEv' style='font-weight:bold;'><b>";
+								$code.="<form class='formQuit' action='index.php?action=modifEvProduit' method='post' style='display:inline;'><i class='fa fa-folder-open'></i> <select name='typeEv' style='font-weight:bold;'><b>";
 								foreach($type_evenements as $typ){
 									if($typ['EVE-NumID'] == $ev['E/P-NumEvenement']){
 										$code.="<option value='".$typ['EVE-NumID']."' selected>".$typ['EVE-Nom']."</option>";
@@ -2395,7 +2424,7 @@ function AfficheFicheClientProduit($produit,$personnes,$produits_liste,$situatio
 				} 
 
 				$code.="
-				<form method='post' action='index.php?action=addEvProduit'>
+				<form class='formQuit' method='post' action='index.php?action=addEvProduit'>
 					<input type='hidden' name='idProduit' value='".$produit['P/C-NumID']."'/>
 					<input type='hidden' name='idRealisateur' value='".Auth::getInfo('id')."'/>
 					<button style='float:right;' type='submit' class='btn btn-success'><i class='fa fa-plus'></i> Ajouter Evenement</button>
@@ -2666,7 +2695,7 @@ function AfficheFicheCompagnieGeneral($compagnie){
 	$droits = $res->fetchALL(PDO::FETCH_ASSOC);
 	if($droits[0]['CON-AutGestionCie'] == 1){
 		$code.='
-		<form action="index.php?action=modifCompagnieGeneral" method="post">
+		<form class="formQuit" action="index.php?action=modifCompagnieGeneral" method="post">
 		<input type="hidden" name="idComp" value="'.$compagnie[0]['CIE-NumID'].'"/> 
 			<div class="col-lg-4">
 				<div class="form-group">
@@ -2835,7 +2864,7 @@ function AfficheFicheCompagnieContact($contacts,$idComp){
 		</thead>
 		<tbody>";
 		foreach($contacts as $cont){
-			$code.='<tr><form action="index.php?action=modifCompagnieContact" method="post" onsubmit="return verif();">
+			$code.='<tr><form class="formQuit" action="index.php?action=modifCompagnieContact" method="post" onsubmit="return verif();">
 		    <input type="hidden" name="idComp" value="'.$cont['C/C-Num'].'"/> 
 		    <input type="hidden" name="idNom" value="'.$cont['C/C-Nom'].'"/>
 		    <input type="hidden" name="idPrenom" value="'.$cont['C/C-Prénom'].'"/>
@@ -2867,7 +2896,7 @@ function AfficheFicheCompagnieContact($contacts,$idComp){
 		}
 		$code.="
 		<tr id='formContact'>
-		<td><form action='index.php?action=addCompagnieContact' name='formulaire' method='post'>
+		<td><form class='formQuit' action='index.php?action=addCompagnieContact' name='formulaire' method='post'>
 		<input style='width:200px;' type='text' name='nom' required/></td>
 		<script>
 			function verif(){
@@ -2988,7 +3017,7 @@ function AfficheFicheCompagnieContactLocaux($idComp,$departements,$contactsLoc){
 	}
 	foreach($contactsLoc as $cont){
 		if(!empty($_POST['dep']) && $cont['R/I-NumDptRattachement'] == $_POST['dep']){
-			$code.='<tr><form action="index.php?action=modifCompagnieContactLoc" method="post">
+			$code.='<tr><form class="formQuit" action="index.php?action=modifCompagnieContactLoc" method="post">
 				    <input type="hidden" name="idIns" value="'.$cont['INS-NumID'].'"/> 
 				    <input type="hidden" name="idComp" value="'.$idComp.'"/>
 				    <input type="hidden" name="idDep" value="'.$_POST['dep'].'"/>
@@ -3013,7 +3042,7 @@ function AfficheFicheCompagnieContactLocaux($idComp,$departements,$contactsLoc){
 	if(!empty($_POST['dep'])){
 		$code.="
 		<tr id='formContactLoc'>
-		<td><form action='index.php?action=addCompagnieContactLoc' method='post'><input type='text' name='nom' required/></td>
+		<td><form class='formQuit' action='index.php?action=addCompagnieContactLoc' method='post'><input type='text' name='nom' required/></td>
 		<td><input type='text' name='prenom'/></td>
 		<td><input type='text' style='width:95px;' class='phone' name='tel'/></td>
 		<td><input type='text' name='mail'/></td>
@@ -3080,7 +3109,7 @@ function AfficheFicheCompagnieCode($idComp,$codes,$courtiers,$compagnies,$codeMa
 		$couleur = $c['CON-Couleur'];
 	}
 	$code.='
-		<tr><form action="index.php?action=modifCompagnieCode" method="post">
+		<tr><form class="formQuit" action="index.php?action=modifCompagnieCode" method="post">
 	    <input type="hidden" name="idCode" value="'.$c['COD-NumID'].'"/> 
 	    <input type="hidden" name="idComp" value="'.$idComp.'"/>
 	';
@@ -3158,7 +3187,7 @@ function AfficheFicheCompagnieCode($idComp,$codes,$courtiers,$compagnies,$codeMa
 	$code.="</form></tr>";
 	}
 	$code.="
-		<tr id='formCode'><td><form action='index.php?action=addCompagnieCode' method='post'><input type='hidden' name='idComp' value='".$idComp."'/></td>";
+		<tr id='formCode'><td><form class='formQuit' action='index.php?action=addCompagnieCode' method='post'><input type='hidden' name='idComp' value='".$idComp."'/></td>";
 		$code.="<td><select style='width:100px;' name='courtier' required><option></option>";
 		foreach ($courtiers as $courtier) {
 				$code.="<option value='".$courtier['CON-NumID']."'>".$courtier['CON-Nom']." ".$courtier['CON-Prénom']."</b></option>";
@@ -3282,7 +3311,7 @@ function AffichePartenaireAccord($accords,$partenaires,$types,$conseillers){
 			if(!in_array($acc['ACC-NumPartenaire'],$tab_part)){
 				array_push($tab_part,$acc['ACC-NumPartenaire']);
 			}
-			$code.="<tr><form action='index.php?action=modifAccord' method='post'>
+			$code.="<tr><form class='formQuit' action='index.php?action=modifAccord' method='post'>
 			<td style='width:300px;'><select name='partenaire'>";
 			foreach ($partenaires as $part) {
 				if($acc['ACC-NumPartenaire'] == $part['CLT-NumID']){
@@ -3328,7 +3357,7 @@ function AffichePartenaireAccord($accords,$partenaires,$types,$conseillers){
 		}
 		$code.="
 		<tr id='formAccord'>
-		<form action='index.php?action=addAccord' method='post'>
+		<form class='formQuit' action='index.php?action=addAccord' method='post'>
 		<td style='width:300px;'><select name='partenaire' required><option></option>";
 			foreach ($partenaires as $part) {
 				$code.="<option value='".$part['CLT-NumID']."'>".$part['CLT-Nom']." ".$part['CLT-NomJeuneFille']." ".$part['CLT-Prénom']."</option>";					

@@ -71,7 +71,7 @@
             $content.="
             <div style='position:absolute;top:".$i.";left:20'><h3>Codes Courtage de ".$r['CON-Prénom']." ".$r['CON-Nom']."</h3></div>";
             $content.="
-            <div style='position:absolute;top:0;left:0'><i>le ".date("d/m/Y à H:i")."</i></div>";
+            <div style='position:absolute;top:0;left:0'><i>le ".date("d/m/Y á H:i")."</i></div>";
             $i = $i + 35;
         } else {
             //$i = $i + 5;
