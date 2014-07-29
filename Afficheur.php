@@ -1406,7 +1406,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin1">
 				        <h4>Ajouter un besoin </h4>
-				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form1">
+				        <form action="index.php?action=addClientBesoin" method="post" id="form1">
 	                	Besoin : <select id="besoin2" name="idBesoin">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
