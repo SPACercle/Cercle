@@ -241,7 +241,7 @@ class Controller{
 			$pdo->exec("SET NAMES UTF8");
 			$res = $pdo->query($query);
 			if($res->rowCount() == 0){
-				$query = "INSERT INTO `clients et prospects` (`CLT-Nom`,`CLT-Prénom`,`CLT-DateNaissance`,`CLT-Type`,`CLT-Conseiller`) VALUES ('$nom','$prenom','$date','5','5');";
+				$query = "INSERT INTO `clients et prospects` (`CLT-Nom`,`CLT-Prénom`,`CLT-DateNaissance`,`CLT-Type`,`CLT-Conseiller`) VALUES ('$nom','$prenom','$date','5','".Auth::getInfo('id')."');";
 				$pdo = BDD::getConnection();
 				$pdo->exec("SET NAMES UTF8");
 				$res = $pdo->exec($query);
@@ -270,7 +270,7 @@ class Controller{
 			$pdo->exec("SET NAMES UTF8");
 			$res = $pdo->query($query);
 			if($res->rowCount() == 0){
-				$query = "INSERT INTO `clients et prospects` (`CLT-Nom`,`CLT-Statut`,`CLT-PrsMorale`,`CLT-Type`,`CLT-Conseiller`) VALUES ('$raison','$forme',1,'5','5');";
+				$query = "INSERT INTO `clients et prospects` (`CLT-Nom`,`CLT-Statut`,`CLT-PrsMorale`,`CLT-Type`,`CLT-Conseiller`) VALUES ('$raison','$forme',1,'5','".Auth::getInfo('id')."');";
 				$pdo = BDD::getConnection();
 				$pdo->exec("SET NAMES UTF8");
 				$res = $pdo->exec($query);

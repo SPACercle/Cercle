@@ -114,12 +114,12 @@
 
 	<div style='position:absolute;top:739;left:20'><span>Fait en 2 exemplaires originaux á ".$res2[0]['CLT-Ville'].", le ".$date."</span></div>
 	<div style='position:absolute;top:150;left:215'><span><h3><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mandat Administratif<br/>Audit Social, Fiscal ou Patrimonial</i></h3></span></div>
-	<div style='position:absolute;top:798;left:450'><span>".$res2[0]['CON-Société']."</span></div>
-	<div style='position:absolute;top:818;left:430'><span>Représentée par ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</span></div>
+	<div style='position:absolute;top:798;left:430'><span>".$res2[0]['CON-Société']."</span></div>
+	<div style='position:absolute;top:774;left:470'><span>Représentée par ".$res2[0]['CON-Prénom']." ".$res2[0]['CON-Nom']."</span></div>
 
-	<div style='position:absolute;top:818;left:143'><span>".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</span></div>
-	<div style='position:absolute;top:774;left:480'><span>Le Mandataire </span></div>
-	<div style='position:absolute;top:798;left:182'><span>Le Mandant</span></div>
+	<div style='position:absolute;top:798;left:200'><span>".$res2[0]['CLT-Prénom']." ".$res2[0]['CLT-Nom']."</span></div>
+	<div style='position:absolute;top:774;left:380'><span>Le Mandataire </span></div>
+	<div style='position:absolute;top:798;left:120'><span>Le Mandant</span></div>
 
 	<div style='position:absolute;top:898;left:137'><span>Signature précédée de la mention</span></div>
 	<div style='position:absolute;top:918;left:137'><span>Lu et Approuvé, bon pour Mandat</span></div>

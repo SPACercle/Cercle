@@ -108,6 +108,7 @@
         }
         $content.="
         <div style='position:absolute;top:".$i.";left:0'><div style='display:inline;background-color:".$couleur.";border:1px solid black;width:10px;height:10px;'></div><b> ".$r['CIE-Nom']."</b></div>
+        <div style='position:absolute;top:".($i+9).";left:20;color:red;'><i>".$r['COD-Détail']."</i></div>
         <div style='position:absolute;top:".$i.";left:769'> ".$r['COD-TypeCode']."</div>
         <div style='position:absolute;top:".$i.";left:900'>".$r['COD-CodeMere']."</div>";
         //$i = $i + 10;
