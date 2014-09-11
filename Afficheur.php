@@ -859,13 +859,25 @@ function AfficheFicheClientProfessionnel($client,$categories,$professions,$statu
             </div>
             <div class="panel-body">
             	<label>Catégorie : </label>
-            	<select name="categorie" style="width:250px;"><option selected="selected"></option>';
+            	<select name="categorie" style="width:250px;" id="catFiltre"><option selected="selected"></option>';
+				
+				//Récupération de la catégorie de la profession du client
+				$query = "SELECT `PRO-Catégorie` FROM `professions` WHERE `PRO-NumID` = ".$client['CLT-Profession'].";";
+				$pdo = BDD::getConnection();
+				$pdo->exec("SET NAMES UTF8");
+				$res = $pdo->query($query);
+				$cat = $res->fetchALL(PDO::FETCH_ASSOC);
+
 				foreach ($categories as $categorie) {
-					$code.="<option value='".$categorie['CAT-NumID']."'>".$categorie['CAT-Nom']."</option>";
+					if($categorie['CAT-NumID'] == $cat[0]['PRO-Catégorie']){
+						$code.="<option selected='selected' value='".$categorie['CAT-NumID']."'>".$categorie['CAT-Nom']."</option>";
+					} else {
+						$code.="<option value='".$categorie['CAT-NumID']."'>".$categorie['CAT-Nom']."</option>";
+					}
 				}
 				$code.='</select><br/><br/>
 				<label>Profession : </label>
-				<select name="profession" style="width:400px;">';
+				<select name="profession" id="profFiltre" style="width:400px;">';
 				if($client['CLT-Profession'] == null){
 					$code.="<option selected='selected'></option>";
 				}
@@ -1216,7 +1228,9 @@ function AfficheFicheClientRelationel($client,$type_relation,$relations,$personn
 
 	        <div id="fieldChooser" tabIndex="1">
 	        	<div id="lienPers">
-		            <div id="sourceFields"><h4 style="display:inline;"><span style="color:#A5260A">Personne</span></h4>';
+		            <div id="sourceFields"><h4 style="display:inline;"><span style="color:#A5260A">Personne </span></h4>
+		            <input type="text" id="filtrePers" placeholder="recherche..."/>
+		            ';
 		               foreach ($personnes as $pers) {
 							$code.="<div>".$pers['CLT-Nom']." ".$pers['CLT-Prénom']."<input type='hidden' name='pers' value='".$pers['CLT-NumID']."'/></div>";
 						}
@@ -1462,7 +1476,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin2">
 				        <h4>Ajouter un besoin </h4>
-				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form2"/>
+				        <form action="index.php?action=addClientBesoin" method="post" id="form2"/>
 	                	Besoin : <select id="besoin3" name="idBesoin2">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1518,7 +1532,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin3">
 				        <h4>Ajouter un besoin </h4>
-				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form3"/>
+				        <form action="index.php?action=addClientBesoin" method="post" id="form3"/>
 	                	Besoin : <select id="besoin4" name="idBesoin3">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1574,7 +1588,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin4">
 				        <h4>Ajouter un besoin </h4>
-				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form4"/>
+				        <form action="index.php?action=addClientBesoin" method="post" id="form4"/>
 	                	Besoin : <select id="besoin5" name="idBesoin4">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1630,7 +1644,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin5">
 				        <h4>Ajouter un besoin </h4>
-				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form5"/>
+				        <form action="index.php?action=addClientBesoin" method="post" id="form5"/>
 	                	Besoin : <select id="besoin6" name="idBesoin5">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1686,7 +1700,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin6">
 				        <h4>Ajouter un besoin </h4>
-				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form6"/>
+				        <form action="index.php?action=addClientBesoin" method="post" id="form6"/>
 	                	Besoin : <select id="besoin7" name="idBesoin6">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){
@@ -1742,7 +1756,7 @@ function AfficheFicheClientBesoin($client,$besoins,$occurences,$besoins_cli){
 						<br/><br/>
 						<div id="formBesoin7">
 				        <h4>Ajouter un besoin </h4>
-				        <form class="formQuit" action="index.php?action=addClientBesoin" method="post" id="form7"/>
+				        <form action="index.php?action=addClientBesoin" method="post" id="form7"/>
 	                	Besoin : <select id="besoin8" name="idBesoin7">
 	                	<option>Choisir...</option>';
 	                	foreach ($besoins as $besoin){

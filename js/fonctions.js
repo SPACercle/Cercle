@@ -577,4 +577,61 @@ $(document).ready(function() {
 		});
 	});
 
+	//Focus sur le champ du filtre après rechargement de la liste (pour mettre le curseur à la fin de texte)
+	(function($){
+	    $.fn.focusTextToEnd = function(){
+	        this.focus();
+	        var $thisVal = this.val();
+	        this.val('').val($thisVal);
+	        return this;
+    	}
+	}(jQuery));
+
+	/**
+	* Méthode qui sera appelée au changement du filtre des personnes dans la création de lien
+	*/
+	$(document).on('keyup','#filtrePers',function(){  
+		var xhr = getXhr();
+		// On défini ce qu'on va faire quand on aura la réponse
+		xhr.onreadystatechange = function(){
+			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
+			if(xhr.readyState == 4 && xhr.status == 200){
+				liste = xhr.responseText;
+				// On se sert de innerHTML pour rajouter les options a la liste
+				$('#lienPers').find("#sourceFields").html(liste);
+				$('#filtrePers').focusTextToEnd();
+			}
+		}
+		// Ici on va voir comment faire du post
+		xhr.open("POST","ajaxPersLienFiltre.php",true);
+		// ne pas oublier ça pour le post
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		// ne pas oublier de poster les arguments
+		filtre = document.getElementById("filtrePers").value;
+		xhr.send("filtre="+filtre);
+	});
+
+	/**
+	* Méthode qui sera appelée au changement du filtre des catéogies professionelles (fiche client onglet pro)
+	*/
+	$('#catFiltre').change(function(){
+		var xhr = getXhr();
+		// On défini ce qu'on va faire quand on aura la réponse
+		xhr.onreadystatechange = function(){
+			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
+			if(xhr.readyState == 4 && xhr.status == 200){
+				prof = xhr.responseText;
+				// On se sert de innerHTML pour rajouter les options a la liste
+				document.getElementById('profFiltre').innerHTML = prof;
+			}
+		}
+		// Ici on va voir comment faire du post
+		xhr.open("POST","ajaxProf.php",true);
+		// ne pas oublier ça pour le post
+		xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		// ne pas oublier de poster les arguments
+		cat = document.getElementById("catFiltre").value;
+		xhr.send("cat="+cat);
+	});
+
 });
